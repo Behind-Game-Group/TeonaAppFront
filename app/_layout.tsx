@@ -33,7 +33,7 @@ export default function RootLayout() {
         {/* Stack principale */}
         <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
 
-        {/* Auth Stack */}
+        {/* Hub Stack */}
         <Stack.Screen name="hub/login" options={{ title: 'Login' }} />
         <Stack.Screen name="hub/register" options={{ title: 'Register' }} />
 
