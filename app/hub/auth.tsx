@@ -1,10 +1,10 @@
 import React from 'react';
-import {Dimensions, ImageBackground, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
-import {Link} from "expo-router";
+import { Dimensions, ImageBackground, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { Link } from "expo-router";
 
-const {width, height} = Dimensions.get('window');
+const { width, height } = Dimensions.get('window'); // Récupère les dimensions de l'écran
 
-export default function startScreen() {
+export default function StartScreen() {
     return (
         <View style={styles.container}>
             <ImageBackground
@@ -34,7 +34,8 @@ const styles = StyleSheet.create({
         flex: 1,
     },
     backgroundImage: {
-        flex: 1,
+        width: width,
+        height: height,
         justifyContent: 'center',
     },
     content: {
@@ -53,7 +54,6 @@ const styles = StyleSheet.create({
         justifyContent: 'flex-end',
         alignItems: 'center',
         paddingBottom: height * 0.1,
-        marginBottom: 20,
     },
     buttonSignup: {
         backgroundColor: '#4387AA',
