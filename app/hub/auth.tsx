@@ -1,6 +1,7 @@
 import React from 'react';
 import {Dimensions, ImageBackground, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import {Link} from "expo-router";
+import AllowNotif from "@/components/AllowNotif/AllowNotif";
 
 const {width, height} = Dimensions.get('window');
 
@@ -18,7 +19,7 @@ export default function startScreen() {
 
                 <View style={styles.buttonsContainer}>
                     <TouchableOpacity style={styles.buttonSignup}>
-                        <Link href={'/hub/register'} style={styles.buttonTextSignUp}>Sign Up</Link>
+                        <Link href={'/hub/register'} style={styles.buttonTextSignUp} onPress={AllowNotif}>Sign Up</Link>
                     </TouchableOpacity>
                     <TouchableOpacity style={styles.buttonSignIn}>
                         <Link href={'/hub/login'} style={styles.buttonTextSignIn}>Sign In</Link>
