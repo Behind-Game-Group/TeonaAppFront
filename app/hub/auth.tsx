@@ -1,27 +1,29 @@
 import React from 'react';
-<<<<<<< HEAD
-import {Dimensions, ImageBackground, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
-import {Link} from "expo-router";
-import AllowNotif from "@/components/TeoNotif/TeoNotif";
-=======
-import { Dimensions, ImageBackground, StyleSheet, Text, View } from 'react-native';
+import {
+    Dimensions,
+    ImageBackground,
+    StyleSheet,
+    Text,
+    View,
+} from 'react-native';
 import { useRouter } from "expo-router";
 import CustomButton from '@/components/ButtonInscriptionLogin';
->>>>>>> f22457ec0582f9b89ab6081781164e7bd1afb7fa
+import AllowNotif from "@/components/AllowNotif/AllowNotif";
 
-const {width, height} = Dimensions.get('window');
+const { width, height } = Dimensions.get('window');
 
-<<<<<<< HEAD
-export default function startScreen() {
-=======
-const auth: React.FC = () => {
+const StartScreen: React.FC = () => {
     const router = useRouter();
 
->>>>>>> f22457ec0582f9b89ab6081781164e7bd1afb7fa
+    const handleSignUp = () => {
+        AllowNotif();
+        router.push('/hub/register');
+    };
+
     return (
         <View style={styles.container}>
             <ImageBackground
-                source={require('../../assets/images/bgImgSign.png')}
+                source={require('@/assets/images/bgImgSign.png')}
                 style={styles.backgroundImage}
                 resizeMode="cover"
             >
@@ -30,44 +32,31 @@ const auth: React.FC = () => {
                 </View>
 
                 <View style={styles.buttonsContainer}>
-<<<<<<< HEAD
-                    <TouchableOpacity style={styles.buttonSignup}>
-                        <Link href={'/hub/register'} style={styles.buttonTextSignUp} onPress={AllowNotif}>Sign Up</Link>
-                    </TouchableOpacity>
-                    <TouchableOpacity style={styles.buttonSignIn}>
-                        <Link href={'/hub/login'} style={styles.buttonTextSignIn}>Sign In</Link>
-                    </TouchableOpacity>
-=======
                     <CustomButton
                         text="Sign Up"
                         color="blue"
-                        onPress={() => {
-                            router.push('/hub/register');
-                        }}
+                        onPress={handleSignUp}
                     />
-
                     <CustomButton
                         text="Sign In"
                         color="white"
-                        onPress={() => {
-                            router.push('/hub/login');
-                        }}
+                        onPress={() => router.push('/hub/login')}
                     />
->>>>>>> f22457ec0582f9b89ab6081781164e7bd1afb7fa
                 </View>
             </ImageBackground>
         </View>
     );
 };
 
-export default auth;
+export default StartScreen;
 
 const styles = StyleSheet.create({
     container: {
         flex: 1,
     },
     backgroundImage: {
-        flex: 1,
+        width: width,
+        height: height,
         justifyContent: 'center',
     },
     content: {
@@ -86,6 +75,5 @@ const styles = StyleSheet.create({
         justifyContent: 'flex-end',
         alignItems: 'center',
         paddingBottom: height * 0.1,
-        marginBottom: 20,
     },
 });
