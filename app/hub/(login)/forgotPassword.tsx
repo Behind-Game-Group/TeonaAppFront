@@ -1,17 +1,27 @@
-import React, {useState} from 'react';
-import {Alert, ImageBackground, StyleSheet, Text, TextInput, View,} from 'react-native';
+import React, { useState } from 'react';
+import {
+    Alert,
+    ImageBackground,
+    StyleSheet,
+    Text,
+    TextInput,
+    View,
+} from 'react-native';
+import { useRouter } from 'expo-router';
 import CustomButton from "@/components/ButtonInscriptionLogin";
 
-export default function forgotPassword() {
-    const [email, setEmail] = useState('');
+const ForgotPassword: React.FC = () => {
+    const [email, setEmail] = useState<string>('');
+    const router = useRouter();
 
-    const handleResetPassword = () => {
+    const handleResetPassword = (): void => {
         if (!email) {
             Alert.alert('Error', 'Please enter your email address.');
             return;
         }
 
         Alert.alert('Password Reset', `A reset link has been sent to ${email}`);
+        router.push('//hub(login)\verifyEmail');
     };
 
     return (
@@ -41,11 +51,10 @@ export default function forgotPassword() {
                     color="blue"
                     onPress={handleResetPassword}
                 />
-
             </View>
         </ImageBackground>
     );
-}
+};
 
 const styles = StyleSheet.create({
     backgroundImage: {
@@ -60,7 +69,7 @@ const styles = StyleSheet.create({
         borderRadius: 10,
         alignItems: 'center',
         shadowColor: '#000',
-        shadowOffset: {width: 0, height: 2},
+        shadowOffset: { width: 0, height: 2 },
         shadowOpacity: 0.25,
         shadowRadius: 4,
         elevation: 5,
@@ -88,3 +97,5 @@ const styles = StyleSheet.create({
         fontSize: 16,
     },
 });
+
+export default ForgotPassword;
