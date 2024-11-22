@@ -1,6 +1,8 @@
-import {Alert,Button, Text, ImageBackground,StyleSheet,View} from "react-native";
+import {Alert, Button, Text, ImageBackground, StyleSheet, View} from "react-native";
 import {SafeAreaProvider, SafeAreaView} from "react-native-safe-area-context";
 import TeoNotif from "@/components/TeoNotif/TeoNotif";
+import CustomButton from "@/components/ButtonInscriptionLogin";
+import {router} from "expo-router";
 
 export default function AllowNotif() {
 
@@ -16,13 +18,36 @@ export default function AllowNotif() {
                     <View style={styles.notifContainer}>
                         <Text style={styles.titleAll}> Turn on your notifications to stay up to date about your
                             journey.</Text>
-                        <Text style={styles.optTitleAll}> We'll automatically send you information about your journey in real time . </Text>
+                        <Text style={styles.optTitleAll}> We'll automatically send you information about your journey in
+                            real time . </Text>
                     </View>
                     <View style={styles.notifAllow}>
                         <TeoNotif>
                             <Text>
-                                <h4>Real-time updates</h4>
+                                Real-time updates
+                                Receive relevant information throughout your trip.
+                                Changes in itineraries, flight delays, issues with your journey ...
+                                We got you informed at all times
                             </Text>
+                            <View style={styles.allowButtContainer}>
+                            <CustomButton
+                                onPress={() => router.push('/hub/login')}
+                                text="Yes,keep me updated"
+                                color="blue"
+
+                            />
+                            <CustomButton
+                                onPress={() => router.push('/hub/login')}
+                                text="Maybe,later"
+                                color="white"
+
+                            />
+                            </View>
+                            <Text>
+                                Change your mind ? switch off commercial offers from all Georgina transport and third
+                                parties at any time in the app's notification settings.
+                            </Text>
+
                         </TeoNotif>
 
                     </View>
@@ -34,17 +59,15 @@ export default function AllowNotif() {
 const styles = StyleSheet.create({
 
     backgroundImage: {
-        flex:1,
-        justifyContent:'center',
-        alignItems:'center',
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
     },
-    allContainer: {
-
-    },
+    allContainer: {},
     allContent: {
-        flex:1,
-        justifyContent:'center',
-        alignItems:'center',
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
     },
     titleAll: {
         color: "black",
@@ -57,6 +80,10 @@ const styles = StyleSheet.create({
     },
     notifAllow: {
         backgroundColor: "#fff",
-    }
+    },
+    allowButtContainer: {
+
+    },
+
 
 });
