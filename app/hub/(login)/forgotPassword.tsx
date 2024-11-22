@@ -1,24 +1,27 @@
 import React, { useState } from 'react';
 import {
-    View,
-    Text,
-    TextInput,
-    TouchableOpacity,
-    StyleSheet,
     Alert,
     ImageBackground,
+    StyleSheet,
+    Text,
+    TextInput,
+    View,
 } from 'react-native';
+import { useRouter } from 'expo-router';
+import CustomButton from "@/components/ButtonInscriptionLogin";
 
-export default function forgotPassword() {
-    const [email, setEmail] = useState('');
+const ForgotPassword: React.FC = () => {
+    const [email, setEmail] = useState<string>('');
+    const router = useRouter();
 
-    const handleResetPassword = () => {
+    const handleResetPassword = (): void => {
         if (!email) {
             Alert.alert('Error', 'Please enter your email address.');
             return;
         }
 
         Alert.alert('Password Reset', `A reset link has been sent to ${email}`);
+        router.push('//hub(login)\verifyEmail');
     };
 
     return (
@@ -43,13 +46,15 @@ export default function forgotPassword() {
                     autoCorrect={false}
                 />
 
-                <TouchableOpacity style={styles.button} onPress={handleResetPassword}>
-                    <Text style={styles.buttonText}>Send Reset Link</Text>
-                </TouchableOpacity>
+                <CustomButton
+                    text="Send Reset Link"
+                    color="blue"
+                    onPress={handleResetPassword}
+                />
             </View>
         </ImageBackground>
     );
-}
+};
 
 const styles = StyleSheet.create({
     backgroundImage: {
@@ -91,17 +96,6 @@ const styles = StyleSheet.create({
         backgroundColor: '#fff',
         fontSize: 16,
     },
-    button: {
-        marginTop: 20,
-        backgroundColor: '#2787BB',
-        padding: 15,
-        borderRadius: 5,
-        alignItems: 'center',
-        width: '100%',
-    },
-    buttonText: {
-        color: '#fff',
-        fontSize: 18,
-        fontWeight: 'bold',
-    },
 });
+
+export default ForgotPassword;

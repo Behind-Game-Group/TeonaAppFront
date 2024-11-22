@@ -44,7 +44,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'center',
         borderRadius: 30,
-        backgroundColor: 'rgba(255, 255, 255, 0.7)', // Opacité sur le fond seulement
+        backgroundColor: 'rgba(255, 255, 255, 0.7)' // Opacité sur le fond seulement
     },
     title: {
         fontFamily: 'Lucida Grande',

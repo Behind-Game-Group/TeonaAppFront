@@ -7,60 +7,54 @@ import {
     ImageBackground,
     StyleSheet,
 } from 'react-native';
-import { Link } from 'expo-router';
+import {Link, useRouter} from 'expo-router';
 import CustomButton from '@/components/ButtonInscriptionLogin';
 
-const LoginPage: React.FC = () => {
-    const [email, setEmail] = useState('');
-    const [password, setPassword] = useState('');
+const VerifyEmailPage: React.FC = () => {
+    const [pinCode, setPinCode] = useState('');
+    const router = useRouter();
 
-    const handleLogin = () => {
-        if (!email || !password) {
-            Alert.alert('Error', 'Please fill in both fields.');
+    const handleVerify = () => {
+        if (!pinCode) {
+            Alert.alert('Error', 'Please enter the PIN code.');
             return;
         }
 
-        Alert.alert('Login', `Email: ${email}\nPassword: ${'*'.repeat(password.length)}`);
+        Alert.alert('Verification', `PIN Code entered: ${pinCode}`);
+        router.push('/hub(login)\verifyEmail');
     };
 
     return (
         <ImageBackground
-            source={require('@/assets/images/bgSignIn.png')}
+            source={require('@/assets/images/verifyMailForgotPassword.png')}
             style={styles.backgroundImage}
         >
             <View style={styles.container}>
-                <Text style={styles.title}>Login</Text>
+                <Text style={styles.title}>Verify Your Email</Text>
+                <Text style={styles.subtitle}>
+                    Please enter the PIN code sent to your email address.
+                </Text>
 
                 <TextInput
                     style={styles.input}
-                    placeholder="Email Address"
+                    placeholder="Enter PIN Code"
                     placeholderTextColor="#888"
-                    keyboardType="email-address"
-                    value={email}
-                    onChangeText={setEmail}
-                    autoCapitalize="none"
-                    autoCorrect={false}
+                    keyboardType="numeric"
+                    value={pinCode}
+                    onChangeText={setPinCode}
+                    maxLength={6}
                 />
 
-                <TextInput
-                    style={styles.input}
-                    placeholder="Password"
-                    placeholderTextColor="#888"
-                    secureTextEntry
-                    value={password}
-                    onChangeText={setPassword}
-                />
-
-                <View style={styles.forgotPasswordContainer}>
-                    <Link href={"/hub/(login)/forgotPassword"} style={styles.forgotPasswordLink}>
-                        Forgot your password?
+                <View style={styles.pinNotReceivedContainer}>
+                    <Link href={"/hub/auth"} style={styles.pinNotReceivedLink}>
+                        Pin code not received?
                     </Link>
                 </View>
 
                 <CustomButton
-                    text="Login"
+                    text="Verify"
                     color="blue"
-                    onPress={handleLogin}
+                    onPress={handleVerify}
                 />
             </View>
         </ImageBackground>
@@ -89,6 +83,12 @@ const styles = StyleSheet.create({
         fontSize: 28,
         fontWeight: 'bold',
         color: '#333',
+        marginBottom: 10,
+    },
+    subtitle: {
+        fontSize: 16,
+        color: '#666',
+        textAlign: 'center',
         marginBottom: 20,
     },
     input: {
@@ -100,18 +100,19 @@ const styles = StyleSheet.create({
         borderRadius: 5,
         backgroundColor: '#fff',
         fontSize: 16,
+        textAlign: 'center',
     },
-    forgotPasswordContainer: {
-        alignSelf: 'flex-end',
+    pinNotReceivedContainer: {
+        alignSelf: 'center',
         marginVertical: 5,
     },
-    forgotPasswordLink: {
+    pinNotReceivedLink: {
         color: '#2787BB',
         fontSize: 14,
         fontWeight: '600',
         textDecorationLine: 'underline',
-        alignSelf: 'flex-end',
+        alignSelf: 'center',
     },
 });
 
-export default LoginPage;
+export default VerifyEmailPage;
