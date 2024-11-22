@@ -1,17 +1,29 @@
 import React from 'react';
-import { Dimensions, ImageBackground, StyleSheet, Text, View } from 'react-native';
+import {
+    Dimensions,
+    ImageBackground,
+    StyleSheet,
+    Text,
+    View,
+} from 'react-native';
 import { useRouter } from "expo-router";
 import CustomButton from '@/components/ButtonInscriptionLogin';
+import AllowNotif from "@/components/AllowNotif/AllowNotif";
 
-const { width, height } = Dimensions.get('window'); // Récupère les dimensions de l'écran
+const { width, height } = Dimensions.get('window');
 
-const auth: React.FC = () => {
+const StartScreen: React.FC = () => {
     const router = useRouter();
+
+    const handleSignUp = () => {
+        AllowNotif();
+        router.push('/hub/register');
+    };
 
     return (
         <View style={styles.container}>
             <ImageBackground
-                source={require('../../assets/images/bgImgSign.png')}
+                source={require('@/assets/images/bgImgSign.png')}
                 style={styles.backgroundImage}
                 resizeMode="cover"
             >
@@ -23,17 +35,12 @@ const auth: React.FC = () => {
                     <CustomButton
                         text="Sign Up"
                         color="blue"
-                        onPress={() => {
-                            router.push('/hub/register');
-                        }}
+                        onPress={handleSignUp}
                     />
-
                     <CustomButton
                         text="Sign In"
                         color="white"
-                        onPress={() => {
-                            router.push('/hub/login');
-                        }}
+                        onPress={() => router.push('/hub/login')}
                     />
                 </View>
             </ImageBackground>
@@ -41,7 +48,7 @@ const auth: React.FC = () => {
     );
 };
 
-export default auth;
+export default StartScreen;
 
 const styles = StyleSheet.create({
     container: {
