@@ -8,7 +8,7 @@ export default function startScreen() {
     return (
         <View style={styles.container}>
             <ImageBackground
-                source={require('../../assets/images/bgBeginInscription.png')}
+                source={require('@/assets/images/bgBeginInscription.png')}
                 style={styles.backgroundImage}
                 resizeMode="cover"
             >
@@ -39,7 +39,6 @@ const styles = StyleSheet.create({
         alignItems: 'center',
     },
     content: {
-        backgroundColor : 'white',
         width: '93%',
         marginTop: 635,
         alignItems: 'center',
@@ -53,8 +52,8 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
         color: '#606060',
         textAlign: 'center',
-        paddingTop: 10, // marge en haut
-        paddingBottom: 10, // marge en bas
+        paddingTop: 10,
+        paddingBottom: 10,
     },
     detailsContent: {
         fontSize: 18,
@@ -69,7 +68,7 @@ const styles = StyleSheet.create({
         shadowOffset: { width: 0, height: 2 }, // Décalage uniquement en bas
         shadowOpacity: 0.2,
         // Ombre pour Android
-        elevation: 10, // La valeur d'élévation qui donne l'ombre en Android
+        elevation: 10,
         borderWidth: 2,
         paddingVertical: 10,
         paddingHorizontal: width * 0.1,
