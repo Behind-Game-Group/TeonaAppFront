@@ -2,7 +2,7 @@ import React from 'react';
 <<<<<<< HEAD
 import {Dimensions, ImageBackground, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import {Link} from "expo-router";
-import AllowNotif from "@/components/AllowNotif/AllowNotif";
+import AllowNotif from "@/components/TeoNotif/TeoNotif";
 =======
 import { Dimensions, ImageBackground, StyleSheet, Text, View } from 'react-native';
 import { useRouter } from "expo-router";
