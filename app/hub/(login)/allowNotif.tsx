@@ -7,7 +7,7 @@ export default function AllowNotif() {
     return (
         <SafeAreaProvider style={styles.allContainer}>
             <ImageBackground
-                source={require('../../assets/images/pexels-katerina-holmes-5911138.jpg')}
+                source={require('@/assets/images/allowcontainer1.jpg')}
                 style={styles.backgroundImage}
                 resizeMode="cover"
             >

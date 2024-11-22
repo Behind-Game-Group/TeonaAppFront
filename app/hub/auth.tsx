@@ -8,7 +8,8 @@ import {
 } from 'react-native';
 import { useRouter } from "expo-router";
 import CustomButton from '@/components/ButtonInscriptionLogin';
-import AllowNotif from "@/components/AllowNotif/AllowNotif";
+import AllowNotif from "@/app/hub/(login)/allowNotif";
+
 
 const { width, height } = Dimensions.get('window');
 
