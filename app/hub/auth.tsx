@@ -1,10 +1,13 @@
 import React from 'react';
-import { Dimensions, ImageBackground, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
-import { Link } from "expo-router";
+import { Dimensions, ImageBackground, StyleSheet, Text, View } from 'react-native';
+import { useRouter } from "expo-router";
+import CustomButton from '@/components/ButtonInscriptionLogin';
 
 const { width, height } = Dimensions.get('window'); // Récupère les dimensions de l'écran
 
-export default function StartScreen() {
+const auth: React.FC = () => {
+    const router = useRouter();
+
     return (
         <View style={styles.container}>
             <ImageBackground
@@ -13,21 +16,32 @@ export default function StartScreen() {
                 resizeMode="cover"
             >
                 <View style={styles.content}>
-                    <Text style={styles.title}>Welcome Passenger !</Text>
+                    <Text style={styles.title}>Welcome Passenger!</Text>
                 </View>
 
                 <View style={styles.buttonsContainer}>
-                    <TouchableOpacity style={styles.buttonSignup}>
-                        <Link href={'/hub/register'} style={styles.buttonTextSignUp}>Sign Up</Link>
-                    </TouchableOpacity>
-                    <TouchableOpacity style={styles.buttonSignIn}>
-                        <Link href={'/hub/login'} style={styles.buttonTextSignIn}>Sign In</Link>
-                    </TouchableOpacity>
+                    <CustomButton
+                        text="Sign Up"
+                        color="blue"
+                        onPress={() => {
+                            router.push('/hub/register');
+                        }}
+                    />
+
+                    <CustomButton
+                        text="Sign In"
+                        color="white"
+                        onPress={() => {
+                            router.push('/hub/login');
+                        }}
+                    />
                 </View>
             </ImageBackground>
         </View>
     );
-}
+};
+
+export default auth;
 
 const styles = StyleSheet.create({
     container: {
@@ -54,37 +68,5 @@ const styles = StyleSheet.create({
         justifyContent: 'flex-end',
         alignItems: 'center',
         paddingBottom: height * 0.1,
-    },
-    buttonSignup: {
-        backgroundColor: '#4387AA',
-        borderColor: '#2787BB',
-        borderWidth: 2,
-        paddingVertical: 10,
-        paddingHorizontal: width * 0.1,
-        borderRadius: 5,
-        marginVertical: 10,
-        width: '60%',
-        alignItems: 'center',
-    },
-    buttonSignIn: {
-        backgroundColor: '#fff',
-        borderColor: '#2787BB',
-        borderWidth: 2,
-        paddingVertical: 10,
-        paddingHorizontal: width * 0.1,
-        borderRadius: 5,
-        marginVertical: 10,
-        width: '60%',
-        alignItems: 'center',
-    },
-    buttonTextSignUp: {
-        color: 'white',
-        fontSize: 18,
-        fontWeight: 'bold',
-    },
-    buttonTextSignIn: {
-        color: '#4387AA',
-        fontSize: 18,
-        fontWeight: 'bold',
     },
 });

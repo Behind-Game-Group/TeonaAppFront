@@ -3,14 +3,14 @@ import {
     View,
     Text,
     TextInput,
-    TouchableOpacity,
-    StyleSheet,
     Alert,
     ImageBackground,
+    StyleSheet,
 } from 'react-native';
 import { Link } from 'expo-router';
+import CustomButton from '@/components/ButtonInscriptionLogin';
 
-export default function LoginPage() {
+const LoginPage: React.FC = () => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
 
@@ -22,7 +22,6 @@ export default function LoginPage() {
 
         Alert.alert('Login', `Email: ${email}\nPassword: ${'*'.repeat(password.length)}`);
     };
-
 
     return (
         <ImageBackground
@@ -58,13 +57,15 @@ export default function LoginPage() {
                     </Link>
                 </View>
 
-                <TouchableOpacity style={styles.button} onPress={handleLogin}>
-                    <Text style={styles.buttonText}>Login</Text>
-                </TouchableOpacity>
+                <CustomButton
+                    text="Login"
+                    color="blue"
+                    onPress={handleLogin}
+                />
             </View>
         </ImageBackground>
     );
-}
+};
 
 const styles = StyleSheet.create({
     backgroundImage: {
@@ -111,18 +112,6 @@ const styles = StyleSheet.create({
         textDecorationLine: 'underline',
         alignSelf: 'flex-end',
     },
-    button: {
-        marginTop: 20,
-        backgroundColor: '#2787BB',
-        borderColor: '#D9D9D9',
-        padding: 15,
-        borderRadius: 5,
-        alignItems: 'center',
-        width: '100%',
-    },
-    buttonText: {
-        color: '#fff',
-        fontSize: 18,
-        fontWeight: 'bold',
-    },
 });
+
+export default LoginPage;
