@@ -10,6 +10,7 @@ const TeoNotif: React.FC<TeoNotifProps> = ({ children }) => {
     return (
 
             <View >
+                //ajout des notifications ici
                 {children}
             </View>
 
