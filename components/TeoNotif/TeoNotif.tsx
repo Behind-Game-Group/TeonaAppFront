@@ -9,7 +9,7 @@ interface TeoNotifProps {
 const TeoNotif: React.FC<TeoNotifProps> = ({ children }) => {
     return (
 
-            <View >
+            <View style={styles.TeoNotif} >
                 //ajout des notifications ici
                 {children}
             </View>
@@ -20,3 +20,13 @@ const TeoNotif: React.FC<TeoNotifProps> = ({ children }) => {
 
 
 export default TeoNotif;
+const styles = StyleSheet.create({
+    TeoNotif: {
+        backgroundColor: 'white',
+        borderRadius: 20,
+        padding: 20,
+        margin: 20,
+        elevation: 0,
+        opacity:0.85,
+    },
+});
