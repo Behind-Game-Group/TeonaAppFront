@@ -4,7 +4,7 @@ import TeoNotif from "@/components/TeoNotif/TeoNotif";
 import CustomButton from "@/components/ButtonInscriptionLogin";
 import {router} from "expo-router";
 
-export default function AllowNotif() {
+export default function NotifPage() {
 
     return (
         <SafeAreaProvider style={styles.allContainer}>

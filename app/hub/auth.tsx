@@ -8,7 +8,7 @@ import {
 } from 'react-native';
 import { useRouter } from "expo-router";
 import CustomButton from '@/components/ButtonInscriptionLogin';
-import AllowNotif from "@/app/hub/(login)/allowNotif";
+import NotifPage from "@/app/hub/notifPage";
 
 
 const { width, height } = Dimensions.get('window');
@@ -17,7 +17,7 @@ const StartScreen: React.FC = () => {
     const router = useRouter();
 
     const handleSignUp = () => {
-        AllowNotif();
+        NotifPage();
         router.push('/hub/register');
     };
 
