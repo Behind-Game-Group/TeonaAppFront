@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React from 'react';
 import {
     View,
     Text,
@@ -7,18 +7,19 @@ import {
     StyleSheet,
     ImageBackground,
 } from 'react-native';
-import LayoutLogo from '../register/_layout'
+import LayoutLogo from './(register)/_layout';
+import {Link} from "expo-router";
 
-export default function startScreen() {
+export default function informationsName() {
     return (
         <View style={styles.container}>
             <ImageBackground
-                source={require('@/assets/images/bgInformationsName.png')}
+                source={require('../../assets/images/bgInformationsName.png')}
                 style={styles.backgroundImage}
             >
                 <View style={styles.content}>
-                    <Text style={styles.title}>FLet’s get started!
-                        Let’s start with your  name</Text>
+                    <Text style={styles.title}>FLet’s get started! {'\n'}
+                        Let’s start with your {'\n'} name</Text>
                     <Text style={styles.detailsContent}>Enter your first and last name exactly
                         as written on your password or ID card. </Text>
 
@@ -37,7 +38,7 @@ export default function startScreen() {
                     />
 
                     <TouchableOpacity style={styles.button}>
-                        <Text style={styles.buttonText}>Continue</Text>
+                        <Link href="/hub/informationsIdentity" style={styles.buttonText}>Continue</Link>
                     </TouchableOpacity>
                 </View>
                 <LayoutLogo/>
@@ -72,14 +73,12 @@ const styles = StyleSheet.create({
         marginTop: 100,
     },
     title: {
-        fontFamily: 'Lucida Grande',
         fontSize: 20,
         fontWeight: 'bold',
         color: '#606060',
         textAlign: 'center',
     },
     detailsContent: {
-        fontFamily: 'Lucida Grande',
         fontSize: 20,
         color: '#606060',
         textAlign: 'center',

@@ -4,20 +4,21 @@ import {Link} from "expo-router";
 
 const {width, height} = Dimensions.get('window');
 
-export default function startScreen() {
+export default function beginInscription() {
     return (
         <View style={styles.container}>
             <ImageBackground
-                source={require('@/assets/images/bgBeginInscription.png')}
+                source={require('../../assets/images/bgBeginInscription.png')}
                 style={styles.backgroundImage}
                 resizeMode="cover"
             >
+
                 <View style={styles.content}>
                     <Text style={styles.title}>Carry your journey with you</Text>
-                    <Text style={styles.detailsContent}>Find a destination, an itinerary, book a trip…<br/>
-                        TeonaPassenger app will stay with <br/> you every step of the way.</Text>
+                    <Text style={styles.detailsContent}>Find a destination, an itinerary, book a trip…{'\n'}
+                        TeonaPassenger app will stay with {'\n'} you every step of the way.</Text>
                     <TouchableOpacity style={styles.buttonContinue}>
-                        <Link href={'/hub/register'} style={styles.buttonTextContinue}>Continue</Link>
+                        <Link href="/hub/informationsName" style={styles.buttonTextContinue}>Continue</Link>
                     </TouchableOpacity>
                 </View>
 
@@ -47,7 +48,6 @@ const styles = StyleSheet.create({
         backgroundColor: 'rgba(255, 255, 255, 0.7)' // Opacité sur le fond seulement
     },
     title: {
-        fontFamily: 'Lucida Grande',
         fontSize: 18,
         fontWeight: 'bold',
         color: '#606060',
@@ -65,7 +65,7 @@ const styles = StyleSheet.create({
         borderColor: '#D9D9D9',
         // Ombre pour iOS
         shadowColor: '#000',
-        shadowOffset: { width: 0, height: 2 }, // Décalage uniquement en bas
+        shadowOffset: {width: 0, height: 2}, // Décalage uniquement en bas
         shadowOpacity: 0.2,
         // Ombre pour Android
         elevation: 10,
@@ -77,10 +77,10 @@ const styles = StyleSheet.create({
         width: '75%',
         alignItems: 'center',
         marginBottom: 20,
-     },
+    },
     buttonTextContinue: {
         color: 'white',
         fontSize: 18,
         fontWeight: 'bold',
-     },
+    },
 });
