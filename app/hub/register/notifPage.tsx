@@ -1,4 +1,4 @@
-import {Alert, Button, Text, ImageBackground, StyleSheet, View} from "react-native";
+import {Text, ImageBackground, StyleSheet, View} from "react-native";
 import {SafeAreaProvider, SafeAreaView} from "react-native-safe-area-context";
 import TeoNotif from "@/components/TeoNotif/TeoNotif";
 import CustomButton from "@/components/ButtonInscriptionLogin";
@@ -31,13 +31,13 @@ export default function NotifPage() {
                             </Text>
                             <View style={styles.allowButtContainer}>
                             <CustomButton
-                                onPress={() => router.push('/hub/login')}
+                                onPress={() => router.push('/hub/register/notifAllow')}
                                 text="Yes,keep me updated"
                                 color="blue"
 
                             />
                             <CustomButton
-                                onPress={() => router.push('/hub/login')}
+                                onPress={() => router.push('/hub/register/notifAllow')}
                                 text="Maybe,later"
                                 color="white"
 
