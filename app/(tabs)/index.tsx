@@ -24,7 +24,6 @@ export default function HomeScreen() {
                 <Link href={'/hub/auth'}>Auth Screen</Link>
                 <Link href={'/hub/login'}>Login</Link>
                 <Link href={'/hub/beginInscription'}>Begin Inscription</Link>
-
                 <Link href={'/hub/informationsIdentity'}>Identity</Link>
                 <Link href={'/wallet/wallet'}>Wallet</Link>
                 <Link href={'/bus/bus'}>Bus</Link>
