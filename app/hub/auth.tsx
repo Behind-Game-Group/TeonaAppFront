@@ -18,7 +18,7 @@ const StartScreen: React.FC = () => {
 
     const handleSignUp = () => {
         NotifPage();
-        router.push('/hub/register');
+        router.push('/hub/(register)/BeginInscription');
     };
 
     return (
@@ -41,7 +41,7 @@ const StartScreen: React.FC = () => {
                     <CustomButton
                         text="Sign In"
                         color="white"
-                        onPress={() => router.push('/hub/login')}
+                        onPress={() => router.push('/hub/(login)/Login')}
                     />
                 </View>
             </ImageBackground>

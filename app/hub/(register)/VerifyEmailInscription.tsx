@@ -7,7 +7,7 @@ const ForgotPasswordVerifyEmail: React.FC = () => {
 
   const handleVerification = (pinCode: string) => {
     // Implémenter la logique pour le vérifier le PIN code ici
-    router.push('/hub/(login)/forgotPassword');
+    router.push('/hub/(register)/ContactPreferences');
   };
 
   return (

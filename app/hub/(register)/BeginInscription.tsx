@@ -12,7 +12,7 @@ function BeginInscription() {
     return (
         <View style={styles.container}>
             <ImageBackground
-                source={require('../../assets/images/bgBeginInscription.png')}
+                source={require('../../../assets/images/bgBeginInscription.png')}
                 style={styles.backgroundImage}
                 resizeMode="cover"
             >

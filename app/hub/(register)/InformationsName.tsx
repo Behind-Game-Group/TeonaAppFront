@@ -6,7 +6,7 @@ import {
     StyleSheet,
     ImageBackground,
 } from 'react-native';
-import LayoutLogo from './(register)/_layout';
+import LayoutLogo from './_layout';
 import {useRouter} from "expo-router";
 import ButtonInscriptionLogin from "@/components/ButtonInscriptionLogin";
 
@@ -19,7 +19,7 @@ function InformationsName() {
     return (
         <View style={styles.container}>
             <ImageBackground
-                source={require('../../assets/images/bgInformationsName.png')}
+                source={require('../../../assets/images/bgInformationsName.png')}
                 style={styles.backgroundImage}
             >
                 <View style={styles.content}>

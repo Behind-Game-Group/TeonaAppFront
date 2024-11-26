@@ -6,7 +6,7 @@ import {
     ImageBackground,
     Pressable
 } from 'react-native';
-import LayoutLogo from './(register)/_layout';
+import LayoutLogo from './_layout';
 import ButtonInscriptionLogin from "@/components/ButtonInscriptionLogin";
 import {useRouter} from "expo-router";
 
@@ -22,7 +22,7 @@ export default function InformationsGeneralConditions() {
     return (
         <View style={styles.container}>
             <ImageBackground
-                source={require('../../assets/images/bgInformationsGeneralConditions.png')}
+                source={require('../../../assets/images/bgInformationsGeneralConditions.png')}
                 style={styles.backgroundImage}
             >
                 <View style={styles.content}>

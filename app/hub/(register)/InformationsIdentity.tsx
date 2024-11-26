@@ -5,7 +5,7 @@ import {
     StyleSheet,
     ImageBackground, ActivityIndicator,
 } from 'react-native';
-import LayoutLogo from './(register)/_layout';
+import LayoutLogo from './_layout';
 import {Picker} from "@react-native-picker/picker";
 import {useRouter} from "expo-router";
 import ButtonInscriptionLogin from "@/components/ButtonInscriptionLogin";
@@ -66,7 +66,7 @@ function InformationsIdentity() {
     return (
         <View style={styles.container}>
             <ImageBackground
-                source={require('../../assets/images/bgInformationsIdentity.png')}
+                source={require('../../../assets/images/bgInformationsIdentity.png')}
                 style={styles.backgroundImage}
             >
                 <View style={styles.content}>

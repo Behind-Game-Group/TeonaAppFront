@@ -6,9 +6,10 @@ import {
     StyleSheet,
     ImageBackground, ActivityIndicator,
 } from 'react-native';
-import LayoutLogo from './(register)/_layout';
+import LayoutLogo from './_layout';
 import ButtonInscriptionLogin from "@/components/ButtonInscriptionLogin";
 import {Picker} from "@react-native-picker/picker";
+import { useRouter } from 'expo-router';
 
 interface Country {
     languages?: Record<string, string>;
@@ -22,6 +23,7 @@ function InformationsEmail() {
     const [language, setLanguage] = useState(null);
     const [languages, setLanguages] = useState<string[]>([]);
     const [loading, setLoading] = useState<boolean>(true);
+    const router = useRouter();
 
     useEffect(() => {
         const fetchLanguages = async () => {
@@ -45,10 +47,19 @@ function InformationsEmail() {
         void fetchLanguages();
     }, []);
 
+    const handleContinue = () => {
+        if (!email.trim()) {
+            alert("Please enter a valid email address.");
+            return;
+        }
+
+        router.push("/hub/VerifyEmailInscription");
+    };
+
     return (
         <View style={styles.container}>
             <ImageBackground
-                source={require('../../assets/images/bgInformationsEmail.png')}
+                source={require('../../../assets/images/bgInformationsEmail.png')}
                 style={styles.backgroundImage}
             >
                 <View style={styles.content}>
@@ -104,8 +115,10 @@ function InformationsEmail() {
                             keyboardType="phone-pad"
                         />
                     </View>
-                    <ButtonInscriptionLogin text="Continue" color="blue" onPress={() => {
-                    }}
+                    <ButtonInscriptionLogin
+                      text="Continue"
+                      color="blue"
+                      onPress={handleContinue}
                     />
                 </View>
                 <LayoutLogo/>
