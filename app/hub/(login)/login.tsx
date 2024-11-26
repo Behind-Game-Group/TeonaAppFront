@@ -13,6 +13,9 @@ import {
 import { Link, useRouter } from 'expo-router';
 import CustomButton from '@/components/ButtonInscriptionLogin';
 
+// Récupération des dimensions de l'écran
+const { width, height } = Dimensions.get('window');
+
 const LoginPage: React.FC = () => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
@@ -35,7 +38,7 @@ const LoginPage: React.FC = () => {
     };
 
     return (
-      <View style={styles.fullScreen}>
+      <View style={[styles.fullScreen, { width, height }]}>
           <ImageBackground
             source={require('@/assets/images/bgSignIn.png')}
             style={styles.backgroundImage}
@@ -97,7 +100,7 @@ const LoginPage: React.FC = () => {
 
 const styles = StyleSheet.create({
     fullScreen: {
-        flex: 1, // Occupe toute la hauteur et largeur de l'écran
+        flex: 1, // S'assure que tout l'écran est couvert
     },
     backgroundImage: {
         flex: 1,
