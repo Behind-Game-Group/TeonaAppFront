@@ -147,7 +147,7 @@ const styles = StyleSheet.create({
         marginBottom: 10,
     },
     subtitle: {
-        fontSize: 20,
+        fontSize: 18,
         color: '#606060',
         textAlign: 'center',
     },
@@ -156,7 +156,6 @@ const styles = StyleSheet.create({
         color: '#606060',
         alignSelf: 'flex-start',
         marginTop: 15,
-        marginBottom: 5,
     },
     details: {
         fontSize: 12,

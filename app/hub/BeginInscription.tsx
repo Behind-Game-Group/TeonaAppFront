@@ -43,23 +43,22 @@ const styles = StyleSheet.create({
     },
     content: {
         width: '93%',
-        marginTop: 630,
+        marginTop: 580,
         alignItems: 'center',
         justifyContent: 'center',
         borderRadius: 30,
         backgroundColor: 'rgba(255, 255, 255, 0.7)',
-        height: 200,
+        height: 180,
     },
     title: {
         fontSize: 18,
         fontWeight: 'bold',
         color: '#606060',
         textAlign: 'center',
-        paddingTop: 10,
-        paddingBottom: 10,
+        paddingBottom: 5,
     },
     detailsContent: {
-        fontSize: 18,
+        fontSize: 15,
         color: '#606060',
         textAlign: 'center',
     }
