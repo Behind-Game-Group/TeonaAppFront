@@ -11,7 +11,7 @@ export default function CookiePop() {
             <ImageBackground
                 source={require('@/assets/images/cookiepop.png')}
                 style={styles.backgroundImage}
-                resizeMode="cover"
+
             >
 
             <SafeAreaView style={styles.content}>
