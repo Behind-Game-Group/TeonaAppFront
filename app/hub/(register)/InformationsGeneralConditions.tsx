@@ -6,7 +6,6 @@ import {
     ImageBackground,
     Pressable
 } from 'react-native';
-import LayoutLogo from './_layout';
 import ButtonInscriptionLogin from "@/components/ButtonInscriptionLogin";
 import {useRouter} from "expo-router";
 
@@ -47,7 +46,6 @@ export default function InformationsGeneralConditions() {
                     </View>
                     <ButtonInscriptionLogin text={"Create an account"} color={"blue"} onPress={handleContinue}/>
                 </View>
-                <LayoutLogo/>
             </ImageBackground>
         </View>
     );

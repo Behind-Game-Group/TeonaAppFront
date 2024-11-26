@@ -5,7 +5,6 @@ import {
     StyleSheet,
     ImageBackground, ActivityIndicator,
 } from 'react-native';
-import LayoutLogo from './_layout';
 import {Picker} from "@react-native-picker/picker";
 import {useRouter} from "expo-router";
 import ButtonInscriptionLogin from "@/components/ButtonInscriptionLogin";
@@ -156,7 +155,6 @@ function InformationsIdentity() {
                     <ButtonInscriptionLogin text={"Continue"} color={"blue"} onPress={handleContinue}/>
 
                 </View>
-                <LayoutLogo/>
             </ImageBackground>
         </View>
     );

@@ -6,7 +6,6 @@ import {
     StyleSheet,
     ImageBackground,
 } from 'react-native';
-import LayoutLogo from './_layout';
 import {useRouter} from "expo-router";
 import ButtonInscriptionLogin from "@/components/ButtonInscriptionLogin";
 
@@ -43,7 +42,6 @@ function InformationsName() {
                     <ButtonInscriptionLogin text={"Continue"} color={"blue"} onPress={handleContinue}/>
 
                 </View>
-                <LayoutLogo/>
             </ImageBackground>
         </View>
     );

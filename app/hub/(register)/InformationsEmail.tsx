@@ -6,7 +6,6 @@ import {
     StyleSheet,
     ImageBackground, ActivityIndicator,
 } from 'react-native';
-import LayoutLogo from './_layout';
 import ButtonInscriptionLogin from "@/components/ButtonInscriptionLogin";
 import {Picker} from "@react-native-picker/picker";
 import { useRouter } from 'expo-router';
@@ -121,7 +120,6 @@ function InformationsEmail() {
                       onPress={handleContinue}
                     />
                 </View>
-                <LayoutLogo/>
             </ImageBackground>
         </View>
     );
