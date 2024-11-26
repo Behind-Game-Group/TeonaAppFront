@@ -1,15 +1,16 @@
 import {SafeAreaProvider, SafeAreaView} from "react-native-safe-area-context";
-import {ImageBackground, StyleSheet, Text, TouchableOpacity,View} from "react-native";
+import {Dimensions, ImageBackground, StyleSheet, Text, TouchableOpacity, View} from "react-native";
 import TeoNotif from "@/components/TeoNotif/TeoNotif";
 import {router} from "expo-router";
 
+const {width, height} = Dimensions.get('window');
 export default function allowTrackAct() {
     return (
         <SafeAreaProvider>
             <ImageBackground
                 source={require('@/assets/images/allowtrackact.png')}
                 style={styles.backgroundImage}
-                resizeMode="cover">
+                >
                 <SafeAreaView>
                     <TeoNotif>
                         <Text
@@ -36,10 +37,12 @@ export default function allowTrackAct() {
 
 const styles = StyleSheet.create({
     backgroundImage: {
-        flex: 1,
         justifyContent: 'center',
         alignItems: 'center',
+        width: width,
+        height: height,
         resizeMode: 'contain',
+
     },
     trackActiText:{
     color:"black",

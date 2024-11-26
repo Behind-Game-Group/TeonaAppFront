@@ -114,20 +114,20 @@ const styles = StyleSheet.create({
     cookieButton: {
         flexDirection: 'column',
         justifyContent: 'flex-end',
-
-
+        alignContent:'center',
+        alignItems: 'center',
     },
     viewCookieButton: {
         flexDirection: 'column',
         justifyContent: 'flex-end',
         alignContent:'space-around',
-        alignItems: 'left',
+        alignItems: 'flex-start',
         paddingBottom: height * 0.05,
     },
     notifCookieButton : {
         alignContent:'space-around',
         justifyContent: 'flex-end',
-        alignItems:'left',
+        alignItems: 'flex-start',
 
 
     },

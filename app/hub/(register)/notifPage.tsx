@@ -1,4 +1,4 @@
-import {Text, ImageBackground, StyleSheet, View} from "react-native";
+import {Text, ImageBackground, StyleSheet, View, Dimensions, Image} from "react-native";
 import {SafeAreaProvider, SafeAreaView} from "react-native-safe-area-context";
 import TeoNotif from "@/components/TeoNotif/TeoNotif";
 import CustomButton from "@/components/ButtonInscriptionLogin";
@@ -11,18 +11,19 @@ export default function NotifPage() {
             <ImageBackground
                 source={require('@/assets/images/allowcontainer1.jpg')}
                 style={styles.backgroundImage}
-                resizeMode="cover"
+
             >
                 <SafeAreaView style={styles.allContent}>
 
-                    <View style={styles.notifContainer}>
-                        <Text style={styles.titleAll}> Turn on your notifications to stay up to date about your
-                            journey.</Text>
-                        <Text style={styles.optTitleAll}> We'll automatically send you information about your journey in
-                            real time . </Text>
-                    </View>
+
                     <View style={styles.notifAllow}>
                         <TeoNotif>
+                            <View style={styles.notifContainer}>
+                                <Text style={styles.titleAll}> Turn on your notifications to stay up to date about your
+                                    journey.</Text>
+                                <Text style={styles.optTitleAll}> We'll automatically send you information about your journey in
+                                    real time . </Text>
+                            </View>
                             <Text>
                                 Real-time updates
                                 Receive relevant information throughout your trip.
@@ -51,38 +52,56 @@ export default function NotifPage() {
                         </TeoNotif>
 
                     </View>
+
                 </SafeAreaView>
             </ImageBackground>
         </SafeAreaProvider>
     )
 }
+const {width, height} = Dimensions.get('window');
 const styles = StyleSheet.create({
 
     backgroundImage: {
-        flex: 1,
         justifyContent: 'center',
         alignItems: 'center',
+        width: width,
+        height: height,
+        resizeMode: 'contain',
     },
-    allContainer: {},
+    allContainer: {
+        flex: 1,
+    },
     allContent: {
         flex: 1,
         justifyContent: 'center',
         alignItems: 'center',
+        maxHeight: height * 0.8,
+        overflow: 'hidden',
+        paddingHorizontal: 10,
+        paddingVertical: 20,
     },
     titleAll: {
-        color: "black",
+        textAlign:'center' ,
+        fontSize: 15,
+
+        color: 'black',
     },
     optTitleAll: {
+        textAlign:'center' ,
+        fontSize: 15,
         color: "blue",
     },
     notifContainer: {
-        backgroundColor: "#fff",
+
     },
     notifAllow: {
-        backgroundColor: "#fff",
+        padding: height * 0.05,
     },
     allowButtContainer: {
-
+        flexDirection: 'column',
+        justifyContent: 'flex-end',
+        
+        alignItems: 'center',
     },
 
 
