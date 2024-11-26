@@ -17,7 +17,7 @@ export default function InformationsGeneralConditions() {
     const router = useRouter();
 
     const handleContinue = () => {
-        router.push("/hub/informationsIdentity");
+        router.push("/hub/InformationsIdentity"); // La faut changer la direction
     };
     return (
         <View style={styles.container}>

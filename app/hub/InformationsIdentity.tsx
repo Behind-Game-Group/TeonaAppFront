@@ -29,7 +29,7 @@ function InformationsIdentity() {
     const router = useRouter();
 
     const handleContinue = () => {
-        router.push("/hub/informationsEmail");
+        router.push("/hub/InformationsEmail");
     };
 
     useEffect(() => {

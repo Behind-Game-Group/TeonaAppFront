@@ -14,7 +14,7 @@ function InformationsName() {
     const router = useRouter();
 
     const handleContinue = () => {
-        router.push("/hub/informationsIdentity");
+        router.push("/hub/InformationsIdentity");
     };
     return (
         <View style={styles.container}>

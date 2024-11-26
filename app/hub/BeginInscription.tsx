@@ -7,7 +7,7 @@ function BeginInscription() {
     const router = useRouter(); //
 
     const handleContinue = () => {
-        router.push("/hub/informationsName");
+        router.push("/hub/InformationsName");
     };
     return (
         <View style={styles.container}>

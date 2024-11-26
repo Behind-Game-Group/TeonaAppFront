@@ -23,8 +23,7 @@ export default function HomeScreen() {
             <ThemedView style={styles.stepContainer}>
                 <Link href={'/hub/auth'}>Auth Screen</Link>
                 <Link href={'/hub/login'}>Login</Link>
-                <Link href={'/hub/beginInscription'}>Begin Inscription</Link>
-                <Link href={'/hub/informationsGeneralConditions'}>Beg</Link>
+                <Link href={'/hub/BeginInscription'}>Begin Inscription</Link>
                 <Link href={'/wallet/wallet'}>Wallet</Link>
                 <Link href={'/bus/bus'}>Bus</Link>
                 <Link href={'/sky/sky'}>Sky</Link>
