@@ -2,12 +2,13 @@ import React, {useState, useEffect} from 'react';
 import {
     View,
     Text,
-    TouchableOpacity,
     StyleSheet,
     ImageBackground, ActivityIndicator,
 } from 'react-native';
 import LayoutLogo from './(register)/_layout';
 import {Picker} from "@react-native-picker/picker";
+import {useRouter} from "expo-router";
+import ButtonInscriptionLogin from "@/components/ButtonInscriptionLogin";
 
 interface Country {
     name: {
@@ -15,35 +16,43 @@ interface Country {
     };
 }
 
-export default function informationsIdentity() {
+function InformationsIdentity() {
 
     const [countries, setCountries] = useState<string[]>([]);
-    const [selectCountry, setSelectCountry] = useState('');
-    const [month, setMonth] = useState('');
-    const [day, setDay] = useState('');
-    const [year, setYear] = useState('');
-    const [title, setTitle] = useState('');
+    const [selectCountry, setSelectCountry] = useState<string>('');
+    const [month, setMonth] = useState<string>('');
+    const [day, setDay] = useState<string>('');
+    const [year, setYear] = useState<string>('');
+    const [title, setTitle] = useState<string>('');
     const [isLoading, setIsLoading] = useState<boolean>(true);
 
+    const router = useRouter();
+
+    const handleContinue = () => {
+        router.push("/hub/informationsEmail");
+    };
+
     useEffect(() => {
-        // Fonction pour récupérer les pays depuis une API
-        const fetchCountries = async () => {
+        // Fonction interne pour charger les pays
+        const loadCountries = async () => {
             try {
                 const response = await fetch('https://restcountries.com/v3.1/all');
                 const data: Country[] = await response.json();
-                // Trier les pays par ordre alphabétique et récupérer leurs noms
                 const countryList = data
                     .map((country) => country.name.common)
-                    .sort();
+                    .sort((a, b) => a.localeCompare(b));
                 setCountries(countryList);
-                setIsLoading(false);
             } catch (error) {
-                console.error('Erreur lors du chargement des pays:', error);
+                console.error('Erreur lors du chargement des pays :', error);
+            } finally {
                 setIsLoading(false);
             }
         };
 
-        fetchCountries();
+        // Appel immédiat de la fonction
+        (async () => {
+            await loadCountries();
+        })();
     }, []);
 
     const months = [
@@ -87,6 +96,7 @@ export default function informationsIdentity() {
                     {/* Date de naissance */}
                     <Text style={styles.label}>Date of birth</Text>
                     <View style={styles.row}>
+                        {/* Mois */}
                         <View style={[styles.input, styles.dateInputMonth]}>
                             <Picker
                                 selectedValue={month}
@@ -143,9 +153,7 @@ export default function informationsIdentity() {
                         </Picker>
                     </View>
 
-                    <TouchableOpacity style={styles.button}>
-                        <Text style={styles.buttonText}>Continue</Text>
-                    </TouchableOpacity>
+                    <ButtonInscriptionLogin text={"Continue"} color={"blue"} onPress={handleContinue}/>
 
                 </View>
                 <LayoutLogo/>
@@ -155,12 +163,9 @@ export default function informationsIdentity() {
 }
 
 const styles = StyleSheet.create({
-    item: {
-        color: 'red'
-    },
     container: {
         flex: 1,
-        backgroundColor: '#000', // Optionnel si l'image ne charge pas
+        backgroundColor: '#000',
     },
     backgroundImage: {
         flex: 1,
@@ -227,7 +232,7 @@ const styles = StyleSheet.create({
     },
     picker: {
         height: 35,
-        backgroundColor: 'rgba(255, 255, 255, 0.3)',
+        backgroundColor: 'rgba(255, 255, 255, 0.1)',
         color: '#606060',
         borderRadius: 5,
     },
@@ -247,3 +252,5 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
     }
 });
+
+export default InformationsIdentity;

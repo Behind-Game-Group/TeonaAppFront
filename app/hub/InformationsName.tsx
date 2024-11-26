@@ -3,14 +3,19 @@ import {
     View,
     Text,
     TextInput,
-    TouchableOpacity,
     StyleSheet,
     ImageBackground,
 } from 'react-native';
 import LayoutLogo from './(register)/_layout';
-import {Link} from "expo-router";
+import {useRouter} from "expo-router";
+import ButtonInscriptionLogin from "@/components/ButtonInscriptionLogin";
 
-export default function informationsName() {
+function InformationsName() {
+    const router = useRouter();
+
+    const handleContinue = () => {
+        router.push("/hub/informationsIdentity");
+    };
     return (
         <View style={styles.container}>
             <ImageBackground
@@ -27,8 +32,6 @@ export default function informationsName() {
                         style={styles.input}
                         placeholder="First Name"
                         placeholderTextColor="#888"
-                        autoCapitalize="none"
-                        autoCorrect={false}
                     />
 
                     <TextInput
@@ -37,9 +40,8 @@ export default function informationsName() {
                         placeholderTextColor="#888"
                     />
 
-                    <TouchableOpacity style={styles.button}>
-                        <Link href="/hub/informationsIdentity" style={styles.buttonText}>Continue</Link>
-                    </TouchableOpacity>
+                    <ButtonInscriptionLogin text={"Continue"} color={"blue"} onPress={handleContinue}/>
+
                 </View>
                 <LayoutLogo/>
             </ImageBackground>
@@ -50,7 +52,7 @@ export default function informationsName() {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: '#000', // Optionnel si l'image ne charge pas
+        backgroundColor: '#000',
     },
     backgroundImage: {
         flex: 1,
@@ -111,3 +113,5 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
     }
 });
+
+export default InformationsName;

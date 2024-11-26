@@ -1,10 +1,14 @@
 import React from 'react';
-import {Dimensions, ImageBackground, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
-import {Link} from "expo-router";
+import {ImageBackground, StyleSheet, Text, View} from 'react-native';
+import {useRouter} from "expo-router";
+import ButtonInscriptionLogin from "@/components/ButtonInscriptionLogin";
 
-const {width, height} = Dimensions.get('window');
+function BeginInscription() {
+    const router = useRouter(); //
 
-export default function beginInscription() {
+    const handleContinue = () => {
+        router.push("/hub/informationsName");
+    };
     return (
         <View style={styles.container}>
             <ImageBackground
@@ -17,11 +21,9 @@ export default function beginInscription() {
                     <Text style={styles.title}>Carry your journey with you</Text>
                     <Text style={styles.detailsContent}>Find a destination, an itinerary, book a trip…{'\n'}
                         TeonaPassenger app will stay with {'\n'} you every step of the way.</Text>
-                    <TouchableOpacity style={styles.buttonContinue}>
-                        <Link href="/hub/informationsName" style={styles.buttonTextContinue}>Continue</Link>
-                    </TouchableOpacity>
-                </View>
 
+                    <ButtonInscriptionLogin text={"Continue"} color={"blue"} onPress={handleContinue}/>
+                </View>
             </ImageBackground>
         </View>
     );
@@ -30,7 +32,7 @@ export default function beginInscription() {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: '#000', // Optionnel si l'image ne charge pas
+        backgroundColor: '#000',
     },
     backgroundImage: {
         flex: 1,
@@ -41,11 +43,12 @@ const styles = StyleSheet.create({
     },
     content: {
         width: '93%',
-        marginTop: 635,
+        marginTop: 630,
         alignItems: 'center',
         justifyContent: 'center',
         borderRadius: 30,
-        backgroundColor: 'rgba(255, 255, 255, 0.7)' // Opacité sur le fond seulement
+        backgroundColor: 'rgba(255, 255, 255, 0.7)',
+        height: 200,
     },
     title: {
         fontSize: 18,
@@ -59,28 +62,7 @@ const styles = StyleSheet.create({
         fontSize: 18,
         color: '#606060',
         textAlign: 'center',
-    },
-    buttonContinue: {
-        backgroundColor: '#2787BB',
-        borderColor: '#D9D9D9',
-        // Ombre pour iOS
-        shadowColor: '#000',
-        shadowOffset: {width: 0, height: 2}, // Décalage uniquement en bas
-        shadowOpacity: 0.2,
-        // Ombre pour Android
-        elevation: 10,
-        borderWidth: 2,
-        paddingVertical: 10,
-        paddingHorizontal: width * 0.1,
-        borderRadius: 5,
-        marginVertical: 10,
-        width: '75%',
-        alignItems: 'center',
-        marginBottom: 20,
-    },
-    buttonTextContinue: {
-        color: 'white',
-        fontSize: 18,
-        fontWeight: 'bold',
-    },
+    }
 });
+
+export default BeginInscription;
