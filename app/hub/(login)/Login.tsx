@@ -11,25 +11,46 @@ import {
     Dimensions,
 } from 'react-native';
 import { Link, useRouter } from 'expo-router';
+import axios from 'axios';
 import CustomButton from '@/components/ButtonInscriptionLogin';
 
-// Récupération des dimensions de l'écran
 const { width, height } = Dimensions.get('window');
 
 const LoginPage: React.FC = () => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [modalVisible, setModalVisible] = useState(false);
+    const [loading, setLoading] = useState(false);
 
     const router = useRouter();
 
-    const handleLogin = () => {
+    const handleLogin = async () => {
         if (!email || !password) {
             Alert.alert('Error', 'Please fill in both fields.');
             return;
         }
 
-        setModalVisible(true);
+        setLoading(true);
+
+        try {
+            const response = await axios.post('XXXXXXXXXXXXXXXXXXXXXXXX', {
+                email,
+                password,
+            });
+
+            // Cas succès
+            Alert.alert('Success', `Welcome back, ${response.data.name || email}!`);
+            setModalVisible(true);
+        } catch (error: any) {
+            console.error(error);
+
+            // Cas erreur
+            const errorMessage =
+              error.response?.data?.message || 'An error occurred. Please try again.';
+            Alert.alert('Error', errorMessage);
+        } finally {
+            setLoading(false);
+        }
     };
 
     const closeModalAndGoHome = () => {
@@ -73,7 +94,11 @@ const LoginPage: React.FC = () => {
                       </Link>
                   </View>
 
-                  <CustomButton text="Login" color="blue" onPress={handleLogin} />
+                  <CustomButton
+                    text={loading ? 'Logging in...' : 'Login'}
+                    color="blue"
+                    onPress={handleLogin}
+                  />
               </View>
 
               {/* Modal */}
@@ -99,9 +124,7 @@ const LoginPage: React.FC = () => {
 };
 
 const styles = StyleSheet.create({
-    fullScreen: {
-        flex: 1, // S'assure que tout l'écran est couvert
-    },
+    fullScreen: { flex: 1 },
     backgroundImage: {
         flex: 1,
         justifyContent: 'center',
@@ -146,7 +169,6 @@ const styles = StyleSheet.create({
         fontSize: 14,
         fontWeight: '600',
         textDecorationLine: 'underline',
-        alignSelf: 'flex-end',
     },
     modalOverlay: {
         flex: 1,
@@ -160,11 +182,6 @@ const styles = StyleSheet.create({
         backgroundColor: 'white',
         borderRadius: 10,
         alignItems: 'center',
-        shadowColor: '#000',
-        shadowOffset: { width: 0, height: 2 },
-        shadowOpacity: 0.25,
-        shadowRadius: 4,
-        elevation: 5,
     },
     modalTitle: {
         fontSize: 24,
