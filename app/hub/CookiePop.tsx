@@ -1,5 +1,5 @@
 import {SafeAreaProvider, SafeAreaView} from "react-native-safe-area-context";
-import {Dimensions, ImageBackground, StyleSheet, Text, Touchable, View} from "react-native";
+import {Dimensions, ImageBackground, StyleSheet, Text, TouchableOpacity, View} from "react-native";
 import TeoNotif from "@/components/TeoNotif/TeoNotif";
 import CustomButton from "@/components/ButtonInscriptionLogin";
 import {router} from "expo-router";
@@ -22,40 +22,46 @@ export default function CookiePop() {
                     > Teona Passenger uses cookies</Text>
                     <Text
                         style={styles.cookieText}>
+                        {'\n'}{'\n'}
                         Teona Passenger uses cookies and similar technologies when you visit the TeonaGroup.com website
                         and related websites and our app (hereinafter called “our website”). We always use functional
                         and analytical cookies to make sure our website works properly and to analyse and improve the
-                        use of our pages. With your consent, we also use cookies to (i) analyse the effectiveness of our
+                        use of our pages.{'\n'}{'\n'}
+                        With your consent, we also use cookies to (i) analyse the effectiveness of our
                         marketing campaigns (“Marketing cookies for performance”) and to (ii) help us make our content
                         and advertisements more relevant to your interests (“Marketing cookies for advertisement and
-                        social media”). By placing these cookies, Teona Passenger and third parties can track your click
-                        behavior accross the web. By clicking on “Accept”, you consent to the placing of all marketing
+                        social media”).
+                        By placing these cookies, Teona Passenger and third parties can track your click
+                        behavior accross the web. {'\n'}{'\n'}
+                        By clicking on “Accept”, you consent to the placing of all marketing
                         cookies. By clicking on “Reject”, we will only place functional and analytical cookies. You can
                         change. Your cookie preferences or withdraw your consent at any time.
+                        {'\n'}
                     </Text>
 
-                    <View style={styles.notifCookieButton}>
-                        <CustomButton
-                            onPress={() => router.push('/hub/beginInscription')}
-                            text="Change cookie settings "
-                            color="white"
-                        />
-                        <CustomButton
-                            onPress={() => router.push('/hub/beginInscription')}
-                            text="Read teona Passenger's cookie policy"
-                            color="white"
-                        />
-                        <CustomButton
-                            onPress={() => router.push('/hub/beginInscription')}
-                            text="Check the full list of cookies and third parties used on our website "
-                            color="white"
-                        />
-                    </View>
+<View style={styles.viewCookieButton}>
+                        <TouchableOpacity
+                            style={styles.notifCookieButton}
+                            onPress={() => router.push('/hub/beginInscription')}>
+                            <Text style={styles.buttonCookieText}>Change cookie settings </Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity
+                            style={styles.notifCookieButton}
+                            onPress={() => router.push('/hub/beginInscription')}>
+                            <Text style={styles.buttonCookieText}>Read teona Passenger's cookie policy</Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity
+                            style={styles.notifCookieButton}
+                            onPress={() => router.push('/hub/beginInscription')}>
+                            <Text style={styles.buttonCookieText}>Check the full list of cookies and third parties used on our website</Text>
+                        </TouchableOpacity>
+</View>
+
                 </TeoNotif>
 
                 <View style={styles.cookieButton}>
                     <CustomButton
-                        onPress={() => router.push('/hub/allowTrackAct')}
+                        onPress={() => router.push('/hub/register/allowTrackAct')}
                         text="Accept"
                         color="blue"
                     />
@@ -80,20 +86,26 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         width: width,
         height: height,
+        resizeMode: 'contain',
     },
     content: {
         flex: 1,
         justifyContent: 'center',
         alignItems: 'center',
+        maxHeight: height * 0.8,
+        overflow: 'hidden',
+        paddingHorizontal: 10,
+        paddingVertical: 20,
     },
     cookieText: {
-        textAlign: 'center',
+        textAlign: 'left',
         fontSize: 12,
         color: 'black',
+        flexWrap: 'wrap',
 
     },
     cookieTitle: {
-        textAlign:'center',
+        textAlign:'left' ,
         fontSize: 15,
         fontWeight: 'bold',
         color: 'black',
@@ -102,14 +114,28 @@ const styles = StyleSheet.create({
     cookieButton: {
         flexDirection: 'column',
         justifyContent: 'flex-end',
-        alignItems: 'center',
-        paddingBottom: height * 0.1,
+
 
     },
-    notifCookieButton : {
+    viewCookieButton: {
         flexDirection: 'column',
         justifyContent: 'flex-end',
-        alignItems: 'center',
+        alignContent:'space-around',
+        alignItems: 'left',
+        paddingBottom: height * 0.05,
+    },
+    notifCookieButton : {
+        alignContent:'space-around',
+        justifyContent: 'flex-end',
+        alignItems:'left',
 
-    }
+
+    },
+    buttonCookieText: {
+        color: '#4387AA',
+        fontWeight: 'bold',
+        justifyContent: 'flex-end',
+        alignContent:'space-around',
+        alignItems: 'center',
+    },
 });

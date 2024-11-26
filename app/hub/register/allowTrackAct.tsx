@@ -1,6 +1,7 @@
 import {SafeAreaProvider, SafeAreaView} from "react-native-safe-area-context";
 import {ImageBackground, StyleSheet, Text, TouchableOpacity} from "react-native";
 import TeoNotif from "@/components/TeoNotif/TeoNotif";
+import {router} from "expo-router";
 
 export default function allowTrackAct() {
     return (
@@ -16,8 +17,12 @@ export default function allowTrackAct() {
                         </Text>
                         <Text>
                             By anonymously sharing your data, you will benefit from relevant partners. </Text>
-                    <TouchableOpacity> Don't allow</TouchableOpacity>
-                        <TouchableOpacity> Allow</TouchableOpacity>
+                    <TouchableOpacity onPress={() => router.push('/hub/beginInscription')}>
+                        <Text> Don't Allow</Text>
+                    </TouchableOpacity>
+                        <TouchableOpacity onPress={() => router.push('/hub/beginInscription')}>
+                            <Text>Allow</Text>
+                        </TouchableOpacity>
                     </TeoNotif>
                 </SafeAreaView>
             </ImageBackground>
