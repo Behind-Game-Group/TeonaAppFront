@@ -27,6 +27,7 @@ export default function LoginLayout() {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
+        backgroundColor: 'rgba(0, 0, 0, 0.1)', // Le fond de la page est déjà légèrement transparent
     },
     content: {
         flex: 1,
@@ -34,7 +35,7 @@ const styles = StyleSheet.create({
     footer: {
         height: '10%',
         width: '100%',
-        backgroundColor: 'rgba(96, 96, 96, 0.35)',
+        backgroundColor: 'rgba(96, 96, 96, 0.15)', // Moins opaque pour plus de transparence
         justifyContent: 'center',
         alignItems: 'center',
     },
@@ -43,3 +44,4 @@ const styles = StyleSheet.create({
         height: '80%',
     },
 });
+

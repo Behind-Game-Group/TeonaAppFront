@@ -28,9 +28,9 @@ export default function NotifAllow() {
                             Notification may include alerts, sounds and icon badges. These can be configured in settings.
                         </Text>
                         <CustomButton text={"Don't Allow"}
-                                      onPress={() => router.push('/hub/register/register')}
+                                      onPress={() => router.push('/hub/beginInscription')}
                                       color='white'/>
-                        <CustomButton text={"Allow"} onPress={() => router.push('/hub/register/register')} color='white'/>
+                        <CustomButton text={"Allow"} onPress={() => router.push('/hub/beginInscription')} color='white'/>
                     </TeoNotif>
                 </View>
 

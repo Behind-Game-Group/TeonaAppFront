@@ -28,6 +28,7 @@ export default function HomeScreen() {
                 <Link href={'/wallet/wallet'}>Wallet</Link>
                 <Link href={'/bus/bus'}>Bus</Link>
                 <Link href={'/sky/sky'}>Sky</Link>
+                <Link href={'/hub/PasswordCreation'}>Password Creation</Link>
             </ThemedView>
         </ParallaxScrollView>
     );
