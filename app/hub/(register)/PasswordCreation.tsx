@@ -8,6 +8,7 @@ import {
   StyleSheet,
   Dimensions,
 } from 'react-native';
+import axios from 'axios';
 import CustomButton from '@/components/ButtonInscriptionLogin';
 
 // Récupération des dimensions de l'écran
@@ -17,6 +18,7 @@ const PasswordCreation: React.FC = () => {
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [isPasswordValid, setIsPasswordValid] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   const validatePassword = (input: string) => {
     const minLength = 12;
@@ -37,7 +39,7 @@ const PasswordCreation: React.FC = () => {
     validatePassword(input);
   };
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     if (!isPasswordValid) {
       Alert.alert(
         'Invalid Password',
@@ -51,7 +53,24 @@ const PasswordCreation: React.FC = () => {
       return;
     }
 
-    Alert.alert('Success', 'Your password has been created.');
+    setIsLoading(true);
+
+    try {
+      const response = await axios.post('XXXXXX', {
+        password,
+      });
+
+      if (response.status === 200) {
+        Alert.alert('Success', 'Your password has been created.');
+      } else {
+        Alert.alert('Error', 'An unexpected error occurred.');
+      }
+    } catch (error) {
+      Alert.alert('Error', 'Failed to create the password. Please try again.');
+      console.error('Request error:', error);
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
@@ -111,7 +130,7 @@ const PasswordCreation: React.FC = () => {
         </View>
 
         <CustomButton
-          text="Create Password"
+          text={isLoading ? 'Creating...' : 'Create Password'}
           color="blue"
           onPress={handleSubmit}
         />
@@ -122,8 +141,8 @@ const PasswordCreation: React.FC = () => {
 
 const styles = StyleSheet.create({
   backgroundImage: {
-    width: width, // Largeur de l'écran
-    height: height, // Hauteur de l'écran
+    width: width,
+    height: height,
     justifyContent: 'center',
     alignItems: 'center',
   },

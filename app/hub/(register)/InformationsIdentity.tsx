@@ -3,11 +3,14 @@ import {
     View,
     Text,
     StyleSheet,
-    ImageBackground, ActivityIndicator,
+    ImageBackground,
+    ActivityIndicator,
+    Alert,
 } from 'react-native';
 import {Picker} from "@react-native-picker/picker";
 import {useRouter} from "expo-router";
 import ButtonInscriptionLogin from "@/components/ButtonInscriptionLogin";
+import axios from "axios";
 
 interface Country {
     name: {
@@ -16,7 +19,6 @@ interface Country {
 }
 
 function InformationsIdentity() {
-
     const [countries, setCountries] = useState<string[]>([]);
     const [selectCountry, setSelectCountry] = useState<string>('');
     const [month, setMonth] = useState<string>('');
@@ -24,139 +26,156 @@ function InformationsIdentity() {
     const [year, setYear] = useState<string>('');
     const [title, setTitle] = useState<string>('');
     const [isLoading, setIsLoading] = useState<boolean>(true);
+    const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
 
     const router = useRouter();
 
-    const handleContinue = () => {
-        router.push("/hub/InformationsEmail");
+    const handleContinue = async () => {
+        if (!selectCountry || !month || !day || !year || !title) {
+            Alert.alert("Missing Information", "Please fill in all the fields before continuing.");
+            return;
+        }
+
+        const data = {
+            country: selectCountry,
+            dateOfBirth: `${year}-${month}-${day}`,
+            title,
+        };
+
+        try {
+            setIsSubmitting(true);
+            const response = await axios.post('XXXXXX', data);
+            console.log("Response:", response.data);
+            router.push("/hub/InformationsEmail");
+        } catch (error) {
+            Alert.alert("Error", "Failed to submit your information. Please try again.");
+        } finally {
+            setIsSubmitting(false);
+        }
     };
 
     useEffect(() => {
-        // Fonction interne pour charger les pays
         const loadCountries = async () => {
             try {
                 const response = await fetch('https://restcountries.com/v3.1/all');
                 const data: Country[] = await response.json();
                 const countryList = data
-                    .map((country) => country.name.common)
-                    .sort((a, b) => a.localeCompare(b));
+                  .map((country) => country.name.common)
+                  .sort((a, b) => a.localeCompare(b));
                 setCountries(countryList);
             } catch (error) {
-                console.error('Erreur lors du chargement des pays :', error);
+                console.error('Error loading countries:', error);
             } finally {
                 setIsLoading(false);
             }
         };
 
-        // Appel immédiat de la fonction
         (async () => {
             await loadCountries();
         })();
     }, []);
 
     const months = [
-        'January', 'February', 'March', 'April', 'May',
-        'June', 'July', 'August', 'September', 'October',
-        'November', 'December',
+        '01', '02', '03', '04', '05',
+        '06', '07', '08', '09', '10',
+        '11', '12',
     ];
-    const days = Array.from({length: 31}, (_, i) => i + 1);
-    const years = Array.from({length: 100}, (_, i) => 2024 - i);
+    const days = Array.from({length: 31}, (_, i) => (i + 1).toString().padStart(2, '0'));
+    const years = Array.from({length: 100}, (_, i) => (2024 - i).toString());
 
     return (
-        <View style={styles.container}>
-            <ImageBackground
-                source={require('../../../assets/images/bgInformationsIdentity.png')}
-                style={styles.backgroundImage}
-            >
-                <View style={styles.content}>
-                    <Text style={styles.title}>Nice to meet you, {'\n'}
-                        Mariam ! Let us know {'\n'} more about you!
-                    </Text>
+      <View style={styles.container}>
+          <ImageBackground
+            source={require('../../../assets/images/bgInformationsIdentity.png')}
+            style={styles.backgroundImage}
+          >
+              <View style={styles.content}>
+                  <Text style={styles.title}>Nice to meet you, {'\n'}
+                      Mariam ! Let us know {'\n'} more about you!
+                  </Text>
 
-                    {/* Pays */}
-                    <Text style={styles.label}>Country/Region of residence</Text>
-                    <View style={[styles.input, styles.inputCountry]}>
-                        {isLoading ? (
-                            <ActivityIndicator size="small" color="#606060"/>
-                        ) : (
-                            <Picker
-                                selectedValue={selectCountry}
-                                onValueChange={(itemValue) => setSelectCountry(itemValue)}
-                                style={styles.picker}
-                            >
-                                <Picker.Item label="Georgia" value=""/>
-                                {countries.map((country, index) => (
-                                    <Picker.Item key={index} label={country} value={country}/>
-                                ))}
-                            </Picker>
-                        )}
-                    </View>
-
-                    {/* Date de naissance */}
-                    <Text style={styles.label}>Date of birth</Text>
-                    <View style={styles.row}>
-                        {/* Mois */}
-                        <View style={[styles.input, styles.dateInputMonth]}>
-                            <Picker
-                                selectedValue={month}
-                                onValueChange={(itemValue) => setMonth(itemValue)}
-                                style={styles.picker}
-                            >
-                                <Picker.Item label="Month" value=""/>
-                                {months.map((month, index) => (
-                                    <Picker.Item key={index} label={month} value={month}/>
-                                ))}
-                            </Picker>
-                        </View>
-
-                        {/* Jour */}
-                        <View style={[styles.input, styles.dateInputDay]}>
-                            <Picker
-                                selectedValue={day}
-                                onValueChange={(itemValue) => setDay(itemValue)}
-                                style={styles.picker}
-                            >
-                                <Picker.Item label="Day" value=""/>
-                                {days.map((day) => (
-                                    <Picker.Item key={day} label={day.toString()} value={day.toString()}/>
-                                ))}
-                            </Picker>
-                        </View>
-
-                        {/* Année */}
-                        <View style={[styles.input, styles.dateInputYear]}>
-                            <Picker
-                                selectedValue={year}
-                                onValueChange={(itemValue) => setYear(itemValue)}
-                                style={styles.picker}
-                            >
-                                <Picker.Item label="Year" value=""/>
-                                {years.map((year) => (
-                                    <Picker.Item key={year} label={year.toString()} value={year.toString()}/>
-                                ))}
-                            </Picker>
-                        </View>
-                    </View>
-
-                    {/* Title */}
-                    <Text style={styles.label}>What is your title?</Text>
-                    <View style={[styles.input, styles.inputTitle]}>
+                  {/* Country */}
+                  <Text style={styles.label}>Country/Region of residence</Text>
+                  <View style={[styles.input, styles.inputCountry]}>
+                      {isLoading ? (
+                        <ActivityIndicator size="small" color="#606060"/>
+                      ) : (
                         <Picker
-                            selectedValue={title}
-                            onValueChange={(itemValue) => setTitle(itemValue)}
-                            style={styles.picker}
+                          selectedValue={selectCountry}
+                          onValueChange={(itemValue) => setSelectCountry(itemValue)}
+                          style={styles.picker}
                         >
-                            <Picker.Item label="Title" value=""/>
-                            <Picker.Item label="Monsieur" value="Monsieur"/>
-                            <Picker.Item label="Madame" value="Madame"/>
+                            <Picker.Item label="Select your country" value=""/>
+                            {countries.map((country, index) => (
+                              <Picker.Item key={index} label={country} value={country}/>
+                            ))}
                         </Picker>
-                    </View>
+                      )}
+                  </View>
 
-                    <ButtonInscriptionLogin text={"Continue"} color={"blue"} onPress={handleContinue}/>
+                  {/* Date of Birth */}
+                  <Text style={styles.label}>Date of birth</Text>
+                  <View style={styles.row}>
+                      <View style={[styles.input, styles.dateInputMonth]}>
+                          <Picker
+                            selectedValue={month}
+                            onValueChange={(itemValue) => setMonth(itemValue)}
+                            style={styles.picker}
+                          >
+                              <Picker.Item label="Month" value=""/>
+                              {months.map((month, index) => (
+                                <Picker.Item key={index} label={month} value={month}/>
+                              ))}
+                          </Picker>
+                      </View>
+                      <View style={[styles.input, styles.dateInputDay]}>
+                          <Picker
+                            selectedValue={day}
+                            onValueChange={(itemValue) => setDay(itemValue)}
+                            style={styles.picker}
+                          >
+                              <Picker.Item label="Day" value=""/>
+                              {days.map((day) => (
+                                <Picker.Item key={day} label={day} value={day}/>
+                              ))}
+                          </Picker>
+                      </View>
+                      <View style={[styles.input, styles.dateInputYear]}>
+                          <Picker
+                            selectedValue={year}
+                            onValueChange={(itemValue) => setYear(itemValue)}
+                            style={styles.picker}
+                          >
+                              <Picker.Item label="Year" value=""/>
+                              {years.map((year) => (
+                                <Picker.Item key={year} label={year} value={year}/>
+                              ))}
+                          </Picker>
+                      </View>
+                  </View>
 
-                </View>
-            </ImageBackground>
-        </View>
+                  {/* Title */}
+                  <Text style={styles.label}>What is your title?</Text>
+                  <View style={[styles.input, styles.inputTitle]}>
+                      <Picker
+                        selectedValue={title}
+                        onValueChange={(itemValue) => setTitle(itemValue)}
+                        style={styles.picker}
+                      >
+                          <Picker.Item label="Select your title" value=""/>
+                          <Picker.Item label="Monsieur" value="Monsieur"/>
+                          <Picker.Item label="Madame" value="Madame"/>
+                      </Picker>
+                  </View>
+
+                  <ButtonInscriptionLogin
+                    text={isSubmitting ? "Submitting..." : "Continue"}
+                    color={"blue"}
+                    onPress={handleContinue}
+                  />
+              </View>
+          </ImageBackground>
+      </View>
     );
 }
 

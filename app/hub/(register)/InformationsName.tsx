@@ -1,49 +1,78 @@
-import React from 'react';
+import React, { useState } from 'react';
 import {
     View,
     Text,
     TextInput,
     StyleSheet,
     ImageBackground,
+    Alert,
 } from 'react-native';
-import {useRouter} from "expo-router";
-import ButtonInscriptionLogin from "@/components/ButtonInscriptionLogin";
+import { useRouter } from 'expo-router';
+import ButtonInscriptionLogin from '@/components/ButtonInscriptionLogin';
+import axios from 'axios';
 
 function InformationsName() {
     const router = useRouter();
 
-    const handleContinue = () => {
-        router.push("/hub/InformationsIdentity");
+    const [firstName, setFirstName] = useState('');
+    const [lastName, setLastName] = useState('');
+
+    const handleContinue = async () => {
+        if (!firstName || !lastName) {
+            Alert.alert('Error', 'Please fill in both fields.');
+            return;
+        }
+
+        try {
+            const response = await axios.post('https://example.com/api/user', {
+                firstName,
+                lastName,
+            });
+
+            if (response.status === 200) {
+                router.push('/hub/InformationsIdentity');
+            }
+        } catch (error) {
+            console.error(error);
+            Alert.alert('Error', 'Please try again.');
+        }
     };
+
     return (
-        <View style={styles.container}>
-            <ImageBackground
-                source={require('../../../assets/images/bgInformationsName.png')}
-                style={styles.backgroundImage}
-            >
-                <View style={styles.content}>
-                    <Text style={styles.title}>FLet’s get started! {'\n'}
-                        Let’s start with your {'\n'} name</Text>
-                    <Text style={styles.detailsContent}>Enter your first and last name exactly
-                        as written on your password or ID card. </Text>
+      <View style={styles.container}>
+          <ImageBackground
+            source={require('../../../assets/images/bgInformationsName.png')}
+            style={styles.backgroundImage}
+          >
+              <View style={styles.content}>
+                  <Text style={styles.title}>
+                      Let’s get started! {'\n'}
+                      Let’s start with your {'\n'} name
+                  </Text>
+                  <Text style={styles.detailsContent}>
+                      Enter your first and last name exactly as written on your passport or ID card.
+                  </Text>
 
-                    <TextInput
-                        style={styles.input}
-                        placeholder="First Name"
-                        placeholderTextColor="#888"
-                    />
+                  <TextInput
+                    style={styles.input}
+                    placeholder="First Name"
+                    placeholderTextColor="#888"
+                    value={firstName}
+                    onChangeText={setFirstName}
+                  />
 
-                    <TextInput
-                        style={styles.input}
-                        placeholder="Last Name"
-                        placeholderTextColor="#888"
-                    />
+                  <TextInput
+                    style={styles.input}
+                    placeholder="Last Name"
+                    placeholderTextColor="#888"
+                    value={lastName}
+                    onChangeText={setLastName}
+                  />
 
-                    <ButtonInscriptionLogin text={"Continue"} color={"blue"} onPress={handleContinue}/>
-
-                </View>
-            </ImageBackground>
-        </View>
+                  <ButtonInscriptionLogin text="Continue" color="blue" onPress={handleContinue} />
+              </View>
+          </ImageBackground>
+      </View>
     );
 }
 
@@ -66,7 +95,7 @@ const styles = StyleSheet.create({
         borderRadius: 25,
         alignItems: 'center',
         shadowColor: '#000',
-        shadowOffset: {width: 0, height: 2},
+        shadowOffset: { width: 0, height: 2 },
         shadowOpacity: 0.25,
         shadowRadius: 4,
         elevation: 5,
@@ -95,21 +124,6 @@ const styles = StyleSheet.create({
         backgroundColor: 'rgba(255, 255, 255, 0.3)',
         fontSize: 16,
     },
-    button: {
-        marginTop: 20,
-        marginBottom: 12,
-        backgroundColor: '#2787BB',
-        borderColor: '#D9D9D9',
-        padding: 15,
-        borderRadius: 5,
-        alignItems: 'center',
-        width: '75%',
-    },
-    buttonText: {
-        color: '#fff',
-        fontSize: 18,
-        fontWeight: 'bold',
-    }
 });
 
 export default InformationsName;
