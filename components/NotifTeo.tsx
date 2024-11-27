@@ -7,7 +7,7 @@ export interface IosNotificationOptions {
     allowAlert: boolean;
     allowBadge: boolean;
     allowSound: boolean;
-    allowAnnouncements?: boolean;
+
 }
 
 {/*Configuration pour Android */}
@@ -58,7 +58,7 @@ export async function initializeNotifications(
                     allowAlert: iosOptions.allowAlert,
                     allowBadge: iosOptions.allowBadge,
                     allowSound: iosOptions.allowSound,
-                    allowAnnouncements: iosOptions.allowAnnouncements,
+
                 },
             });
             existingStatus = status;
@@ -107,7 +107,7 @@ export async function scheduleLocalNotification(
                 body,
                 data,
             },
-            trigger: { seconds: triggerInSeconds },
+            trigger: null,
         });
         console.log('Notification locale planifiée.');
     } catch (error) {
