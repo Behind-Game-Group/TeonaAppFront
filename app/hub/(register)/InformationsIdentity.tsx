@@ -218,7 +218,7 @@ const styles = StyleSheet.create({
         marginRight: 7,
     },
     dateInputDay: {
-        width: '15%',
+        width: '18%',
         marginRight: 7,
     },
     dateInputYear: {
