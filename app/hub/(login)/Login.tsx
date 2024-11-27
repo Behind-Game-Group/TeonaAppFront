@@ -89,7 +89,7 @@ const LoginPage: React.FC = () => {
                   />
 
                   <View style={styles.forgotPasswordContainer}>
-                      <Link href="/hub/(login)/forgotPassword" style={styles.forgotPasswordLink}>
+                      <Link href="/hub/(login)/ForgotPassword" style={styles.forgotPasswordLink}>
                           Forgot your password?
                       </Link>
                   </View>

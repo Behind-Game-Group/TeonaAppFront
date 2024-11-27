@@ -9,10 +9,11 @@ import {
 } from 'react-native';
 import { useRouter } from 'expo-router';
 import ButtonInscriptionLogin from '@/components/ButtonInscriptionLogin';
-import axios from 'axios';
+import { useUser } from '@/app/hub/(register)/userInfoContext/UserInfo';
 
 function InformationsName() {
     const router = useRouter();
+    const { updateUser } = useUser();
 
     const [firstName, setFirstName] = useState('');
     const [lastName, setLastName] = useState('');
@@ -23,19 +24,10 @@ function InformationsName() {
             return;
         }
 
-        try {
-            const response = await axios.post('https://example.com/api/user', {
-                firstName,
-                lastName,
-            });
+        // Met à jour les données de l'utilisateur dans le contexte
+        updateUser({ firstName, lastName });
 
-            if (response.status === 200) {
-                router.push('/hub/InformationsIdentity');
-            }
-        } catch (error) {
-            console.error(error);
-            Alert.alert('Error', 'Please try again.');
-        }
+        router.push('/hub/InformationsIdentity');
     };
 
     return (

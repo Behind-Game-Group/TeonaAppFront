@@ -8,8 +8,12 @@ import {
   TouchableOpacity,
 } from 'react-native';
 import CustomButton from '@/components/ButtonInscriptionLogin';
+import { router, useRouter } from 'expo-router';
 
 const NotificationPreferencesPage: React.FC = () => {
+
+  const router = useRouter();
+
   const [emailNotifications, setEmailNotifications] = useState(false);
   const [promotionalEmails, setPromotionalEmails] = useState(false);
 
@@ -25,6 +29,7 @@ const NotificationPreferencesPage: React.FC = () => {
       : 'Do not receive promotional emails\n';
 
     Alert.alert('Notification Preferences', preferences);
+    router.push('/hub/(register)/PasswordCreation');
   };
 
   const toggleCheckbox = (currentValue: boolean, setValue: React.Dispatch<React.SetStateAction<boolean>>) => {

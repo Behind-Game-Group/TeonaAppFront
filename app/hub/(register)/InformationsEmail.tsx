@@ -9,6 +9,7 @@ import {
 import ButtonInscriptionLogin from "@/components/ButtonInscriptionLogin";
 import {Picker} from "@react-native-picker/picker";
 import { useRouter } from 'expo-router';
+import { useUser } from '@/app/hub/(register)/userInfoContext/UserInfo';
 
 interface Country {
     languages?: Record<string, string>;
@@ -16,10 +17,12 @@ interface Country {
 
 function InformationsEmail() {
 
+    const { user, updateUser } = useUser();
+
     const [email, setEmail] = useState<string>('');
     const [phoneNumber, setPhoneNumber] = useState('');
     const [countryCode, setCountryCode] = useState('+995');
-    const [language, setLanguage] = useState(null);
+    const [language, setLanguage] = useState<string | undefined>(undefined);
     const [languages, setLanguages] = useState<string[]>([]);
     const [loading, setLoading] = useState<boolean>(true);
     const router = useRouter();
@@ -31,8 +34,8 @@ function InformationsEmail() {
                 const data: Country[] = await response.json();
 
                 const languageOptions: string[] = data
-                    .flatMap((country) => country.languages ? Object.values(country.languages) : [])
-                    .filter((value, index, self) => self.indexOf(value) === index);
+                  .flatMap((country) => country.languages ? Object.values(country.languages) : [])
+                  .filter((value, index, self) => self.indexOf(value) === index);
 
                 setLanguages(languageOptions.toSorted((a, b) => a.localeCompare(b)));
             } catch (error) {
@@ -52,76 +55,78 @@ function InformationsEmail() {
             return;
         }
 
+        updateUser({ email, phoneNumber, countryCode, language });
+
         router.push("/hub/VerifyEmailInscription");
     };
 
     return (
-        <View style={styles.container}>
-            <ImageBackground
-                source={require('../../../assets/images/bgInformationsEmail.png')}
-                style={styles.backgroundImage}
-            >
-                <View style={styles.content}>
-                    <Text style={styles.title}>How can we reach you, {'\n'} Mariam?</Text>
-                    <Text style={styles.subtitle}>
-                        We’ll send newsletters you {'\n'} subscribe to and any changes to {'\n'}
-                        your journey to this email address.{'\n'} You will also use it to login.
-                    </Text>
+      <View style={styles.container}>
+          <ImageBackground
+            source={require('../../../assets/images/bgInformationsEmail.png')}
+            style={styles.backgroundImage}
+          >
+              <View style={styles.content}>
+                  <Text style={styles.title}>How can we reach you, {'\n'}  {user.firstName ?? 'Guest'}?</Text>
+                  <Text style={styles.subtitle}>
+                      We’ll send newsletters you {'\n'} subscribe to and any changes to {'\n'}
+                      your journey to this email address.{'\n'} You will also use it to login.
+                  </Text>
 
-                    {/* Email adresse */}
-                    <Text style={styles.label}>E-mail</Text>
-                    <TextInput
-                        style={[styles.input, styles.inputEmail]}
-                        value={email}
-                        onChangeText={(text) => setEmail(text)}
-                        keyboardType="email-address"
-                    />
+                  {/* Email adresse */}
+                  <Text style={styles.label}>E-mail</Text>
+                  <TextInput
+                    style={[styles.input, styles.inputEmail]}
+                    value={email}
+                    onChangeText={(text) => setEmail(text)}
+                    keyboardType="email-address"
+                  />
 
-                    {/* Langue préférée */}
-                    <Text style={styles.label}>Preferred language</Text>
-                    {loading ? (
-                        <ActivityIndicator size="large" color="#2787BB"/>
-                    ) : (
-                        <View style={styles.input}>
-                            <Picker
-                                selectedValue={language}
-                                onValueChange={(itemValue) => setLanguage(itemValue)}
-                                style={styles.picker}
-                            >
-                                <Picker.Item label="English" value=""/>
-                                {languages.map((lang) => (
-                                    <Picker.Item key={lang} label={lang} value={lang}/>
-                                ))}
-                            </Picker>
-                        </View>
-                    )}
-
-                    {/* Phone number */}
-                    <Text style={styles.label}>Phone number</Text>
-                    <Text style={styles.details}>If you provide your phone number, we can send you
-                        updates about any changes to your trip</Text>
-                    <View style={styles.phoneRow}>
-                        <TextInput
-                            style={[styles.input, styles.inputCountryCode]}
-                            value={countryCode}
-                            onChangeText={setCountryCode}
-                            keyboardType="phone-pad"
-                        />
-                        <TextInput
-                            style={[styles.input, styles.inputPhone]}
-                            value={phoneNumber}
-                            onChangeText={setPhoneNumber}
-                            keyboardType="phone-pad"
-                        />
+                  {/* Langue préférée */}
+                  <Text style={styles.label}>Preferred language</Text>
+                  {loading ? (
+                    <ActivityIndicator size="large" color="#2787BB"/>
+                  ) : (
+                    <View style={styles.input}>
+                        <Picker
+                          selectedValue={language}
+                          onValueChange={(itemValue) => setLanguage(itemValue)}
+                          style={styles.picker}
+                        >
+                            <Picker.Item label="English" value=""/>
+                            {languages.map((lang) => (
+                              <Picker.Item key={lang} label={lang} value={lang}/>
+                            ))}
+                        </Picker>
                     </View>
-                    <ButtonInscriptionLogin
-                      text="Continue"
-                      color="blue"
-                      onPress={handleContinue}
-                    />
-                </View>
-            </ImageBackground>
-        </View>
+                  )}
+
+                  {/* Phone number */}
+                  <Text style={styles.label}>Phone number</Text>
+                  <Text style={styles.details}>If you provide your phone number, we can send you
+                      updates about any changes to your trip</Text>
+                  <View style={styles.phoneRow}>
+                      <TextInput
+                        style={[styles.input, styles.inputCountryCode]}
+                        value={countryCode}
+                        onChangeText={setCountryCode}
+                        keyboardType="phone-pad"
+                      />
+                      <TextInput
+                        style={[styles.input, styles.inputPhone]}
+                        value={phoneNumber}
+                        onChangeText={setPhoneNumber}
+                        keyboardType="phone-pad"
+                      />
+                  </View>
+                  <ButtonInscriptionLogin
+                    text="Continue"
+                    color="blue"
+                    onPress={handleContinue}
+                  />
+              </View>
+          </ImageBackground>
+      </View>
     );
 }
 

@@ -8,8 +8,9 @@ import {
   StyleSheet,
   Dimensions,
 } from 'react-native';
-import axios from 'axios';
+import { useUser } from '@/app/hub/(register)/userInfoContext/UserInfo';
 import CustomButton from '@/components/ButtonInscriptionLogin';
+import { useRouter } from 'expo-router';
 
 // Récupération des dimensions de l'écran
 const { width, height } = Dimensions.get('window');
@@ -19,6 +20,10 @@ const PasswordCreation: React.FC = () => {
   const [confirmPassword, setConfirmPassword] = useState('');
   const [isPasswordValid, setIsPasswordValid] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+
+  const { user, updateUser } = useUser();
+
+  const router = useRouter();
 
   const validatePassword = (input: string) => {
     const minLength = 12;
@@ -39,7 +44,7 @@ const PasswordCreation: React.FC = () => {
     validatePassword(input);
   };
 
-  const handleSubmit = async () => {
+  const handleSubmit = () => {
     if (!isPasswordValid) {
       Alert.alert(
         'Invalid Password',
@@ -55,22 +60,14 @@ const PasswordCreation: React.FC = () => {
 
     setIsLoading(true);
 
-    try {
-      const response = await axios.post('XXXXXX', {
-        password,
-      });
+    // Mettre à jour le mot de passe de l'utilisateur dans le contexte
+    updateUser({ password });
 
-      if (response.status === 200) {
-        Alert.alert('Success', 'Your password has been created.');
-      } else {
-        Alert.alert('Error', 'An unexpected error occurred.');
-      }
-    } catch (error) {
-      Alert.alert('Error', 'Failed to create the password. Please try again.');
-      console.error('Request error:', error);
-    } finally {
-      setIsLoading(false);
-    }
+    Alert.alert('Success', 'Your password has been created.');
+
+    router.push('/hub/(register)/InformationsGeneralConditions');
+
+    setIsLoading(false);
   };
 
   return (
@@ -120,10 +117,7 @@ const PasswordCreation: React.FC = () => {
             - At least one number
           </Text>
           <Text
-            style={[
-              styles.criteria,
-              /[!@#$%^&*(),.?":{}|<>]/.test(password) && styles.valid,
-            ]}
+            style={[styles.criteria, /[!@#$%^&*(),.?":{}|<>]/.test(password) && styles.valid]}
           >
             - At least one special character
           </Text>

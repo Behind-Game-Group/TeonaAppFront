@@ -4,50 +4,82 @@ import {
     Text,
     StyleSheet,
     ImageBackground,
-    Pressable
+    Pressable,
+    Alert
 } from 'react-native';
 import ButtonInscriptionLogin from "@/components/ButtonInscriptionLogin";
-import {useRouter} from "expo-router";
+import { useRouter } from "expo-router";
+import { useUser } from '@/app/hub/(register)/userInfoContext/UserInfo';
+import axios from 'axios';
 
 export default function InformationsGeneralConditions() {
     const [isChecked, setIsChecked] = useState(false);
-
-    const toggleCheckbox = () => setIsChecked(!isChecked);
     const router = useRouter();
 
-    const handleContinue = () => {
-        router.push("/hub/InformationsIdentity"); // La faut changer la direction
-    };
-    return (
-        <View style={styles.container}>
-            <ImageBackground
-                source={require('../../../assets/images/bgInformationsGeneralConditions.png')}
-                style={styles.backgroundImage}
-            >
-                <View style={styles.content}>
-                    <View style={styles.contentBox}>
-                        <Text style={styles.title}>We’re almost there!</Text>
-                        <Text style={styles.detailsContent}>TeonaGroup is Georgina Sky, Georgina Bus and
-                            Marika Cruiser joint loyalty programme. We share the responsibility for handling
-                            your personal data. Your data is processed in accordance with the TeonaGroup privacy
-                            policy. You have the right to refuse the processing of your personal data.
-                            Please go to the TeonaGroup privacy policy for more information. You can edit your
-                            preference in your profile at any time. </Text>
+    const { user } = useUser();
 
-                        <View style={styles.containerCheckbox}>
-                            <Pressable
-                                style={[styles.checkbox, isChecked && styles.checked]}
-                                onPress={toggleCheckbox}
-                            >
-                                {isChecked && <Text style={styles.checkmark}>✓</Text>}
-                            </Pressable>
-                            <Text style={styles.label}>I agree with the TeonaGroup General Conditions</Text>
-                        </View>
-                    </View>
-                    <ButtonInscriptionLogin text={"Create an account"} color={"blue"} onPress={handleContinue}/>
-                </View>
-            </ImageBackground>
-        </View>
+    const toggleCheckbox = () => setIsChecked(!isChecked);
+
+    const handleContinue = async () => {
+        if (!isChecked) {
+            alert("You must agree to the terms and conditions.");
+            return;
+        }
+
+        try {
+            const response = await axios.post('/create-account', {
+                firstName: user.firstName,
+                lastName: user.lastName,
+                email: user.email,
+                phoneNumber: user.phoneNumber,
+                country: user.country,
+                countryCode: user.countryCode,
+                language: user.language,
+                password: user.password,
+            });
+
+
+            if (response.status === 200 && response.data.success) {
+                router.push("/hub/(register)/CookiePop");
+            } else {
+                Alert.alert('Account Creation Failed', response.data.message || 'Something went wrong');
+            }
+        } catch (error) {
+            console.error('Error during account creation:', error);
+            Alert.alert('Error', 'An error occurred while creating your account.');
+        }
+    };
+
+    return (
+      <View style={styles.container}>
+          <ImageBackground
+            source={require('../../../assets/images/bgInformationsGeneralConditions.png')}
+            style={styles.backgroundImage}
+          >
+              <View style={styles.content}>
+                  <View style={styles.contentBox}>
+                      <Text style={styles.title}>We’re almost there!</Text>
+                      <Text style={styles.detailsContent}>TeonaGroup is Georgina Sky, Georgina Bus and
+                          Marika Cruiser joint loyalty programme. We share the responsibility for handling
+                          your personal data. Your data is processed in accordance with the TeonaGroup privacy
+                          policy. You have the right to refuse the processing of your personal data.
+                          Please go to the TeonaGroup privacy policy for more information. You can edit your
+                          preference in your profile at any time. </Text>
+
+                      <View style={styles.containerCheckbox}>
+                          <Pressable
+                            style={[styles.checkbox, isChecked && styles.checked]}
+                            onPress={toggleCheckbox}
+                          >
+                              {isChecked && <Text style={styles.checkmark}>✓</Text>}
+                          </Pressable>
+                          <Text style={styles.label}>I agree with the TeonaGroup General Conditions</Text>
+                      </View>
+                  </View>
+                  <ButtonInscriptionLogin text={"Create an account"} color={"blue"} onPress={handleContinue} />
+              </View>
+          </ImageBackground>
+      </View>
     );
 }
 
@@ -71,7 +103,7 @@ const styles = StyleSheet.create({
         borderRadius: 25,
         alignItems: 'center',
         shadowColor: '#000',
-        shadowOffset: {width: 0, height: 2},
+        shadowOffset: { width: 0, height: 2 },
         shadowOpacity: 0.25,
         shadowRadius: 4,
         elevation: 5,

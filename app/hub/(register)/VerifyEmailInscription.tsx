@@ -13,23 +13,23 @@ const ForgotPasswordVerifyEmail: React.FC = () => {
       return;
     }
 
-    try {
-      // Remplacez l'URL par celle de votre API
-      const response = await axios.post('xxxxx', {
-        pinCode,
-      });
+    router.push('/hub/(register)/ContactPreferences');
 
-      if (response.status === 200 && response.data.valid) {
-        // Le code PIN est valide, on redirige l'utilisateur
-        router.push('/hub/(register)/ContactPreferences');
-      } else {
-        Alert.alert('Invalid PIN', 'The PIN code you entered is incorrect.');
-      }
-    } catch (error) {
-      console.error('Error verifying PIN:', error);
-      Alert.alert('Error', 'An error occurred while verifying your PIN.');
-    } finally {
-    }
+    // try {
+    //   const response = await axios.post('xxxxx', {
+    //     pinCode,
+    //   });
+    //
+    //   if (response.status === 200 && response.data.valid) {
+    //     // Le code PIN est valide, on redirige l'utilisateur
+    //     router.push('/hub/(register)/ContactPreferences');
+    //   } else {
+    //     Alert.alert('Invalid PIN', 'The PIN code you entered is incorrect.');
+    //   }
+    // } catch (error) {
+    //   console.error('Error verifying PIN:', error);
+    //   Alert.alert('Error', 'An error occurred while verifying your PIN.');
+    // }
   };
 
   return (

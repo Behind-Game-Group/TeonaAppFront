@@ -10,7 +10,7 @@ import {
 import {Picker} from "@react-native-picker/picker";
 import {useRouter} from "expo-router";
 import ButtonInscriptionLogin from "@/components/ButtonInscriptionLogin";
-import axios from "axios";
+import { useUser } from '@/app/hub/(register)/userInfoContext/UserInfo';
 
 interface Country {
     name: {
@@ -19,6 +19,9 @@ interface Country {
 }
 
 function InformationsIdentity() {
+
+    const { user, updateUser } = useUser();
+
     const [countries, setCountries] = useState<string[]>([]);
     const [selectCountry, setSelectCountry] = useState<string>('');
     const [month, setMonth] = useState<string>('');
@@ -42,16 +45,12 @@ function InformationsIdentity() {
             title,
         };
 
-        try {
-            setIsSubmitting(true);
-            const response = await axios.post('XXXXXX', data);
-            console.log("Response:", response.data);
-            router.push("/hub/InformationsEmail");
-        } catch (error) {
-            Alert.alert("Error", "Failed to submit your information. Please try again.");
-        } finally {
-            setIsSubmitting(false);
-        }
+        setIsSubmitting(true);
+
+        // Update user data in the context
+        updateUser(data);
+
+        router.push('/hub/InformationsEmail');
     };
 
     useEffect(() => {
@@ -90,8 +89,9 @@ function InformationsIdentity() {
             style={styles.backgroundImage}
           >
               <View style={styles.content}>
-                  <Text style={styles.title}>Nice to meet you, {'\n'}
-                      Mariam ! Let us know {'\n'} more about you!
+                  <Text style={styles.title}>
+                      Nice to meet you, {'\n'}
+                      {user.firstName ?? 'Guest'}! Let us know {'\n'} more about you!
                   </Text>
 
                   {/* Country */}
@@ -163,8 +163,8 @@ function InformationsIdentity() {
                         style={styles.picker}
                       >
                           <Picker.Item label="Select your title" value=""/>
-                          <Picker.Item label="Monsieur" value="Monsieur"/>
-                          <Picker.Item label="Madame" value="Madame"/>
+                          <Picker.Item label="Mister" value="Mister"/>
+                          <Picker.Item label="Misses" value="Misses"/>
                       </Picker>
                   </View>
 

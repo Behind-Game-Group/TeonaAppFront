@@ -20,10 +20,10 @@ export default function allowTrackAct() {
                         <Text style={styles.trackActiText}>
                             By anonymously sharing your data, you will benefit from relevant partners. {'\n'}</Text>
                     <View style={styles.trackActiButton}>
-                        <TouchableOpacity onPress={() => router.push('/hub/beginInscription')}>
+                        <TouchableOpacity onPress={() => router.push('/hub/(register)/BeginInscription')}>
                         <Text> Don't Allow</Text>
                     </TouchableOpacity>
-                        <TouchableOpacity onPress={() => router.push('/hub/beginInscription')}>
+                        <TouchableOpacity onPress={() => router.push('/hub/(register)/BeginInscription')}>
                             <Text>Allow</Text>
                         </TouchableOpacity>
                     </View>

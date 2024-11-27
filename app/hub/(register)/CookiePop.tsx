@@ -42,17 +42,17 @@ export default function CookiePop() {
 <View style={styles.viewCookieButton}>
                         <TouchableOpacity
                             style={styles.notifCookieButton}
-                            onPress={() => router.push('/hub/beginInscription')}>
+                            onPress={() => router.push('/hub/(login)/Login')}>
                             <Text style={styles.buttonCookieText}>Change cookie settings </Text>
                         </TouchableOpacity>
                         <TouchableOpacity
                             style={styles.notifCookieButton}
-                            onPress={() => router.push('/hub/beginInscription')}>
+                            onPress={() => router.push('/hub/(login)/Login')}>
                             <Text style={styles.buttonCookieText}>Read teona Passenger's cookie policy</Text>
                         </TouchableOpacity>
                         <TouchableOpacity
                             style={styles.notifCookieButton}
-                            onPress={() => router.push('/hub/beginInscription')}>
+                            onPress={() => router.push('/hub/(login)/Login')}>
                             <Text style={styles.buttonCookieText}>Check the full list of cookies and third parties used on our website</Text>
                         </TouchableOpacity>
 </View>
@@ -61,12 +61,12 @@ export default function CookiePop() {
 
                 <View style={styles.cookieButton}>
                     <CustomButton
-                        onPress={() => router.push('/hub/register/allowTrackAct')}
+                        onPress={() => router.push('/hub/(register)/allowTrackAct')}
                         text="Accept"
                         color="blue"
                     />
                     <CustomButton
-                        onPress={() => router.push('/hub/beginInscription')}
+                        onPress={() => router.push('/hub/(login)/Login')}
                         text="Reject"
                         color="white"
                     />
