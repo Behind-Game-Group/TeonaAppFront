@@ -27,15 +27,15 @@ export default function InformationsGeneralConditions() {
         }
 
         try {
-            const response = await axios.post('localhost:8082/api/user/register', {
-                firstName: user.firstName,
-                lastName: user.lastName,
+            const response = await axios.post('/create-account', {
+                name: user.lastName,
+                firstname: user.firstName,
+                gender: user.title,
+                residenceCountry: user.country,
                 email: user.email,
-                phoneNumber: user.phoneNumber,
-                country: user.country,
-                countryCode: user.countryCode,
-                language: user.language,
                 password: user.password,
+                phoneNumber: user.phoneNumber,
+                language: user.language,
             });
 
 
