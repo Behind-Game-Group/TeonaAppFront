@@ -28,14 +28,14 @@ export default function InformationsGeneralConditions() {
 
         try {
             const response = await axios.post('/create-account', {
-                firstName: user.firstName,
-                lastName: user.lastName,
+                name: user.lastName,
+                firstname: user.firstName,
+                gender: user.title,
+                residenceCountry: user.country,
                 email: user.email,
-                phoneNumber: user.phoneNumber,
-                country: user.country,
-                countryCode: user.countryCode,
-                language: user.language,
                 password: user.password,
+                phoneNumber: user.phoneNumber,
+                language: user.language,
             });
 
 

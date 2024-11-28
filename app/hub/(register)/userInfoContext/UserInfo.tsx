@@ -4,13 +4,15 @@ import React, { createContext, useState, useContext, ReactNode } from 'react';
 interface User {
   firstName?: string;
   lastName?: string;
+  title?: string;
   email?: string;
   phoneNumber?: string;
   country?: string;
-  countryCode?: string;
+  dateOfBirth?: string;
   language?: string;
   password?: string;
 }
+
 
 // Crée le contexte pour l'utilisateur avec le type User
 interface UserContextType {
