@@ -32,17 +32,17 @@ export default function NotifPage() {
                             </Text>
                             <View style={styles.allowButtContainer}>
                             <CustomButton
-                                onPress={() => router.push('/hub/register/notifAllow')}
+                                onPress={() => router.push('/hub/(register)/notifAllow')}
                                 text="Yes,keep me updated"
                                 color="blue"
-
                             />
+
                             <CustomButton
-                                onPress={() => router.push('/hub/register/notifAllow')}
+                                onPress={() => router.push('/hub/(register)/BeginInscription')}
                                 text="Maybe,later"
                                 color="white"
-
                             />
+
                             </View>
                             <Text>
                                 Change your mind ? switch off commercial offers from all Georgina transport and third

@@ -27,7 +27,7 @@ export default function InformationsGeneralConditions() {
         }
 
         try {
-            const response = await axios.post('/create-account', {
+            const response = await axios.post('localhost:8082/api/user/register', {
                 firstName: user.firstName,
                 lastName: user.lastName,
                 email: user.email,

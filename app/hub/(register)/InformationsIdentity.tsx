@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React, { useState, useEffect } from 'react';
 import {
     View,
     Text,
@@ -7,8 +7,8 @@ import {
     ActivityIndicator,
     Alert,
 } from 'react-native';
-import {Picker} from "@react-native-picker/picker";
-import {useRouter} from "expo-router";
+import { Picker } from "@react-native-picker/picker";
+import { useRouter } from "expo-router";
 import ButtonInscriptionLogin from "@/components/ButtonInscriptionLogin";
 import { useUser } from '@/app/hub/(register)/userInfoContext/UserInfo';
 
@@ -19,7 +19,6 @@ interface Country {
 }
 
 function InformationsIdentity() {
-
     const { user, updateUser } = useUser();
 
     const [countries, setCountries] = useState<string[]>([]);
@@ -79,8 +78,8 @@ function InformationsIdentity() {
         '06', '07', '08', '09', '10',
         '11', '12',
     ];
-    const days = Array.from({length: 31}, (_, i) => (i + 1).toString().padStart(2, '0'));
-    const years = Array.from({length: 100}, (_, i) => (2024 - i).toString());
+    const days = Array.from({ length: 31 }, (_, i) => (i + 1).toString().padStart(2, '0'));
+    const years = Array.from({ length: 100 }, (_, i) => (2024 - i).toString());
 
     return (
       <View style={styles.container}>
@@ -98,16 +97,16 @@ function InformationsIdentity() {
                   <Text style={styles.label}>Country/Region of residence</Text>
                   <View style={[styles.input, styles.inputCountry]}>
                       {isLoading ? (
-                        <ActivityIndicator size="small" color="#606060"/>
+                        <ActivityIndicator size="small" color="#606060" />
                       ) : (
                         <Picker
                           selectedValue={selectCountry}
                           onValueChange={(itemValue) => setSelectCountry(itemValue)}
                           style={styles.picker}
                         >
-                            <Picker.Item label="Select your country" value=""/>
+                            <Picker.Item label="Select your country" value="" />
                             {countries.map((country, index) => (
-                              <Picker.Item key={index} label={country} value={country}/>
+                              <Picker.Item key={index} label={country} value={country} />
                             ))}
                         </Picker>
                       )}
@@ -116,39 +115,39 @@ function InformationsIdentity() {
                   {/* Date of Birth */}
                   <Text style={styles.label}>Date of birth</Text>
                   <View style={styles.row}>
-                      <View style={[styles.input, styles.dateInputMonth]}>
+                      <View style={[styles.input, styles.dateInput]}>
                           <Picker
                             selectedValue={month}
                             onValueChange={(itemValue) => setMonth(itemValue)}
                             style={styles.picker}
                           >
-                              <Picker.Item label="Month" value=""/>
+                              <Picker.Item label="Month" value="" />
                               {months.map((month, index) => (
-                                <Picker.Item key={index} label={month} value={month}/>
+                                <Picker.Item key={index} label={month} value={month} />
                               ))}
                           </Picker>
                       </View>
-                      <View style={[styles.input, styles.dateInputDay]}>
+                      <View style={[styles.input, styles.dateInput]}>
                           <Picker
                             selectedValue={day}
                             onValueChange={(itemValue) => setDay(itemValue)}
                             style={styles.picker}
                           >
-                              <Picker.Item label="Day" value=""/>
+                              <Picker.Item label="Day" value="" />
                               {days.map((day) => (
-                                <Picker.Item key={day} label={day} value={day}/>
+                                <Picker.Item key={day} label={day} value={day} />
                               ))}
                           </Picker>
                       </View>
-                      <View style={[styles.input, styles.dateInputYear]}>
+                      <View style={[styles.input, styles.dateInput]}>
                           <Picker
                             selectedValue={year}
                             onValueChange={(itemValue) => setYear(itemValue)}
                             style={styles.picker}
                           >
-                              <Picker.Item label="Year" value=""/>
+                              <Picker.Item label="Year" value="" />
                               {years.map((year) => (
-                                <Picker.Item key={year} label={year} value={year}/>
+                                <Picker.Item key={year} label={year} value={year} />
                               ))}
                           </Picker>
                       </View>
@@ -162,9 +161,9 @@ function InformationsIdentity() {
                         onValueChange={(itemValue) => setTitle(itemValue)}
                         style={styles.picker}
                       >
-                          <Picker.Item label="Select your title" value=""/>
-                          <Picker.Item label="Mister" value="Mister"/>
-                          <Picker.Item label="Misses" value="Misses"/>
+                          <Picker.Item label="Select your title" value="" />
+                          <Picker.Item label="Mister" value="Mister" />
+                          <Picker.Item label="Misses" value="Misses" />
                       </Picker>
                   </View>
 
@@ -198,7 +197,7 @@ const styles = StyleSheet.create({
         borderRadius: 25,
         alignItems: 'center',
         shadowColor: '#000',
-        shadowOffset: {width: 0, height: 2},
+        shadowOffset: { width: 0, height: 2 },
         shadowOpacity: 0.25,
         shadowRadius: 4,
         elevation: 5,
@@ -219,55 +218,33 @@ const styles = StyleSheet.create({
     },
     row: {
         flexDirection: 'row',
-        alignItems: 'center',
+        justifyContent: 'space-between',
         width: '100%',
+        marginTop: 8,
     },
     input: {
-        width: '100%',
-        borderWidth: 0.5,
+        borderWidth: 1,
         borderColor: '#606060',
         borderRadius: 5,
+        backgroundColor: 'white',
+        height: 50,
+        justifyContent: 'center',
     },
     inputCountry: {
-        width: '95%',
-        marginRight: 20,
+        width: '100%',
     },
-    dateInputMonth: {
+    dateInput: {
         width: '30%',
-        marginRight: 7,
-    },
-    dateInputDay: {
-        width: '18%',
-        marginRight: 7,
-    },
-    dateInputYear: {
-        width: '20%',
+        marginRight: 8,
     },
     inputTitle: {
-        width: '95%',
-        marginRight: 20,
+        width: '100%',
+        marginTop: 10,
     },
     picker: {
-        height: 35,
-        backgroundColor: 'rgba(255, 255, 255, 0.1)',
+        flex: 1,
         color: '#606060',
-        borderRadius: 5,
     },
-    button: {
-        marginTop: 20,
-        marginBottom: 12,
-        backgroundColor: '#2787BB',
-        borderColor: '#D9D9D9',
-        padding: 15,
-        borderRadius: 5,
-        alignItems: 'center',
-        width: '85%',
-    },
-    buttonText: {
-        color: '#fff',
-        fontSize: 18,
-        fontWeight: 'bold',
-    }
 });
 
 export default InformationsIdentity;

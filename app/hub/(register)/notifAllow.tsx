@@ -30,9 +30,9 @@ export default function NotifAllow() {
                         </Text>
                         <View style={styles.allowButtons}>
                         <CustomButton text={"Don't Allow"}
-                                      onPress={() => router.push('/hub/beginInscription')}
+                                      onPress={() => router.push('/hub/(register)/BeginInscription')}
                                       color='white'/>
-                        <CustomButton text={"Allow"} onPress={() => router.push('/hub/beginInscription')} color='blue'/>
+                        <CustomButton text={"Allow"} onPress={() => router.push('/hub/(register)/BeginInscription')} color='blue'/>
                         </View>
                         </TeoNotif>
                 </View>
