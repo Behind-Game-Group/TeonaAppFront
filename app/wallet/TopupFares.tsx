@@ -11,65 +11,78 @@ const Props = {
 export default function TopupFares({totalPrice}: Props) {
     return (
         <SafeAreaProvider style={styles.faresContainer}>
+            <Text
+                style={styles.faresCardText}
 
+            >Let's TopUp your card!</Text>
             <SafeAreaView style={styles.faresContent}>
-                <Text>Let's TopUp your card!</Text>
+
+
                 <View
                     style={styles.faresCard}>
-                    <Image source={require('@/assets/images/teonapassyearly.png')}/>
+                    <Image
+                        style={styles.faresCardImage}
+                        source={require('@/assets/images/teonapassyearly.png')}/>
                     <Text>TeonaPass Yearly pass 540 </Text>
                 <View style={styles.faresButtons}>
                     <TopUpButton
 
-                        title="top up"
+                        title="TopUp"
                         onPress={'wallet'}
                     />
                 </View>
                 </View>
                 <View style={styles.faresCard}>
-                    <Image source={require('@/assets/images/teonapass.png')}/>
+                    <Image
+                        style={styles.faresCardImage}
+                        source={require('@/assets/images/teonapass.png')}/>
                     <Text
-                        style={styles.faresCardText}>TeonaPass Yearly pass 45 </Text>
+                      >TeonaPass Yearly pass 45 </Text>
                     <View style={styles.faresButtons}>
                         <TopUpButton
 
-                            title="top up"
+                            title="TopUp"
                             onPress={'wallet'}
                         />
                     </View>
                 </View>
                 <View style={styles.faresCard}>
-                    <Image source={require('@/assets/images/teonapass.png')}/>
+                    <Image
+                        style={styles.faresCardImage}
+                        source={require('@/assets/images/teonapass.png')}/>
                     <Text>TeonaPass Yearly pass 11,25 </Text>
                     <View style={styles.faresButtons}>
                         <TopUpButton
 
-                            title="top up"
+                            title="TopUp"
                             onPress={'wallet'}
                         />
                     </View>
                 </View>
                 <View style={styles.faresCard}>
-                    <Image source={require('@/assets/images/teonapass.png')}/>
+                    <Image
+                        style={styles.faresCardImage}
+                        source={require('@/assets/images/teonapass.png')}/>
                     <Text>TeonaPass Yearly pass 7,95 </Text>
                     <View style={styles.faresButtons}>
                         <TopUpButton
 
-                            title="top up"
+                            title="TopUp"
                             onPress={'wallet'}
                         />
                     </View>
                 </View>
                 <View style={styles.validCardFares}>
                     <Text style={styles.faresPrice}>`${totalPrice}` €</Text>
-
+                    <View style={styles.faresButtons}>
                     <TopUpButton
 
                         title="TopUp"
                         onPress={'wallet'}
                     />
-
+                    </View>
                 </View>
+
             </SafeAreaView>
 
         </SafeAreaProvider>
@@ -77,50 +90,57 @@ export default function TopupFares({totalPrice}: Props) {
 }
 const styles = StyleSheet.create({
     faresContainer: {
-        flex: 1, // Prend tout l'espace disponible
-        padding: 6, // Ajoute un padding pour éviter que les éléments touchent les bords
+        flex: 1,
+        padding: 6,
     },
     faresContent: {
         flex:1,
-        borderWidth: 3,//test
 
-        borderColor:'black',//test
-        justifyContent: 'center', // Centre verticalement les éléments
-        alignItems: 'center', // Centre horizontalement les éléments
-    padding:15,
+        justifyContent: 'center',
+        alignItems: 'center',
+        padding: 15,
     },
     faresCard: {
-        flexDirection: 'row', // Positionne les enfants horizontalement
+        flexDirection: 'row',
         alignItems: 'center',
-        borderWidth: 3,//test
 
-        borderColor:'black',//test
-width:'100%',
+
+        width: '100%',
 
 
     },
     faresButtons: {
-        flexDirection: 'row', // Positionne les boutons horizontalement
-        justifyContent: 'center', // Aligne les boutons à droite
-        alignItems: 'center', // Centre verticalement les boutons
-        marginTop: 6, // Ajoute un espacement au-dessus des boutons
-        color:'orange',
-        borderColor:'orange',
-        borderBottomColor :'orange',
-        padding:6,
-    },
-    validCardFares:{
-        flexDirection: 'row',
+        flexDirection:'flex-start',
         justifyContent: 'center',
         alignItems: 'center',
+        marginTop: 6,
+        color: 'orange',
+        borderColor: 'orange',
+        borderBottomColor: 'orange',
+        padding: 6,
     },
-    faresPrice:{
+    validCardFares: {
+        flexDirection: 'row',
+        justifyContent: 'space-evenly',
+        alignItems: 'flex-end',
+        width: '100%',
+    },
+    faresPrice: {
         paddingVertical: 12,
         paddingHorizontal: 24,
-        borderColor:"black",
+        borderColor: "black",
         borderWidth: 3,
     },
-    faresCardText:{
+    faresCardText: {
+        width: '100%',
+        flexDirection: 'flex-start',
+        textAlign: 'center',
+        fontWeight: 'bold',
+    },
+    faresCardImage: {
 
+        width: width * 0.2,
+        height: height * 0.2,
+        resizeMode: 'contain',
     },
 });
