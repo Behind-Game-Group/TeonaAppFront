@@ -16,9 +16,17 @@ const ForgotPasswordVerifyEmail: React.FC = () => {
     router.push('/hub/(register)/CookiePop');
 
     try {
-      const response = await axios.get('api/user/register', {
-        pinCode,
-      });
+      const response = await axios.post(
+        "http://localhost:8082/api/user/verify",
+        {
+          pinCode,
+        },
+        {
+          headers: {
+            'Content-Type': 'application/json',
+          }
+        }
+      );
 
       if (response.status === 200 && response.data.valid) {
         // Le code PIN est valide, on redirige l'utilisateur
@@ -30,6 +38,7 @@ const ForgotPasswordVerifyEmail: React.FC = () => {
       console.error('Error verifying PIN:', error);
       Alert.alert('Error', 'An error occurred while verifying your PIN.');
     }
+
   };
 
   return (

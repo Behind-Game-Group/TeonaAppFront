@@ -46,13 +46,7 @@ function InformationsIdentity() {
 
         setIsSubmitting(true);
 
-        // Update user data in the context
-        const infoUser = {
-            country: selectCountry,
-            dateOfBirth: `${year}-${month}-${day}`,
-            title,
-        }
-        updateUser( infoUser );
+        updateUser( data );
 
         router.push('/hub/InformationsEmail');
     };

@@ -1,13 +1,13 @@
-import React, {useState, useEffect} from 'react';
+import React, { useState, useEffect } from 'react';
 import {
     View,
     Text,
     TextInput,
     StyleSheet,
-    ImageBackground, ActivityIndicator,
+    ImageBackground, ActivityIndicator, Alert
 } from 'react-native';
 import ButtonInscriptionLogin from "@/components/ButtonInscriptionLogin";
-import {Picker} from "@react-native-picker/picker";
+import { Picker } from "@react-native-picker/picker";
 import { useRouter } from 'expo-router';
 import { useUser } from '@/app/hub/(register)/userInfoContext/UserInfo';
 
@@ -22,7 +22,7 @@ function InformationsEmail() {
     const [email, setEmail] = useState<string>('');
     const [phoneNumber, setPhoneNumber] = useState('');
     const [countryCode, setCountryCode] = useState('+995');
-    const [language, setLanguage] = useState<string | undefined>(undefined);
+    const [language, setLanguage] = useState<string | undefined>('English');
     const [languages, setLanguages] = useState<string[]>([]);
     const [loading, setLoading] = useState<boolean>(true);
     const router = useRouter();
@@ -45,7 +45,6 @@ function InformationsEmail() {
             }
         };
 
-        // Appel explicite avec void pour indiquer qu'on ignore la promesse
         void fetchLanguages();
     }, []);
 
@@ -55,8 +54,15 @@ function InformationsEmail() {
             return;
         }
 
+        if (!language) {
+            alert("Please select a language.");
+            return;
+        }
+
+        // Mise à jour de l'utilisateur avec les données collectées
         updateUser({ email, phoneNumber, language });
 
+        // Redirection après la mise à jour
         router.push("/hub/(register)/ContactPreferences");
     };
 
@@ -93,7 +99,7 @@ function InformationsEmail() {
                           onValueChange={(itemValue) => setLanguage(itemValue)}
                           style={styles.picker}
                         >
-                            <Picker.Item label="English" value=""/>
+                            <Picker.Item label="English" value="English"/>
                             {languages.map((lang) => (
                               <Picker.Item key={lang} label={lang} value={lang}/>
                             ))}
@@ -149,7 +155,7 @@ const styles = StyleSheet.create({
         borderRadius: 25,
         alignItems: 'center',
         shadowColor: '#000',
-        shadowOffset: {width: 0, height: 2},
+        shadowOffset: { width: 0, height: 2 },
         shadowOpacity: 0.25,
         shadowRadius: 4,
         elevation: 5,
