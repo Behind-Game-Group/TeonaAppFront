@@ -1,9 +1,8 @@
 import {Stack} from 'expo-router';
 import React from 'react';
-import {View, StyleSheet, Image, Dimensions} from 'react-native';
+import {View, StyleSheet, Image} from 'react-native';
 
-const {width} = Dimensions.get('window');
-export default function LoginLayout() {
+export default function TeonaPassLayout() {
     return (
         <View style={styles.container}>
             {/* Contenu principal */}
