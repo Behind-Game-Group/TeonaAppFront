@@ -1,9 +1,9 @@
 import {SafeAreaProvider, SafeAreaView} from "react-native-safe-area-context";
 
-import {Dimensions, ImageBackground, StyleSheet, TouchableOpacity, View, Text} from "react-native";
+import {Dimensions, ImageBackground, StyleSheet,  View, Text} from "react-native";
 import TeoNotif from "@/components/TeoNotif/TeoNotif";
 import TeoMap from "@/components/TeoMap";
-
+const htmlFilePath = require('@/assets/teona-map.html');
 const {width, height} = Dimensions.get('window');
 export default function AllowLocation() {
     return (
@@ -28,10 +28,8 @@ export default function AllowLocation() {
 
                         <View style={styles.allowMapContainer}>
                             <TeoMap
-                                style={styles.allowMap}
-                                showUserLocation={true}
-                                markerTitle="Ma position"
-                                markerDescription="Ceci est ma position actuelle"
+
+                                htmlFilePath={htmlFilePath}
                             />
                         </View>
 
@@ -79,6 +77,6 @@ const styles = StyleSheet.create({
         borderRadius: 15,
     },
     allowMapContainer:{
-
+    borderWidth: 1,
     }
 });
