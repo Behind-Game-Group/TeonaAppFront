@@ -23,7 +23,7 @@ export default function HomeScreen() {
             <ThemedView style={styles.stepContainer}>
                 <Link href={'/hub/login'}>Login</Link>
                 <Link href={'/hub/register'}>Register</Link>
-                <Link href={'/wallet/wallet'}>Wallet</Link>
+                <Link href={'/wallet/FormTeonaPass'}>Wallet</Link>
                 <Link href={'/bus/bus'}>Bus</Link>
                 <Link href={'/sky/sky'}>Sky</Link>
             </ThemedView>
