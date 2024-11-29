@@ -27,20 +27,27 @@ export default function InformationsGeneralConditions() {
         }
 
         try {
-            const response = await axios.post('/create-account', {
-                name: user.lastName,
-                firstname: user.firstName,
-                gender: user.title,
-                residenceCountry: user.country,
-                email: user.email,
-                password: user.password,
-                phoneNumber: user.phoneNumber,
-                language: user.language,
-            });
-
+            const response = await axios.post(
+              '/create-account',
+              {
+                  name: user.lastName,
+                  firstname: user.firstName,
+                  gender: user.title,
+                  residenceCountry: user.country,
+                  email: user.email,
+                  password: user.password,
+                  phoneNumber: user.phoneNumber,
+                  language: user.language,
+              },
+              {
+                  headers: {
+                      'Content-Type': 'application/json',
+                  },
+              }
+            );
 
             if (response.status === 200 && response.data.success) {
-                router.push("/hub/(register)/CookiePop");
+                router.push("/hub/(register)/VerifyEmailInscription");
             } else {
                 Alert.alert('Account Creation Failed', response.data.message || 'Something went wrong');
             }
@@ -48,6 +55,7 @@ export default function InformationsGeneralConditions() {
             console.error('Error during account creation:', error);
             Alert.alert('Error', 'An error occurred while creating your account.');
         }
+
     };
 
     return (

@@ -55,9 +55,9 @@ function InformationsEmail() {
             return;
         }
 
-        updateUser({ email, phoneNumber, countryCode, language });
+        updateUser({ email, phoneNumber, language });
 
-        router.push("/hub/VerifyEmailInscription");
+        router.push("/hub/(register)/ContactPreferences");
     };
 
     return (
