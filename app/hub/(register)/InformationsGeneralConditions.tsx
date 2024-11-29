@@ -27,21 +27,25 @@ export default function InformationsGeneralConditions() {
         }
 
         try {
+            const requestBody = {
+                user: {
+                    name: user.lastName,
+                    firstname: user.firstName,
+                    gender: user.title,
+                    country: user.country,
+                    email: user.email,
+                    password: user.password,
+                    phoneNumber: user.phoneNumber,
+                    language: user.language,
+                    dateOfBirth: user.dateOfBirth,
+                },
+            };
+
+            console.log("Request Body:", JSON.stringify(requestBody, null, 2));
+
             const response = await axios.post(
               "http://localhost:8082/api/user/register",
-              {
-                  user: {
-                      name: user.lastName,
-                      firstname: user.firstName,
-                      gender: user.title,
-                      country: user.country,
-                      email: user.email,
-                      password: user.password,
-                      phoneNumber: user.phoneNumber,
-                      language: user.language,
-                      dateOfBirth: user.dateOfBirth,
-                  },
-              },
+              requestBody,
               {
                   headers: {
                       "Content-Type": "application/json",
@@ -49,13 +53,16 @@ export default function InformationsGeneralConditions() {
               }
             );
 
+
             if (response.status === 200 && response.data.success) {
                 router.push("/hub/(register)/VerifyEmailInscription");
             } else {
-                Alert.alert('Account Creation Failed', response.data.message || 'Something went wrong');
+                Alert.alert(
+                  'Account Creation Failed',
+                  response.data.message || 'Something went wrong'
+                );
             }
         } catch (error) {
-            console.error('Error during account creation:', error);
             Alert.alert('Error', 'An error occurred while creating your account.');
         }
 
