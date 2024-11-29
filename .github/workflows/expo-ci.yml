@@ -44,20 +44,20 @@ jobs:
       - name: Run lint
         run: npm run lint
 
-      # 7. Création de la version Android avec EAS Build
-      - name: Build Android
-        if: github.ref == 'refs/heads/main'  # Exécute le job uniquement si le push est sur la branche principale
-        run: |
-          eas build --platform android --profile preview --non-interactive
-        env:
-          EAS_BUILD_PROFILE: preview
-          EXPO_TOKEN: ${{ secrets.EXPO_TOKEN }}
-
-      # 9. Création de la version iOS avec EAS Build
-      - name: Build iOS
-        if: github.ref == 'refs/heads/main' # Exécute le job uniquement si le push est sur la branche principale
-        run: |
-          eas build --platform ios --profile preview --non-interactive
-        env:
-          EAS_BUILD_PROFILE: preview
-          EXPO_TOKEN: ${{ secrets.EXPO_TOKEN }}
+#      # 7. Création de la version Android avec EAS Build
+#      - name: Build Android
+#        if: github.ref == 'refs/heads/main'  # Exécute le job uniquement si le push est sur la branche principale
+#        run: |
+#          eas build --platform android --profile preview --non-interactive
+#        env:
+#          EAS_BUILD_PROFILE: preview
+#          EXPO_TOKEN: ${{ secrets.EXPO_TOKEN }}
+#
+#      # 9. Création de la version iOS avec EAS Build
+#      - name: Build iOS
+#        if: github.ref == 'refs/heads/main' # Exécute le job uniquement si le push est sur la branche principale
+#        run: |
+#          eas build --platform ios --profile preview --non-interactive
+#        env:
+#          EAS_BUILD_PROFILE: preview
+#          EXPO_TOKEN: ${{ secrets.EXPO_TOKEN }}
