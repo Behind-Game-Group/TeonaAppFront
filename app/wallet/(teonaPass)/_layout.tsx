@@ -1,11 +1,15 @@
 import {Stack} from 'expo-router';
 import React from 'react';
-import {View, StyleSheet, Image, Dimensions} from 'react-native';
+import {View, StyleSheet, Image, Dimensions,Text} from 'react-native';
 
-const {width} = Dimensions.get('window');
+const {width,height} = Dimensions.get('window');
 export default function LoginLayout() {
     return (
         <View style={styles.container}>
+            {/* Contenu principal */}
+            <View style={styles.content}>
+                <Stack screenOptions={{headerShown: false}}/>
+            </View>
             {/* Contenu principal */}
             <View style={styles.content}>
                 <Stack screenOptions={{headerShown: false}}/>
@@ -35,6 +39,11 @@ const styles = StyleSheet.create({
     },
     content: {
         flex: 1
+    },
+    header: {
+        height: height *0.3,
+        width: '100%',
+        backgroundColor: '#599AD0',
     },
     footer: {
         position: 'absolute',

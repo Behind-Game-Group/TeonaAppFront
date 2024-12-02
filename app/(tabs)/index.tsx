@@ -25,7 +25,7 @@ export default function HomeScreen() {
                 <Link href={'/hub/register'}>Register</Link>
                 <Link href={'/wallet/FormTeonaPass'}>Wallet</Link>
                 <Link href={'/bus/bus'}>Bus</Link>
-                <Link href={'/wallet/TopupFares'}>test</Link>
+
                 <Link href={'/sky/sky'}>Sky</Link>
             </ThemedView>
         </ParallaxScrollView>
