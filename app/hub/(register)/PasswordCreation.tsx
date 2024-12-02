@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState } from "react";
 import {
   View,
   Text,
@@ -7,17 +7,17 @@ import {
   ImageBackground,
   StyleSheet,
   Dimensions,
-} from 'react-native';
-import { useUser } from '@/app/hub/(register)/userInfoContext/UserInfo';
-import CustomButton from '@/components/ButtonInscriptionLogin';
-import { useRouter } from 'expo-router';
+} from "react-native";
+import { useUser } from "@/app/hub/(register)/userInfoContext/UserInfo";
+import CustomButton from "@/components/ButtonInscriptionLogin";
+import { useRouter } from "expo-router";
 
 // Récupération des dimensions de l'écran
-const { width, height } = Dimensions.get('window');
+const { width, height } = Dimensions.get("window");
 
 const PasswordCreation: React.FC = () => {
-  const [password, setPassword] = useState('');
-  const [confirmPassword, setConfirmPassword] = useState('');
+  const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
   const [isPasswordValid, setIsPasswordValid] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
 
@@ -47,32 +47,31 @@ const PasswordCreation: React.FC = () => {
   const handleSubmit = () => {
     if (!isPasswordValid) {
       Alert.alert(
-        'Invalid Password',
-        'Your password does not meet the required criteria.'
+        "Invalid Password",
+        "Your password does not meet the required criteria."
       );
       return;
     }
 
     if (password !== confirmPassword) {
-      Alert.alert('Password Mismatch', 'The passwords do not match.');
+      Alert.alert("Password Mismatch", "The passwords do not match.");
       return;
     }
 
     setIsLoading(true);
 
-    // Mettre à jour le mot de passe de l'utilisateur dans le contexte
     updateUser({ password });
 
-    Alert.alert('Success', 'Your password has been created.');
+    Alert.alert("Success", "Your password has been created.");
 
-    router.push('/hub/(register)/InformationsGeneralConditions');
+    router.push("/hub/(register)/InformationsGeneralConditions");
 
     setIsLoading(false);
   };
 
   return (
     <ImageBackground
-      source={require('@/assets/images/bgPasswordCreation.png')}
+      source={require("@/assets/images/bgPasswordCreation.png")}
       style={styles.backgroundImage}
     >
       <View style={styles.container}>
@@ -117,14 +116,17 @@ const PasswordCreation: React.FC = () => {
             - At least one number
           </Text>
           <Text
-            style={[styles.criteria, /[!@#$%^&*(),.?":{}|<>]/.test(password) && styles.valid]}
+            style={[
+              styles.criteria,
+              /[!@#$%^&*(),.?":{}|<>]/.test(password) && styles.valid,
+            ]}
           >
             - At least one special character
           </Text>
         </View>
 
         <CustomButton
-          text={isLoading ? 'Creating...' : 'Create Password'}
+          text={isLoading ? "Creating..." : "Create Password"}
           color="blue"
           onPress={handleSubmit}
         />
@@ -137,16 +139,16 @@ const styles = StyleSheet.create({
   backgroundImage: {
     width: width,
     height: height,
-    justifyContent: 'center',
-    alignItems: 'center',
+    justifyContent: "center",
+    alignItems: "center",
   },
   container: {
-    width: '85%',
+    width: "85%",
     padding: 16,
-    backgroundColor: 'rgba(255, 255, 255, 0.85)',
+    backgroundColor: "rgba(255, 255, 255, 0.85)",
     borderRadius: 10,
-    alignItems: 'center',
-    shadowColor: '#000',
+    alignItems: "center",
+    shadowColor: "#000",
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.25,
     shadowRadius: 4,
@@ -154,38 +156,38 @@ const styles = StyleSheet.create({
   },
   title: {
     fontSize: 28,
-    fontWeight: 'bold',
-    color: '#333',
+    fontWeight: "bold",
+    color: "#333",
     marginBottom: 20,
   },
   input: {
-    width: '100%',
+    width: "100%",
     padding: 12,
     marginVertical: 10,
     borderWidth: 1,
-    borderColor: '#ccc',
+    borderColor: "#ccc",
     borderRadius: 5,
-    backgroundColor: '#fff',
+    backgroundColor: "#fff",
     fontSize: 16,
   },
   criteriaContainer: {
-    width: '100%',
+    width: "100%",
     marginVertical: 20,
   },
   criteriaTitle: {
     fontSize: 16,
-    fontWeight: 'bold',
-    color: '#333',
+    fontWeight: "bold",
+    color: "#333",
     marginBottom: 8,
   },
   criteria: {
     fontSize: 14,
-    color: '#888',
+    color: "#888",
     marginVertical: 2,
   },
   valid: {
-    color: '#049500',
-    fontWeight: 'bold',
+    color: "#049500",
+    fontWeight: "bold",
   },
 });
 

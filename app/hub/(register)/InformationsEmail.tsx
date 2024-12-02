@@ -62,13 +62,11 @@ function InformationsEmail() {
       return;
     }
 
-    // Mise à jour de l'utilisateur avec les données collectées
     updateUser({ email, phoneNumber, language });
 
-    // Redirection après la mise à jour
     router.push("/hub/(register)/ContactPreferences");
   };
-  console.log(user);
+
   return (
     <View style={styles.container}>
       <ImageBackground
