@@ -27,8 +27,8 @@ const ForgotPasswordVerifyEmail: React.FC = () => {
           },
         }
       );
-
-      if (response.status === 200 && response.data.valid) {
+      console.log("Response from backend:", response);
+      if (response.status === 200 && response.data.status === "success") {
         router.push("/hub/(register)/ContactPreferences");
       } else {
         Alert.alert("Invalid PIN", "The PIN code you entered is incorrect.");

@@ -29,8 +29,8 @@ export default function InformationsGeneralConditions() {
     try {
       const requestBody = {
         user: {
-          name: user.lastName,
-          firstname: user.firstName,
+          lastName: user.lastName,
+          firstName: user.firstName,
           gender: user.gender,
           country: user.country,
           email: user.email,
@@ -41,8 +41,6 @@ export default function InformationsGeneralConditions() {
         },
       };
 
-      console.log("Request Body:", JSON.stringify(requestBody, null, 2));
-
       const response = await axios.post(
         "http://localhost:8082/api/user/register",
         requestBody,
@@ -52,15 +50,16 @@ export default function InformationsGeneralConditions() {
           },
         }
       );
-
-      if (response.status === 200 && response.data.success) {
+      console.log("Request Body:", response);
+      if (response.data.status === "success") {
         router.push("/hub/(register)/VerifyEmailInscription");
-      } else {
-        Alert.alert(
-          "Account Creation Failed",
-          response.data.message || "Something went wrong"
-        );
       }
+      // else {
+      //   Alert.alert(
+      //     "Account Creation Failed",
+      //     response.data.message || "Something went wrong"
+      //   );
+      // }
     } catch (error) {
       console.error("Error during account creation:", error);
       Alert.alert("Error", "An error occurred while creating your account.");
