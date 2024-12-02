@@ -2,7 +2,7 @@ import {Stack} from 'expo-router';
 import React from 'react';
 import {View, StyleSheet, Image} from 'react-native';
 
-export default function TeonaPassLayout() {
+export default function TopUpCardLayout() {
     return (
         <View style={styles.container}>
             {/* Contenu principal */}

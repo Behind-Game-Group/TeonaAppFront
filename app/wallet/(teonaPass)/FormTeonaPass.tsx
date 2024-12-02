@@ -11,6 +11,7 @@ import {
 } from 'react-native';
 import * as ImagePicker from 'expo-image-picker';
 import Ionicons from '@expo/vector-icons/Ionicons';
+import ButtonTeonaPass from "@/components/ButtonTeonaPass";
 
 function FormTeonaPass() {
     const [firstName, setFirstName] = useState<string>('');
@@ -53,7 +54,7 @@ function FormTeonaPass() {
 
         if (!result.canceled) {
             setImage(result.assets[0].uri);
-            setModalVisible(false); // Ferme le modal
+            setModalVisible(false);
         }
     };
 
@@ -199,6 +200,7 @@ function FormTeonaPass() {
                         Your card will arrive to your door within the next 7 working days).
                     </Text>
                 </View>
+                <ButtonTeonaPass text="Continue" onPress={() => console.log('Purchased')}/>
             </View>
         </View>
     );
@@ -235,45 +237,45 @@ const styles = StyleSheet.create({
         marginTop: 10,
     },
     cardImageContainer: {
-        width: 122, // Largeur de la carte
-        height: 122, // Hauteur de la carte
-        borderRadius: 15, // Coins arrondis
-        borderWidth: 2, // Bordure de la carte
-        borderColor: "#606060", // Couleur de la bordure
-        alignItems: "center", // Centre le contenu horizontalement
-        justifyContent: "center", // Centre le contenu verticalement
-        marginTop: 20, // Espace au-dessus
-        position: "relative", // Nécessaire pour positionner des enfants en "absolute"
-        overflow: "hidden", // Empêche l'image de déborder
+        width: 122,
+        height: 122,
+        borderRadius: 15,
+        borderWidth: 2,
+        borderColor: "#606060",
+        alignItems: "center",
+        justifyContent: "center",
+        marginTop: 20,
+        position: "relative",
+        overflow: "hidden",
         marginLeft: 240,
     },
     profilePic: {
-        width: '100%', // Largeur de la photo d'identité
-        height: '100%', // Hauteur de la photo d'identité
-        resizeMode: "cover", // Remplit l'espace sans déformer l'image
+        width: '100%',
+        height: '100%',
+        resizeMode: "cover",
     },
     logoUser: {
-        width: 390, // Largeur du logo
-        height: 180, // Hauteur du logo
-        resizeMode: "contain", // Assure que le logo conserve ses proportions
-        marginTop: 23, // Espace au-dessus
+        width: 390,
+        height: 180,
+        resizeMode: "contain",
+        marginTop: 23,
     },
     addImageButton: {
-        position: "absolute", // Bouton positionné en fonction de son conteneur parent
-        top: 4, // Position légèrement au-dessus du bord supérieur du conteneur
-        right: 5, // Position légèrement à droite du bord droit du conteneur
-        width: 25, // Largeur du bouton
-        height: 25, // Hauteur du bouton
-        borderRadius: 15, // Rond
-        justifyContent: "center", // Centre le contenu verticalement
-        alignItems: "center", // Centre le contenu horizontalement
-        backgroundColor: "#606060", // Couleur
+        position: "absolute",
+        top: 4,
+        right: 5,
+        width: 25,
+        height: 25,
+        borderRadius: 15,
+        justifyContent: "center",
+        alignItems: "center",
+        backgroundColor: "#606060",
     },
     addImageButtonText: {
-        fontSize: 20, // Taille du "+"
-        color: "#fff", // Couleur du texte
-        marginBottom: 4, // Espace sous le texte
-        fontWeight: "bold", // Gras
+        fontSize: 20,
+        color: "#fff",
+        marginBottom: 4,
+        fontWeight: "bold",
     },
     form: {
         width: '100%',
