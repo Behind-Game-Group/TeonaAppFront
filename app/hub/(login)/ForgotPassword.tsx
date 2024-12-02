@@ -9,7 +9,7 @@ import {
 } from 'react-native';
 import { useRouter } from 'expo-router';
 import axios from 'axios';
-import CustomButton from "@/components/ButtonInscriptionLogin";
+import CustomButton from '@/components/ButtonInscriptionLogin';
 
 const ForgotPassword: React.FC = () => {
     const [email, setEmail] = useState<string>('');
@@ -25,7 +25,7 @@ const ForgotPassword: React.FC = () => {
         setLoading(true);
 
         try {
-            const response = await axios.post('XXXXXXXXXXXXXXXXXXXXXXXXXXXX', {
+            const response = await axios.post('XXXXXXXXXXX', {
                 email,
             });
 
@@ -35,7 +35,7 @@ const ForgotPassword: React.FC = () => {
               response.data.message || `A reset link has been sent to ${email}.`
             );
 
-            router.push('/hub/(login)/ForgotPasswordVerifyEmail');
+            router.push('/hub/(login)/Login');
         } catch (error: any) {
             // Erreur
             console.error(error);
@@ -65,8 +65,6 @@ const ForgotPassword: React.FC = () => {
                 keyboardType="email-address"
                 value={email}
                 onChangeText={setEmail}
-                autoCapitalize="none"
-                autoCorrect={false}
               />
 
               <CustomButton

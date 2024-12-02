@@ -5,20 +5,20 @@ import { View, StyleSheet, Image, Dimensions } from 'react-native';
 const { width } = Dimensions.get('window');
 export default function LoginLayout() {
   return (
-    <View style={styles.container}>
-      {/* Contenu principal */}
-      <View style={styles.content}>
-        <Stack screenOptions={{ headerShown: false }} />
+      <View style={styles.container}>
+        {/* Contenu principal */}
+        <View style={styles.content}>
+          <Stack screenOptions={{ headerShown: false }} />
+        </View>
+        {/* Footer avec le logo Teona*/}
+        <View style={styles.footer}>
+          <Image
+            source={require('@/assets/images/teonaLogo.png')}
+            style={styles.logo}
+            resizeMode="contain"
+          />
+        </View>
       </View>
-      {/* Footer avec le logo Teona*/}
-      <View style={styles.footer}>
-        <Image
-          source={require('@/assets/images/teonaLogo.png')}
-          style={styles.logo}
-          resizeMode="contain"
-        />
-      </View>
-    </View>
   );
 }
 const styles = StyleSheet.create({
