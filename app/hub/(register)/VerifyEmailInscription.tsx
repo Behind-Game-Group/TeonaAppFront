@@ -3,9 +3,11 @@ import { useRouter } from "expo-router";
 import axios from "axios";
 import VerifyPinCode from "@/components/verifyPinCode/VerifyPinCode";
 import { Alert } from "react-native";
+import { useUser } from '@/app/hub/(register)/userInfoContext/UserInfo';
 
 const ForgotPasswordVerifyEmail: React.FC = () => {
   const router = useRouter();
+  const { user } = useUser();
 
   const handleVerification = async (pinCode: string) => {
     if (!pinCode) {
@@ -16,9 +18,12 @@ const ForgotPasswordVerifyEmail: React.FC = () => {
     router.push("/hub/(register)/CookiePop");
 
     try {
+      const email = user.email;
+
       const response = await axios.post(
         "http://localhost:8082/api/user/verify",
         {
+          email,
           pinCode,
         },
         {
