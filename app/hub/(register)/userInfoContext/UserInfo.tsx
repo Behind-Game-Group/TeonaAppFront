@@ -7,6 +7,8 @@ interface User {
   gender?: string;
   email?: string;
   phoneNumber?: string;
+  teonaPassenger?: boolean;
+  teonaGroup?: boolean;
   country?: string;
   dateOfBirth?: string;
   language?: string;

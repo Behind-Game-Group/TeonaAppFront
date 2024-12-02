@@ -9,8 +9,8 @@ const ForgotPasswordVerifyEmail: React.FC = () => {
   const router = useRouter();
   const { user } = useUser();
 
-  const handleVerification = async (pinCode: string) => {
-    if (!pinCode) {
+  const handleVerification = async (code: string) => {
+    if (!code) {
       Alert.alert("Error", "Please enter the PIN code.");
       return;
     }
@@ -24,7 +24,7 @@ const ForgotPasswordVerifyEmail: React.FC = () => {
         "http://localhost:8082/api/user/verify",
         {
           email,
-          pinCode,
+          code,
         },
         {
           headers: {
