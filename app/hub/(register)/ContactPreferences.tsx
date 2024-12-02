@@ -1,23 +1,24 @@
-import React, { useState } from 'react';
-import {
-  View,
-  Text,
-  StyleSheet,
-  Alert,
-  ImageBackground,
-  TouchableOpacity,
-} from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { View, Text, StyleSheet, Alert, ImageBackground, TouchableOpacity } from 'react-native';
 import CustomButton from '@/components/ButtonInscriptionLogin';
-import { router, useRouter } from 'expo-router';
+import { useRouter } from 'expo-router';
+import { useUser } from '@/app/hub/(register)/userInfoContext/UserInfo';
 
 const NotificationPreferencesPage: React.FC = () => {
-
   const router = useRouter();
+  const { user, updateUser } = useUser();
 
-  const [emailNotifications, setEmailNotifications] = useState(false);
-  const [promotionalEmails, setPromotionalEmails] = useState(false);
+  // Initialiser les états des préférences avec les valeurs du contexte utilisateur
+  const [emailNotifications, setEmailNotifications] = useState(user.teonaGroup || false);
+  const [promotionalEmails, setPromotionalEmails] = useState(user.teonaPassenger || false);
 
   const handleSavePreferences = () => {
+    // Mettre à jour le contexte avec les nouvelles préférences
+    updateUser({
+      teonaGroup: emailNotifications,
+      teonaPassenger: promotionalEmails,
+    });
+
     let preferences = 'Your preferences:\n';
 
     preferences += emailNotifications
@@ -37,10 +38,7 @@ const NotificationPreferencesPage: React.FC = () => {
   };
 
   return (
-    <ImageBackground
-      source={require('@/assets/images/bgSignIn.png')}
-      style={styles.backgroundImage}
-    >
+    <ImageBackground source={require('@/assets/images/bgSignIn.png')} style={styles.backgroundImage}>
       <View style={styles.container}>
         <Text style={styles.title}>Please set your contact preferences</Text>
 
@@ -50,9 +48,7 @@ const NotificationPreferencesPage: React.FC = () => {
             onPress={() => toggleCheckbox(emailNotifications, setEmailNotifications)}
           >
             <View style={[styles.checkbox, emailNotifications && styles.checkboxChecked]} />
-            <Text style={styles.preferenceText}>
-              Subscribe to Teona Group updates
-            </Text>
+            <Text style={styles.preferenceText}>Subscribe to Teona Group updates</Text>
           </TouchableOpacity>
           <Text style={styles.preferenceDescription}>
             If you would like to receive emails from TeonaPassenger with updates about the programme and personalized offers from TeonaGroup and its partners, simply subscribe using the toggle above. You can unsubscribe at any time.
@@ -63,21 +59,14 @@ const NotificationPreferencesPage: React.FC = () => {
             onPress={() => toggleCheckbox(promotionalEmails, setPromotionalEmails)}
           >
             <View style={[styles.checkbox, promotionalEmails && styles.checkboxChecked]} />
-            <Text style={styles.preferenceText}>
-              Subscribe to Teona Passenger updates
-            </Text>
+            <Text style={styles.preferenceText}>Subscribe to Teona Passenger updates</Text>
           </TouchableOpacity>
           <Text style={styles.preferenceDescription}>
             To receive updates and personalized offers from Georgina Passenger and its partners, simply subscribe above. Georgina Passenger will send you updates and offers via e-mail and social media. You can unsubscribe at any time.
           </Text>
         </View>
 
-        <CustomButton
-          text="Save Preferences"
-          color="blue"
-          onPress={handleSavePreferences}
-        />
-
+        <CustomButton text="Save Preferences" color="blue" onPress={handleSavePreferences} />
       </View>
     </ImageBackground>
   );
@@ -138,15 +127,6 @@ const styles = StyleSheet.create({
     marginLeft: 34,
     marginBottom: 10,
     lineHeight: 18,
-  },
-  linkContainer: {
-    marginTop: 10,
-  },
-  link: {
-    color: '#2787BB',
-    fontSize: 14,
-    fontWeight: '600',
-    textDecorationLine: 'underline',
   },
 });
 
