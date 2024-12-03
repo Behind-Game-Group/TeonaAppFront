@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Text, View, TextInput, Button, Alert, StyleSheet } from "react-native";
 import { useRouter, usePathname } from "expo-router";
-import axios from 'axios';
+import axios from "axios";
 
 const ResetPassword: React.FC = () => {
   const [password, setPassword] = useState("");
@@ -16,9 +16,11 @@ const ResetPassword: React.FC = () => {
 
   useEffect(() => {
     // Extraire manuellement le token depuis l'URL
-    const queryParams = new URLSearchParams(pathname.split("?")[1]);
-    const tokenParam = queryParams.get("token");
+    const query = pathname.split("?")[1];
+    const params = new URLSearchParams(query);
+    const tokenParam = params.get("token");
     setToken(tokenParam);
+
 
     if (!tokenParam) {
       Alert.alert("Error", "No token found in the URL.");
@@ -39,14 +41,13 @@ const ResetPassword: React.FC = () => {
     setIsLoading(true);
 
     try {
-
-      await axios.post("http://localhost:8082/api/user/reset-password",
-        {
-          token,
-          password
-        });
+      await axios.post("http://localhost:8082/api/user/reset-password", {
+        token,
+        password,
+      });
 
       Alert.alert("Success", "Your password has been successfully reset.");
+      router.push("//hub/(login)/Login");
     } catch (error) {
       console.error(error);
       Alert.alert("Error", "An error occurred. Please try again.");
