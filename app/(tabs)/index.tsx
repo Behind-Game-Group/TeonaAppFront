@@ -28,6 +28,7 @@ export default function HomeScreen() {
                 <Link href={'/bus/bus'}>Bus</Link>
                 <Link href={'/sky/sky'}>Sky</Link>
                 <Link href={'/hub/PasswordCreation'}>Password Creation</Link>
+                <Link href={'/hub/(login)/ResetPassword'}>Reset Password</Link>
             </ThemedView>
         </ParallaxScrollView>
     );
