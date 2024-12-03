@@ -67,7 +67,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'space-between',
     backgroundColor: '#599AD0',
-    height: 140,
+    height: 100,
     paddingHorizontal: 16,
     paddingVertical: 10,
   },
@@ -83,7 +83,7 @@ const styles = StyleSheet.create({
   viewStart: { 
     alignItems: 'center', 
     justifyContent: 'flex-start', 
-    height: '60%',
+    height: '100%',
     width: 40,
   },
   title: {

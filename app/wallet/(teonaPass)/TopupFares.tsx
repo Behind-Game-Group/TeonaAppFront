@@ -68,7 +68,7 @@ const TopupFares: React.FC<TopupFaresProps> = ({totalPrice, setCurrentBalance}) 
         }
     };
     return (
-        <>
+        <View style={{ width: '100%', height: '100%'}}>
             <MenuTop text='TopUp Fares' onPress={undefined} />
             <ScrollView contentContainerStyle={[styles.faresContainer]}>
             <SafeAreaView>
@@ -76,9 +76,10 @@ const TopupFares: React.FC<TopupFaresProps> = ({totalPrice, setCurrentBalance}) 
                 <SafeAreaView style={[{}]}>
 
                     {cardData.map((card) => (
-                        <TeonaCard  key={card.id}
-                                    card={card}
-                                    onTopUp={() => handleTopUp(card)} // Envoyer les données au backend lors du clic
+                        <TeonaCard
+                            key={card.id}
+                            card={card}
+                            onTopUp={() => handleTopUp(card)} // Envoyer les données au backend lors du clic
                         />
                     ))}
 
@@ -96,7 +97,7 @@ const TopupFares: React.FC<TopupFaresProps> = ({totalPrice, setCurrentBalance}) 
                 </SafeAreaView>
             </SafeAreaView>
         </ScrollView>
-        </>
+        </View>
         
         
     );
@@ -104,10 +105,9 @@ const TopupFares: React.FC<TopupFaresProps> = ({totalPrice, setCurrentBalance}) 
 const styles = StyleSheet.create({
     faresContainer: {
         // flex: 1,
-        // paddingTop: 20,
-        // paddingInline: 6,
-        // paddingBottom: 240,
-        height: '40%',
+        paddingTop: 20,
+        paddingInline: 6,
+        paddingBottom: 140,
     },
     headerText: {
         fontSize: 24,
@@ -116,7 +116,7 @@ const styles = StyleSheet.create({
 
     },
     faresContent: {
-        flex: 1,
+        // flex: 1,
         justifyContent: 'center',
         alignItems: 'center',
         width: width*0.8,
@@ -139,8 +139,8 @@ const styles = StyleSheet.create({
     },
     faresButtonContainer: {
         alignItems: 'center',
-        flex: 1,
-padding:10,
+        // flex: 1,
+        padding:10,
     },
 });
 export default TopupFares;
