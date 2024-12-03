@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Text, View, TextInput, Alert, ImageBackground, StyleSheet, Dimensions } from "react-native";
-import { useRouter, usePathname } from "expo-router";
+import { useLocalSearchParams, useRouter } from 'expo-router'; // Importez useLocalSearchParams
 import axios from "axios";
 import CustomButton from "@/components/ButtonInscriptionLogin";
 
@@ -14,21 +14,13 @@ const ResetPassword: React.FC = () => {
   const [isLoading, setIsLoading] = useState(false);
 
   const router = useRouter();
-  const pathname = usePathname();
-
-  const [token, setToken] = useState<string | null>(null);
+  const { token } = useLocalSearchParams(); // Utilisez useLocalSearchParams pour récupérer le token
 
   useEffect(() => {
-    // Extraire manuellement le token depuis l'URL
-    const query = pathname.split("?")[1];
-    const params = new URLSearchParams(query);
-    const tokenParam = params.get("token");
-    setToken(tokenParam);
-
-    if (!tokenParam) {
-      Alert.alert("Error", "No token found in the URL.");
+    if (!token) {
+      Alert.alert("Error", "Token not found.");
     }
-  }, [pathname]);
+  }, [token]);
 
   const validatePassword = (input: string) => {
     const minLength = 12;
