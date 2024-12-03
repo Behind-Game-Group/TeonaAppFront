@@ -1,19 +1,23 @@
 import {Stack} from 'expo-router';
 import React from 'react';
 import {View, StyleSheet, Image} from 'react-native';
+import TeonaPassNav from "@/components/TeonaPassNav";
 
 export default function TeonaPassLayout() {
     return (
         <View style={styles.container}>
             {/* Contenu principal */}
+            <View style={styles.header}>
+            <TeonaPassNav title={"title"} />
+        </View>
             <View style={styles.content}>
                 <Stack screenOptions={{headerShown: false}}/>
             </View>
             <View style={styles.footer}>
                 <View style={styles.rowImages}>
                     <Image
-                        source={require('../../../assets/images/bus-logo.png')}
-                        style={styles.logoBus}
+                        source={require('../../../assets/images/teonahome.png')}
+                        style={styles.logoHome}
                     />
                     <Image
                         source={require('../../../assets/images/bus-logo.png')}
@@ -35,6 +39,9 @@ const styles = StyleSheet.create({
     content: {
         flex: 1
     },
+    header: {
+
+    },
     footer: {
         position: 'absolute',
         bottom: 0,
@@ -54,7 +61,12 @@ const styles = StyleSheet.create({
         resizeMode: 'contain',
         tintColor: '#606060',
     },
-    logoBus: {
+    logoBus : {
+        width: 65,
+        height: 65,
+        resizeMode: 'contain',
+    },
+    logoHome: {
         width: 65,
         height: 65,
         resizeMode: 'contain',

@@ -26,7 +26,7 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         alignItems: 'center',
         width: width *0.8,
-
+        paddingLeft: 0,
     },
     image: {
 
@@ -38,13 +38,13 @@ const styles = StyleSheet.create({
         fontSize: 18,
         flexDirection: 'row',
         textAlign: 'center',
-        padding: 10,
+
         flexWrap: 'wrap',
         width: width * 0.5,
     },
     buttonContainer: {
         alignItems: 'center',
-        flexDirection:'flex-between',
+        flexDirection:'row',
     },
 });
 export default TeonaCard;
