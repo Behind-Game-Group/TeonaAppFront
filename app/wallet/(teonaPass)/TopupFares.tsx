@@ -1,11 +1,12 @@
 import React, {useState} from 'react';
 import {SafeAreaProvider} from "react-native-safe-area-context";
-import {SafeAreaView, View, Text,  Dimensions, StyleSheet,  Alert} from "react-native";
+import {SafeAreaView, View, Text,  Dimensions, StyleSheet,  Alert, ScrollView} from "react-native";
 
 import TopUpButton from "@/components/TopUpButton";
 import axios from 'axios';
 import {TeonaCardModel} from "@/components/TeonaCardModel";
 import TeonaCard from "@/components/TeonaCard";
+import MenuTop from '@/components/MenuTop';
 
 
 
@@ -67,9 +68,12 @@ const TopupFares: React.FC<TopupFaresProps> = ({totalPrice, setCurrentBalance}) 
         }
     };
     return (
-        <SafeAreaProvider style={styles.faresContainer}>
+        <>
+            <MenuTop text='TopUp Fares' onPress={undefined} />
+            <ScrollView style={[styles.faresContainer]}>
+            <SafeAreaView>
             <Text style={styles.headerText}>Let's TopUp your card!</Text>
-            <SafeAreaView style={styles.faresContent}>
+            <SafeAreaView style={[{}]}>
 
                 {cardData.map((card) => (
                     <TeonaCard  key={card.id}
@@ -88,12 +92,16 @@ const TopupFares: React.FC<TopupFaresProps> = ({totalPrice, setCurrentBalance}) 
                     </View>
                 </View>
             </SafeAreaView>
-        </SafeAreaProvider>
+        </SafeAreaView>
+        </ScrollView>
+        </>
+        
+        
     );
 };
 const styles = StyleSheet.create({
     faresContainer: {
-        flex: 1,
+        // flex: 1,
 
         padding: 6,
     },
