@@ -22,7 +22,6 @@ const CardPaymentPage: React.FC<CardPaymentPageProps> = ({ route }) => {
 
   return (
     <View style={styles.container}>
-      {/* Affichage des informations de la carte */}
       <View style={styles.cardInfo}>
         <Text style={styles.cardTitle}>Carte : {cardType}</Text>
         <Text style={styles.cardText}>Prix de la carte : {price} €</Text>
@@ -44,24 +43,24 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 20,
-    backgroundColor: '#fff',
+    backgroundColor: '#fff'
   },
   cardInfo: {
-    marginBottom: 20,
+    marginBottom: 20
   },
   cardTitle: {
     fontSize: 22,
-    fontWeight: 'bold',
+    fontWeight: 'bold'
   },
   cardText: {
     fontSize: 16,
-    marginTop: 10,
+    marginTop: 10
   },
   separator: {
     height: 1,
     backgroundColor: '#ccc',
-    marginVertical: 20,
-  },
+    marginVertical: 20
+  }
 });
 
 export default CardPaymentPage;

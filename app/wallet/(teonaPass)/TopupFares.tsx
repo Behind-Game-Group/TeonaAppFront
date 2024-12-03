@@ -1,11 +1,12 @@
 import React, {useState} from 'react';
 import {SafeAreaProvider} from "react-native-safe-area-context";
-import {SafeAreaView, View, Text, Dimensions, StyleSheet, Alert, Image, ScrollView} from "react-native";
+import {SafeAreaView, View, Text,  Dimensions, StyleSheet,  Alert, ScrollView} from "react-native";
 
 import TopUpButton from "@/components/TopUpButton";
 import axios from 'axios';
 import {TeonaCardModel} from "@/components/TeonaCardModel";
 import TeonaCard from "@/components/TeonaCard";
+import MenuTop from '@/components/MenuTop';
 
 
 
@@ -67,25 +68,22 @@ const TopupFares: React.FC<TopupFaresProps> = ({totalPrice, setCurrentBalance}) 
         }
     };
     return (
-        <ScrollView style={styles.faresContainer}>
-            <View >
+        <>
+            <MenuTop text='TopUp Fares' onPress={undefined} />
+            <ScrollView style={[styles.faresContainer]}>
+            <SafeAreaView>
             <Text style={styles.headerText}>Let's TopUp your card!</Text>
-            <View  style={[{}]}>
-            <View style={styles.faresContent}>
-                <View style={styles.faresCard}>
+            <SafeAreaView style={[{}]}>
 
                 {cardData.map((card) => (
-                    <TeonaCard
-                        key={card.id}
+                    <TeonaCard  key={card.id}
                                 card={card}
-                                onTopUp={() => handleTopUp(card)}
+                                onTopUp={() => handleTopUp(card)} // Envoyer les données au backend lors du clic
                     />
                 ))}
 
-                    </View>
 
                 <View style={styles.faresTotalCard}>
-
                     <Text style={styles.faresTotalPrice}>{`${totalPrice} €`}</Text>
                     <View style={styles.faresButtonContainer}>
                         <TopUpButton title={loading ? 'Loading...' : 'TopUp'}
@@ -93,55 +91,52 @@ const TopupFares: React.FC<TopupFaresProps> = ({totalPrice, setCurrentBalance}) 
                                      disabled={loading} />
                     </View>
                 </View>
-            </View>
-            </View>
-            </View >
+            </SafeAreaView>
+        </SafeAreaView>
         </ScrollView>
+        </>
+        
+        
     );
 };
 const styles = StyleSheet.create({
     faresContainer: {
-        flex: 1,
-        backgroundColor: 'yellow',
-    },
-    faresContent: {
-        backgroundColor: 'blue',
-        alignItems: 'center',
-        flex: 1,
+        // flex: 1,
 
-
+        padding: 6,
     },
     headerText: {
-        fontSize: 20,
-        color: '#606060',
-        textAlign: 'center',
+        fontSize: 24,
         fontWeight: 'bold',
-        marginBottom: 20,
-        fontFamily: 'Roboto',
-    },
-    innerContainer: {
-        flex: 1,
-    },
+        textAlign: 'center',
 
+    },
+    faresContent: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+        width: width*0.8,
+        height:height *0.6,
+       },
     faresTotalCard: {
         flexDirection: 'row',
         justifyContent: 'space-evenly',
-        alignItems: 'flex-end',
+        alignItems: 'center',
         width: '100%',
+       
+
     },
     faresTotalPrice: {
-        borderColor: 'black',
+        borderColor: "black",
         borderWidth: 3,
+        padding:3,
         textAlign: 'center',
         flex: 1,
     },
     faresButtonContainer: {
         alignItems: 'center',
         flex: 1,
-        justifyContent: 'center',
-    },
-    faresCard :{
-        padding: 0,
+padding:10,
     },
 });
 export default TopupFares;
