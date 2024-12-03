@@ -1,30 +1,29 @@
 import React, { useState } from 'react';
-import { View, Text, TouchableOpacity, StyleSheet, Image } from 'react-native';
-import { useRouter, RelativePathString, ExternalPathString } from 'expo-router';
+import { View, Text, TouchableOpacity, StyleSheet, Image, Modal } from 'react-native';
+import { useRouter } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
 
 type MenuTopProps = {
   text: string;
-  onPress?: RelativePathString | ExternalPathString;
+  onPress?: string; // Route de navigation
 };
 
 const MenuTop: React.FC<MenuTopProps> = ({ text, onPress }) => {
   const router = useRouter();
-  const [showMenu, setShowMenu] = useState<boolean>(false);
+  const [modalVisible, setModalVisible] = useState<boolean>(false);
 
   return (
     <>
-    <StatusBar style={"light"} backgroundColor="#599AD0" />
-      <View style={[styles.header]}>
+      <StatusBar style="light" backgroundColor="#599AD0" />
+      <View style={styles.header}>
         <TouchableOpacity
-            style={[styles.viewEnd]}
+          style={styles.viewEnd}
           onPress={() => {
-            // Validation du chemin
             if (onPress) {
               try {
                 router.push(onPress); // Naviguer vers une route valide
               } catch (error) {
-                console.log(`Navigation error: ${error}`);
+                console.error(`Navigation error: ${error}`);
               }
             } else {
               router.back(); // Retour si onPress est vide
@@ -34,27 +33,34 @@ const MenuTop: React.FC<MenuTopProps> = ({ text, onPress }) => {
           <Image
             source={require('@/assets/images/chevron-bottom-normal.png')}
             style={styles.image}
-          /> {/* Bouton retour */}
+          />
         </TouchableOpacity>
-        <View style={[styles.viewCenter]}>
-            <Text style={styles.title}>{text}</Text> {/* Titre */}
+
+        <View style={styles.viewCenter}>
+          <Text style={styles.title}>{text}</Text>
         </View>
-        <TouchableOpacity
-            style={[styles.viewStart]} 
-            onPress={() => setShowMenu(!showMenu)}>
-          <Text style={styles.menu}>☰</Text> {/* Menu Burger */}
+
+        <TouchableOpacity style={styles.viewStart} onPress={() => setModalVisible(!modalVisible)}>
+          <Text style={styles.menu}>☰</Text>
         </TouchableOpacity>
       </View>
 
-      {/* Contenu principal */}
-      <View style={styles.content}>
-        <Text>Contenu principal de l'application.</Text>
-      </View>
+      <Modal
+        animationType="slide"
+        visible={modalVisible}
+        onRequestClose={() => setModalVisible(!modalVisible)}
+      >
+        <View style={styles.modal}>
+          <TouchableOpacity onPress={() => setModalVisible(!modalVisible)}>
+            <Text>✖</Text>
+          </TouchableOpacity>
+          <Text>Contenu principal de l'application.</Text>
+        </View>
+      </Modal>
     </>
   );
 };
 
-// Styles
 const styles = StyleSheet.create({
   header: {
     flexDirection: 'row',
@@ -67,24 +73,18 @@ const styles = StyleSheet.create({
   },
   viewEnd: { 
     alignItems: 'center', 
-    justifyContent : 'flex-end', 
+    justifyContent: 'flex-end', 
     height: '100%',
     width: 40,
-    },
- viewCenter: {
-    height: '100%',
-    backgroundColor: 'green',
-    justifyContent: 'center'
   },
- viewStart: {
-    alignItems: 'center',
-    justifyContent: 'flex-start',
+  viewCenter: {
+    justifyContent: 'center',
+  },
+  viewStart: { 
+    alignItems: 'center', 
+    justifyContent: 'flex-start', 
     height: '60%',
-    width: 40
-  },
-  back: {
-    color: '#fff',
-    fontSize: 18,
+    width: 40,
   },
   title: {
     color: '#fff',
@@ -97,15 +97,16 @@ const styles = StyleSheet.create({
     height: 40,
     resizeMode: 'contain',
     alignSelf: 'center',
-},
+  },
   menu: {
     color: '#fff',
     fontSize: 24,
   },
-  content: {
+  modal: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
+    backgroundColor: '#fff',
     padding: 16,
   },
 });

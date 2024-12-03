@@ -70,29 +70,31 @@ const TopupFares: React.FC<TopupFaresProps> = ({totalPrice, setCurrentBalance}) 
     return (
         <>
             <MenuTop text='TopUp Fares' onPress={undefined} />
-            <ScrollView style={[styles.faresContainer]}>
+            <ScrollView contentContainerStyle={[styles.faresContainer]}>
             <SafeAreaView>
-            <Text style={styles.headerText}>Let's TopUp your card!</Text>
-            <SafeAreaView style={[{}]}>
+                <Text style={styles.headerText}>Let's TopUp your card!</Text>
+                <SafeAreaView style={[{}]}>
 
-                {cardData.map((card) => (
-                    <TeonaCard  key={card.id}
-                                card={card}
-                                onTopUp={() => handleTopUp(card)} // Envoyer les données au backend lors du clic
-                    />
-                ))}
+                    {cardData.map((card) => (
+                        <TeonaCard  key={card.id}
+                                    card={card}
+                                    onTopUp={() => handleTopUp(card)} // Envoyer les données au backend lors du clic
+                        />
+                    ))}
 
 
-                <View style={styles.faresTotalCard}>
-                    <Text style={styles.faresTotalPrice}>{`${totalPrice} €`}</Text>
-                    <View style={styles.faresButtonContainer}>
-                        <TopUpButton title={loading ? 'Loading...' : 'TopUp'}
-                                     onPress={setCurrentBalance}
-                                     disabled={loading} />
+                    <View style={styles.faresTotalCard}>
+                        <Text style={styles.faresTotalPrice}>{`${totalPrice} €`}</Text>
+                        <View style={styles.faresButtonContainer}>
+                            <TopUpButton 
+                                title={loading ? 'Loading...' : 'TopUp'}
+                                onPress={setCurrentBalance}
+                                // disabled={loading} 
+                            />
+                        </View>
                     </View>
-                </View>
+                </SafeAreaView>
             </SafeAreaView>
-        </SafeAreaView>
         </ScrollView>
         </>
         
@@ -102,8 +104,10 @@ const TopupFares: React.FC<TopupFaresProps> = ({totalPrice, setCurrentBalance}) 
 const styles = StyleSheet.create({
     faresContainer: {
         // flex: 1,
-
-        padding: 6,
+        // paddingTop: 20,
+        // paddingInline: 6,
+        // paddingBottom: 240,
+        height: '40%',
     },
     headerText: {
         fontSize: 24,
