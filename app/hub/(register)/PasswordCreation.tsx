@@ -1,29 +1,34 @@
-import React, { useState } from "react";
-import {
-  View,
-  Text,
-  TextInput,
-  Alert,
-  ImageBackground,
-  StyleSheet,
-  Dimensions,
-} from "react-native";
-import { useUser } from "@/app/hub/(register)/userInfoContext/UserInfo";
+import React, { useState, useEffect } from "react";
+import { Text, View, TextInput, Alert, ImageBackground, StyleSheet, Dimensions } from "react-native";
+import { useRouter, usePathname } from "expo-router";
+import axios from "axios";
 import CustomButton from "@/components/ButtonInscriptionLogin";
-import { useRouter } from "expo-router";
 
 // Récupération des dimensions de l'écran
 const { width, height } = Dimensions.get("window");
 
-const PasswordCreation: React.FC = () => {
+const ResetPassword: React.FC = () => {
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [isPasswordValid, setIsPasswordValid] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
 
-  const { user, updateUser } = useUser();
-
   const router = useRouter();
+  const pathname = usePathname();
+
+  const [token, setToken] = useState<string | null>(null);
+
+  useEffect(() => {
+    // Extraire manuellement le token depuis l'URL
+    const query = pathname.split("?")[1];
+    const params = new URLSearchParams(query);
+    const tokenParam = params.get("token");
+    setToken(tokenParam);
+
+    if (!tokenParam) {
+      Alert.alert("Error", "No token found in the URL.");
+    }
+  }, [pathname]);
 
   const validatePassword = (input: string) => {
     const minLength = 12;
@@ -44,7 +49,7 @@ const PasswordCreation: React.FC = () => {
     validatePassword(input);
   };
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     if (!isPasswordValid) {
       Alert.alert(
         "Invalid Password",
@@ -58,15 +63,27 @@ const PasswordCreation: React.FC = () => {
       return;
     }
 
+    if (!token) {
+      Alert.alert("Error", "Token is missing.");
+      return;
+    }
+
     setIsLoading(true);
 
-    updateUser({ password });
+    try {
+      await axios.post("http://localhost:8082/api/user/reset-password", {
+        token,
+        password,
+      });
 
-    Alert.alert("Success", "Your password has been created.");
-
-    router.push("/hub/(register)/InformationsGeneralConditions");
-
-    setIsLoading(false);
+      Alert.alert("Success", "Your password has been successfully reset.");
+      router.push("//hub/(login)/Login");
+    } catch (error) {
+      console.error(error);
+      Alert.alert("Error", "An error occurred. Please try again.");
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
@@ -75,11 +92,11 @@ const PasswordCreation: React.FC = () => {
       style={styles.backgroundImage}
     >
       <View style={styles.container}>
-        <Text style={styles.title}>Create a Password</Text>
+        <Text style={styles.title}>Reset Your Password</Text>
 
         <TextInput
           style={styles.input}
-          placeholder="Enter your password"
+          placeholder="Enter your new password"
           placeholderTextColor="#888"
           secureTextEntry
           value={password}
@@ -88,7 +105,7 @@ const PasswordCreation: React.FC = () => {
 
         <TextInput
           style={styles.input}
-          placeholder="Confirm your password"
+          placeholder="Confirm your new password"
           placeholderTextColor="#888"
           secureTextEntry
           value={confirmPassword}
@@ -126,7 +143,7 @@ const PasswordCreation: React.FC = () => {
         </View>
 
         <CustomButton
-          text={isLoading ? "Creating..." : "Create Password"}
+          text={isLoading ? "Resetting..." : "Reset Password"}
           color="blue"
           onPress={handleSubmit}
         />
@@ -191,4 +208,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default PasswordCreation;
+export default ResetPassword;
