@@ -26,7 +26,7 @@ const ForgotPassword: React.FC = () => {
 
     try {
       const response = await axios.post(
-        "localhost:8082/api/user/forgot-password", // This route will send the reset password link to the email address that user has entered
+        "localhost:8082/api/user/forgot-password",
         {
           email,
         }
@@ -38,7 +38,7 @@ const ForgotPassword: React.FC = () => {
         response.data.message || `A reset link has been sent to ${email}.`
       );
 
-      router.push("/hub/(login)/Login"); // TODO :  Here this route should be redirect to the slide where the user can enter the new password
+      router.push("/hub/(login)/ResetPassword");
     } catch (error: any) {
       // Erreur
       console.error(error);
