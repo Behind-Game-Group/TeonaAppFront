@@ -55,7 +55,6 @@ function TopUp() {
                         >
                             <Text style={styles.topUpButtonText}>TopUp</Text>
                         </TouchableOpacity>
-
                     </View>
                 ))}
 
@@ -68,13 +67,16 @@ function TopUp() {
                             resizeMode="cover"
                         />
                     </View>
-                    <TextInput
-                        style={styles.input}
-                        value={selectedPrice}
-                        onChangeText={(text) => setSelectedPrice(text)}
-                        keyboardType="numeric"
-                        placeholder=""
-                    />
+                    <View style={styles.inputContainer}>
+                        <Text style={styles.label}>TopUp with your {'\n'} own amount</Text>
+                        <TextInput
+                            style={styles.input}
+                            value={selectedPrice}
+                            onChangeText={(text) => setSelectedPrice(text)}
+                            keyboardType="numeric"
+                            placeholder=""
+                        />
+                    </View>
                     <TouchableOpacity
                         style={styles.topUpButton}
                         onPress={() => handleTopUp('Visa', selectedPrice)}
@@ -122,7 +124,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'space-between',
         width: '80%',
-        marginTop: 18,
+        marginTop: 20,
     },
     imageContainer: {
         width: 110,
@@ -153,14 +155,25 @@ const styles = StyleSheet.create({
         fontSize: 20,
         color: '#DF8D22',
     },
+    inputContainer: {
+        flexDirection: 'column',
+        alignItems: 'flex-start',
+        marginLeft: 10,
+        marginTop: -10,
+    },
+    label: {
+        fontSize: 10,
+        color: '#606060',
+        marginBottom: 3,
+    },
     input: {
         width: 70,
-        height: 40,
+        height: 30,
         borderWidth: 1,
         borderColor: '#606060',
         fontSize: 16,
         paddingLeft: 7,
-        marginLeft: 10,
+        marginLeft: 5,
     },
 });
 
