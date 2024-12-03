@@ -69,7 +69,7 @@ const TopupFares: React.FC<TopupFaresProps> = ({totalPrice, setCurrentBalance}) 
     };
     return (
         <>
-            <MenuTop text='TopUp Fares' onPress={undefined} />
+
             <ScrollView style={[styles.faresContainer]}>
             <SafeAreaView>
             <Text style={styles.headerText}>Let's TopUp your card!</Text>
@@ -134,7 +134,10 @@ const styles = StyleSheet.create({
         flex: 1,
     },
     faresButtonContainer: {
-        alignItems: 'center',
+        alignContent: 'center',
+        justifyContent:'space-evenly',
+
+        flexDirection :'row',
         flex: 1,
 padding:10,
     },

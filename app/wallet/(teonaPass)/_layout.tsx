@@ -2,13 +2,14 @@ import {Stack} from 'expo-router';
 import React from 'react';
 import {View, StyleSheet, Image} from 'react-native';
 import TeonaPassNav from "@/components/TeonaPassNav";
+import MenuTop from "@/components/MenuTop";
 
 export default function TeonaPassLayout() {
     return (
         <View style={styles.container}>
             {/* Contenu principal */}
             <View style={styles.header}>
-            <TeonaPassNav title={"title"} />
+                <MenuTop text='TopUp Fares' onPress={undefined} />
         </View>
             <View style={styles.content}>
                 <Stack screenOptions={{headerShown: false}}/>
