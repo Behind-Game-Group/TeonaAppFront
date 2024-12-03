@@ -1,6 +1,14 @@
 import React, { useState, useEffect } from "react";
-import { Text, View, TextInput, Alert, ImageBackground, StyleSheet, Dimensions } from "react-native";
-import { useLocalSearchParams, useRouter } from 'expo-router'; // Importez useLocalSearchParams
+import {
+  Text,
+  View,
+  TextInput,
+  Alert,
+  ImageBackground,
+  StyleSheet,
+  Dimensions,
+} from "react-native";
+import { useLocalSearchParams, useRouter } from "expo-router"; // Importez useLocalSearchParams
 import axios from "axios";
 import CustomButton from "@/components/ButtonInscriptionLogin";
 
@@ -8,7 +16,7 @@ import CustomButton from "@/components/ButtonInscriptionLogin";
 const { width, height } = Dimensions.get("window");
 
 const ResetPassword: React.FC = () => {
-  const [password, setPassword] = useState("");
+  const [newPassword, setNewPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [isPasswordValid, setIsPasswordValid] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
@@ -37,7 +45,7 @@ const ResetPassword: React.FC = () => {
   };
 
   const handlePasswordChange = (input: string) => {
-    setPassword(input);
+    setNewPassword(input);
     validatePassword(input);
   };
 
@@ -50,7 +58,7 @@ const ResetPassword: React.FC = () => {
       return;
     }
 
-    if (password !== confirmPassword) {
+    if (newPassword !== confirmPassword) {
       Alert.alert("Password Mismatch", "The passwords do not match.");
       return;
     }
@@ -65,11 +73,11 @@ const ResetPassword: React.FC = () => {
     try {
       await axios.post("http://localhost:8082/api/user/reset-password", {
         token,
-        password,
+        newPassword,
       });
 
       Alert.alert("Success", "Your password has been successfully reset.");
-      router.push("//hub/(login)/Login");
+      router.push("/hub/(login)/Login");
     } catch (error) {
       console.error(error);
       Alert.alert("Error", "An error occurred. Please try again.");
@@ -91,7 +99,7 @@ const ResetPassword: React.FC = () => {
           placeholder="Enter your new password"
           placeholderTextColor="#888"
           secureTextEntry
-          value={password}
+          value={newPassword}
           onChangeText={handlePasswordChange}
         />
 
@@ -107,27 +115,29 @@ const ResetPassword: React.FC = () => {
         <View style={styles.criteriaContainer}>
           <Text style={styles.criteriaTitle}>Password must include:</Text>
           <Text
-            style={[styles.criteria, password.length >= 12 && styles.valid]}
+            style={[styles.criteria, newPassword.length >= 12 && styles.valid]}
           >
             - 12-50 characters
           </Text>
           <Text
-            style={[styles.criteria, /[A-Z]/.test(password) && styles.valid]}
+            style={[styles.criteria, /[A-Z]/.test(newPassword) && styles.valid]}
           >
             - At least one uppercase letter
           </Text>
           <Text
-            style={[styles.criteria, /[a-z]/.test(password) && styles.valid]}
+            style={[styles.criteria, /[a-z]/.test(newPassword) && styles.valid]}
           >
             - At least one lowercase letter
           </Text>
-          <Text style={[styles.criteria, /\d/.test(password) && styles.valid]}>
+          <Text
+            style={[styles.criteria, /\d/.test(newPassword) && styles.valid]}
+          >
             - At least one number
           </Text>
           <Text
             style={[
               styles.criteria,
-              /[!@#$%^&*(),.?":{}|<>]/.test(password) && styles.valid,
+              /[!@#$%^&*(),.?":{}|<>]/.test(newPassword) && styles.valid,
             ]}
           >
             - At least one special character
