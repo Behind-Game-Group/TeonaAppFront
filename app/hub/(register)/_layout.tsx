@@ -3,7 +3,7 @@ import { View, StyleSheet, Image, useWindowDimensions } from 'react-native';
 import { Stack, usePathname } from 'expo-router';
 import { UserProvider } from '@/app/hub/(register)/userInfoContext/UserInfo';
 
-export default function LoginLayout() {
+export default function RegisterLayout() {
   const pathname = usePathname(); // Obtenez le chemin actuel
   const { width } = useWindowDimensions(); // Utilise le hook pour obtenir la largeur dynamique
 

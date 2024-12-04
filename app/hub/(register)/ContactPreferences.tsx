@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet, Alert, ImageBackground, TouchableOpacity } from 'react-native';
+import React, { useState } from 'react';
+import { View, Text, StyleSheet, Alert, ImageBackground, TouchableOpacity, useWindowDimensions } from 'react-native';
 import CustomButton from '@/components/ButtonInscriptionLogin';
 import { useRouter } from 'expo-router';
 import { useUser } from '@/app/hub/(register)/userInfoContext/UserInfo';
@@ -8,12 +8,12 @@ const NotificationPreferencesPage: React.FC = () => {
   const router = useRouter();
   const { user, updateUser } = useUser();
 
-  // Initialiser les états des préférences avec les valeurs du contexte utilisateur
   const [emailNotifications, setEmailNotifications] = useState(user.teonaGroup || false);
   const [promotionalEmails, setPromotionalEmails] = useState(user.teonaPassenger || false);
 
+  const { width, height } = useWindowDimensions();
+
   const handleSavePreferences = () => {
-    // Mettre à jour le contexte avec les nouvelles préférences
     updateUser({
       teonaGroup: emailNotifications,
       teonaPassenger: promotionalEmails,
@@ -38,8 +38,8 @@ const NotificationPreferencesPage: React.FC = () => {
   };
 
   return (
-    <ImageBackground source={require('@/assets/images/bgSignIn.png')} style={styles.backgroundImage}>
-      <View style={styles.container}>
+    <ImageBackground source={require('@/assets/images/bgSignIn.png')} style={[styles.backgroundImage, { width, height }]}>
+      <View style={[styles.container, { width: width * 0.85 }]}>
         <Text style={styles.title}>Please set your contact preferences</Text>
 
         <View style={styles.preferenceContainer}>
@@ -79,7 +79,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   container: {
-    width: '85%',
     padding: 16,
     backgroundColor: 'rgba(255, 255, 255, 0.85)',
     borderRadius: 10,

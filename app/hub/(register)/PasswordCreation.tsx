@@ -6,14 +6,11 @@ import {
   Alert,
   ImageBackground,
   StyleSheet,
-  Dimensions,
+  useWindowDimensions,
 } from "react-native";
 import { useUser } from "@/app/hub/(register)/userInfoContext/UserInfo";
 import CustomButton from "@/components/ButtonInscriptionLogin";
 import { useRouter } from "expo-router";
-
-// Récupération des dimensions de l'écran
-const { width, height } = Dimensions.get("window");
 
 const PasswordCreation: React.FC = () => {
   const [password, setPassword] = useState("");
@@ -21,9 +18,10 @@ const PasswordCreation: React.FC = () => {
   const [isPasswordValid, setIsPasswordValid] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
 
-  const { user, updateUser } = useUser();
-
+  const { updateUser } = useUser();
   const router = useRouter();
+
+  const { width, height } = useWindowDimensions();
 
   const validatePassword = (input: string) => {
     const minLength = 12;
@@ -72,7 +70,7 @@ const PasswordCreation: React.FC = () => {
   return (
     <ImageBackground
       source={require("@/assets/images/bgPasswordCreation.png")}
-      style={styles.backgroundImage}
+      style={[styles.backgroundImage, { width, height }]}
     >
       <View style={styles.container}>
         <Text style={styles.title}>Create a Password</Text>
@@ -137,8 +135,6 @@ const PasswordCreation: React.FC = () => {
 
 const styles = StyleSheet.create({
   backgroundImage: {
-    width: width,
-    height: height,
     justifyContent: "center",
     alignItems: "center",
   },

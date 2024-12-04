@@ -6,7 +6,6 @@ import {
   StyleSheet,
   ImageBackground,
   ActivityIndicator,
-  Alert,
 } from "react-native";
 import ButtonInscriptionLogin from "@/components/ButtonInscriptionLogin";
 import { Picker } from "@react-native-picker/picker";
@@ -27,6 +26,9 @@ function InformationsEmail() {
   const [languages, setLanguages] = useState<string[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const router = useRouter();
+
+  const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+  const phoneNumberRegex = /^[+][0-9]{1,4}[0-9]{7,}$/;
 
   useEffect(() => {
     const fetchLanguages = async () => {
@@ -52,8 +54,15 @@ function InformationsEmail() {
   }, []);
 
   const handleContinue = () => {
-    if (!email.trim()) {
+    // Vérification de l'email
+    if (!email.trim() || !emailRegex.test(email)) {
       alert("Please enter a valid email address.");
+      return;
+    }
+
+    // Vérification du numéro de téléphone
+    if (!phoneNumber.trim() || !phoneNumberRegex.test(`${countryCode}${phoneNumber}`)) {
+      alert("Please enter a valid phone number.");
       return;
     }
 
@@ -65,6 +74,12 @@ function InformationsEmail() {
     updateUser({ email, phoneNumber, language });
 
     router.push("/hub/(register)/ContactPreferences");
+  };
+
+  const handlePhoneNumberChange = (text: string) => {
+    // On ne permet que les chiffres et le "+"
+    const cleanedText = text.replace(/[^0-9+]/g, "");
+    setPhoneNumber(cleanedText);
   };
 
   return (
@@ -79,9 +94,8 @@ function InformationsEmail() {
           </Text>
           <Text style={styles.subtitle}>
             We’ll send newsletters you {"\n"} subscribe to and any changes to{" "}
-            {"\n"}
-            your journey to this email address.{"\n"} You will also use it to
-            login.
+            {"\n"} your journey to this email address.{"\n"} You will also use
+            it to login.
           </Text>
 
           {/* Email adresse */}
@@ -115,21 +129,19 @@ function InformationsEmail() {
           {/* Phone number */}
           <Text style={styles.label}>Phone number</Text>
           <Text style={styles.details}>
-            If you provide your phone number, we can send you updates about any
-            changes to your trip
+            If you provide your phone number, we can send you updates about
+            any changes to your trip
           </Text>
           <View style={styles.phoneRow}>
             <TextInput
               style={[styles.input, styles.inputCountryCode]}
               value={countryCode}
               onChangeText={setCountryCode}
-              keyboardType="phone-pad"
             />
             <TextInput
               style={[styles.input, styles.inputPhone]}
               value={phoneNumber}
-              onChangeText={setPhoneNumber}
-              keyboardType="phone-pad"
+              onChangeText={handlePhoneNumberChange}
             />
           </View>
           <ButtonInscriptionLogin

@@ -6,6 +6,7 @@ import {
   StyleSheet,
   ImageBackground,
   Alert,
+  useWindowDimensions,
 } from "react-native";
 import { useRouter } from "expo-router";
 import ButtonInscriptionLogin from "@/components/ButtonInscriptionLogin";
@@ -17,6 +18,8 @@ function InformationsName() {
 
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
+
+  const { width, height } = useWindowDimensions();
 
   const handleContinue = async () => {
     if (!firstName || !lastName) {
@@ -30,24 +33,24 @@ function InformationsName() {
     router.push("/hub/InformationsIdentity");
   };
   console.log(firstName, lastName);
+
   return (
     <View style={styles.container}>
       <ImageBackground
         source={require("../../../assets/images/bgInformationsName.png")}
-        style={styles.backgroundImage}
+        style={[styles.backgroundImage, { width, height }]}
       >
-        <View style={styles.content}>
-          <Text style={styles.title}>
-            Let’s get started! {"\n"}
-            Let’s start with your {"\n"} name
+        <View style={[styles.content, { marginTop: height * 0.01 }]}>
+          <Text style={[styles.title, { fontSize: height * 0.025 }]}>
+            Let’s get started! {"\n"} Let’s start with your {"\n"} name
           </Text>
-          <Text style={styles.detailsContent}>
+          <Text style={[styles.detailsContent, { fontSize: height * 0.02 }]}>
             Enter your first and last name exactly as written on your passport
             or ID card.
           </Text>
 
           <TextInput
-            style={styles.input}
+            style={[styles.input, { fontSize: height * 0.02 }]}
             placeholder="First Name"
             placeholderTextColor="#888"
             value={firstName}
@@ -55,7 +58,7 @@ function InformationsName() {
           />
 
           <TextInput
-            style={styles.input}
+            style={[styles.input, { fontSize: height * 0.02 }]}
             placeholder="Last Name"
             placeholderTextColor="#888"
             value={lastName}
@@ -80,8 +83,6 @@ const styles = StyleSheet.create({
   },
   backgroundImage: {
     flex: 1,
-    width: "100%",
-    height: "100%",
     justifyContent: "center",
     alignItems: "center",
   },
@@ -96,16 +97,13 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.25,
     shadowRadius: 4,
     elevation: 5,
-    marginTop: 100,
   },
   title: {
-    fontSize: 20,
     fontWeight: "bold",
     color: "#606060",
     textAlign: "center",
   },
   detailsContent: {
-    fontSize: 20,
     color: "#606060",
     textAlign: "center",
     paddingTop: 10,
@@ -119,7 +117,6 @@ const styles = StyleSheet.create({
     borderColor: "#606060",
     borderRadius: 5,
     backgroundColor: "rgba(255, 255, 255, 0.3)",
-    fontSize: 16,
   },
 });
 
