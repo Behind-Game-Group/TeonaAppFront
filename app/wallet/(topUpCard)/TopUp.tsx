@@ -15,13 +15,12 @@ function TopUp() {
     const [selectedPrice, setSelectedPrice] = useState('');
 
     const handleTopUp = (cardType: string, price: string) => {
-        console.log({ cardType, price });
         // Ajout automatique de deux zéros si le prix est un entier
         if (!price.includes('.')) {
             price = `${price}.00`;
         }
         router.push({
-            pathname:'/wallet/TopUpConfirmation',
+            pathname:'/wallet/PaymentDisplay',
             params: {cardType, price},
         });
     };
@@ -30,12 +29,8 @@ function TopUp() {
 
     return (
         <View style={styles.container}>
-            <View style={styles.header}>
-                <Text style={styles.title}>TopUp fares</Text>
-            </View>
-
             <View style={styles.content}>
-                <Text style={styles.secondTitle}>
+                <Text style={styles.title}>
                     Let’s TopUp your card!
                 </Text>
 
@@ -51,7 +46,7 @@ function TopUp() {
                         <Text style={styles.price}>{price}€</Text>
                         <TouchableOpacity
                             style={styles.topUpButton}
-                            onPress={() => handleTopUp('Visa', price)}
+                            onPress={() => handleTopUp('TopUp', price)}
                         >
                             <Text style={styles.topUpButtonText}>TopUp</Text>
                         </TouchableOpacity>
@@ -79,7 +74,7 @@ function TopUp() {
                     </View>
                     <TouchableOpacity
                         style={styles.topUpButton}
-                        onPress={() => handleTopUp('Visa', selectedPrice)}
+                        onPress={() => handleTopUp('TopUp', selectedPrice)}
                     >
                         <Text style={styles.topUpButtonText}>TopUp</Text>
                     </TouchableOpacity>
@@ -100,19 +95,12 @@ const styles = StyleSheet.create({
         backgroundColor: '#599AD0',
         justifyContent: 'center',
     },
-    title: {
-        fontSize: 20,
-        fontWeight: 'bold',
-        color: '#FFFFFF',
-        textAlign: 'center',
-        fontFamily: 'Roboto',
-    },
     content: {
         flex: 1,
         alignItems: 'center',
         paddingTop: 20,
     },
-    secondTitle: {
+    title: {
         fontSize: 17,
         color: '#606060',
         textAlign: 'center',

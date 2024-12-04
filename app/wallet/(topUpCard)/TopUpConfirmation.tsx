@@ -16,7 +16,7 @@ function TopUpConfirmation() {
         );
     }
 
-    console.log('params', { cardType, price });
+    //console.log('params', { cardType, price });
 
     return (
       <View style={styles.container}>
