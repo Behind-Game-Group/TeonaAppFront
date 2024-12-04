@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import {SafeAreaProvider} from "react-native-safe-area-context";
+
 import {SafeAreaView, View, Text,  Dimensions, StyleSheet,  Alert, ScrollView} from "react-native";
 
 import TopUpButton from "@/components/TopUpButton";
@@ -102,7 +102,7 @@ const TopupFares: React.FC<TopupFaresProps> = ({totalPrice, setCurrentBalance}) 
 const styles = StyleSheet.create({
     faresContainer: {
         // flex: 1,
-
+backgroundColor:'#FFFFFF',
         padding: 6,
     },
     headerText: {

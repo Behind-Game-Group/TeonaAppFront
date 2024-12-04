@@ -10,6 +10,7 @@ import {
     Modal,
 } from 'react-native';
 import * as ImagePicker from 'expo-image-picker';
+import Ionicons from '@expo/vector-icons/Ionicons';
 import ButtonWallet from "@/components/ButtonWallet";
 
 function FormTeonaPass() {
@@ -76,6 +77,11 @@ function FormTeonaPass() {
     return (
         <View style={styles.container}>
             <View style={styles.content}>
+                <View style={styles.header}>
+                    <Ionicons name="menu-outline" style={{marginLeft: 335, marginTop: 20}} size={40} color="white"/>
+                    <Text style={styles.title}>Purchase Teona Pass</Text>
+                </View>
+
                 <Text style={styles.secondTitle}>
                     Fill this out and you will have it {'\n'} delivered to your door.
                 </Text>
