@@ -47,7 +47,6 @@
           "sounds": ["./assets/sounds/teonapop.wav"]
         }
       ]
-
     ],
     "experiments": {
       "typedRoutes": true

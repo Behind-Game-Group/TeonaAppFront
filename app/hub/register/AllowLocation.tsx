@@ -1,7 +1,6 @@
 import {SafeAreaProvider, SafeAreaView} from "react-native-safe-area-context";
 
 import {Dimensions, ImageBackground, StyleSheet,  View, Text} from "react-native";
-import TeoNotif from "@/components/TeoNotif/TeoNotif";
 import TeoMap from "@/components/TeoMap";
 const htmlFilePath = require('@/assets/teona-map.html');
 const {width, height} = Dimensions.get('window');
@@ -15,7 +14,7 @@ export default function AllowLocation() {
 
 
                 <SafeAreaView style={styles.container}>
-                    <TeoNotif>
+
 
                         <Text style={styles.allowTitle}>
 
@@ -33,7 +32,6 @@ export default function AllowLocation() {
                             />
                         </View>
 
-                    </TeoNotif>
                 </SafeAreaView>
             </ImageBackground>
         </SafeAreaProvider>
