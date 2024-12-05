@@ -46,10 +46,10 @@ const PaymentOptions: React.FC<PaymentOptionsProps> = ({ price, cardType }) => {
   // Paiement par carte bancaire avec Stripe.js
   const handleCreditCardPaymentWeb = async () => {
     const stripe = await stripePromise;
-     if (!stripe) {
-       Alert.alert('Erreur', 'Stripe.js non chargé');
+    if (!stripe) {
+      Alert.alert('Erreur', 'Stripe.js non chargé');
       return;
-     }
+    }
 
     try {
       const response = await fetch('/create-payment-intent', {
@@ -71,16 +71,21 @@ const PaymentOptions: React.FC<PaymentOptionsProps> = ({ price, cardType }) => {
       const { error } = await stripe.confirmCardPayment(clientSecret);
 
       if (error) {
-        Alert.alert('Erreur de paiement', error.message || 'Une erreur est survenue lors du paiement.');
+        Alert.alert(
+          'Erreur de paiement',
+          error.message || 'Une erreur est survenue lors du paiement.',
+        );
       } else {
-        Alert.alert('Paiement réussi', `Vous avez payé ${price} € avec succès.`);
+        Alert.alert(
+          'Paiement réussi',
+          `Vous avez payé ${price} € avec succès.`,
+        );
       }
     } catch (err) {
       console.error('Erreur lors du paiement', err);
       Alert.alert('Erreur', 'Impossible de traiter le paiement.');
     }
   };
-
 
   // Paiement Apple Pay via Stripe React Native
   // const handleApplePay = async () => {
@@ -152,24 +157,24 @@ const PaymentOptions: React.FC<PaymentOptionsProps> = ({ price, cardType }) => {
   return (
     <View style={styles.paymentOptionsContainer}>
       {/* Paiement par carte bancaire */}
-      <Button title="Carte bancaire" onPress={handleCreditCardPayment} />
+      <Button title='Carte bancaire' onPress={handleCreditCardPayment} />
 
       {/* PayPal */}
-      <Button title="PayPal" onPress={() => showAlert('PayPal')} />
+      <Button title='PayPal' onPress={() => showAlert('PayPal')} />
 
       {/* Apple Pay */}
       {Platform.OS === 'ios' && (
-        <Button title="Apple Pay" onPress={() => showAlert('Apple Pay')} />
+        <Button title='Apple Pay' onPress={() => showAlert('Apple Pay')} />
       )}
 
       {/* Google Pay */}
       {Platform.OS === 'android' && (
-        <Button title="Google Pay" onPress={() => showAlert('Google Pay')} />
+        <Button title='Google Pay' onPress={() => showAlert('Google Pay')} />
       )}
 
       {/* Samsung Pay */}
       {Platform.OS === 'android' && (
-        <Button title="Samsung Pay" onPress={handleSamsungPay} />
+        <Button title='Samsung Pay' onPress={handleSamsungPay} />
       )}
     </View>
   );
