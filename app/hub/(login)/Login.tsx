@@ -38,55 +38,93 @@ const LoginPage: React.FC = () => {
             return;
         }
 
-        setLoading(true);
+      );
+      console.log(response.data.jwt);
+      const token = response.data.jwt;
+      const userId = response.data.userId;
+      console.log("Token type:", typeof token);
+      console.log("Token:", token);
+      if (Platform.OS === "web") {
+        localStorage.setItem("authToken", token);
+        localStorage.setItem("userId", userId);
+      } else {
+        await SecureStore.setItemAsync("authToken", token);
+        await SecureStore.setItemAsync("userId", userId);
+      }
 
-        try {
-            const response = await axios.post(
-              "http://localhost:8082/api/user/login",
-              {
-                  email,
-                  password,
-              }
-            );
+      console.log("Token stored:");
+      setIsAuthenticated(true);
+      setModalVisible(true);
+    } catch (error: any) {
+      console.error(error);
 
-            const token = response.data;
-            console.log("Token:", token);
+      const errorMessage =
+        error.response?.data?.message || "An error occurred. Please try again.";
+      Alert.alert("Error", errorMessage);
+    } finally {
+      setLoading(false);
+    }
+  };
 
-            if (Platform.OS === "web") {
-                localStorage.setItem("authToken", token);
-            } else {
-                await SecureStore.setItemAsync("authToken", token);
-            }
+  const closeModalAndGoHome = () => {
+    setModalVisible(false);
+    router.push("/");
+  };
 
-            setIsAuthenticated(true);
-            setModalVisible(true);
+  return (
+    <View style={[styles.fullScreen, { width, height }]}>
+      <ImageBackground
+        source={require("@/assets/images/bgSignIn.png")}
+        style={styles.backgroundImage}
+        resizeMode="cover"
+      >
+        <View style={styles.container}>
+          <Text style={styles.title}>Login</Text>
 
-        } catch (error: any) {
-            console.error(error);
+          <TextInput
+            style={styles.input}
+            placeholder="Email Address"
+            placeholderTextColor="#888"
+            keyboardType="email-address"
+            value={email}
+            onChangeText={setEmail}
+            autoCapitalize="none"
+            autoCorrect={false}
+          />
 
-            // Cas erreur
-            const errorMessage = error.response?.data?.message || 'An error occurred. Please try again.';
-            if (errorMessage.includes('email')) {
-                setEmailError(errorMessage);
-            } else if (errorMessage.includes('password')) {
-                setPasswordError(errorMessage);
-            }
-        } finally {
-            setLoading(false);
-        }
-    };
+          <TextInput
+            style={styles.input}
+            placeholder="Password"
+            placeholderTextColor="#888"
+            secureTextEntry
+            value={password}
+            onChangeText={setPassword}
+          />
 
-    const closeModalAndGoHome = () => {
-        setModalVisible(false);
-        router.push('/');
-    };
+          <View style={styles.forgotPasswordContainer}>
+            <Link
+              href="/hub/(login)/ForgotPassword"
+              style={styles.forgotPasswordLink}
+            >
+              Forgot your password?
+            </Link>
+          </View>
 
-    return (
-      <View style={[styles.fullScreen, { width, height }]}>
-          <ImageBackground
-            source={require('@/assets/images/bgSignIn.png')}
-            style={styles.backgroundImage}
-            resizeMode="cover"
+          <CustomButton
+            text={loading ? "Logging in..." : "Login"}
+            color="blue"
+            onPress={handleLogin}
+          />
+        </View>
+
+        {/* Modal */}
+        {isAutheticated && (
+          <Modal
+            animationType="slide"
+            transparent
+            visible={modalVisible}
+            onRequestClose={() => setModalVisible(false)}
+
           >
               <View style={styles.container}>
                   <Text style={styles.title}>Login</Text>

@@ -28,7 +28,8 @@ function FormTeonaPass() {
   const [image, setImage] = useState<string | null>(null);
   const [modalVisible, setModalVisible] = useState(false);
   const [email, setEmail] = useState<string | null>(null);
-  const [userId, setUserId] = useState<string>("");
+  const [userId, setUserId] = useState("");
+  const [token, setToken] = useState("");
 
   const requestPermissions = async () => {
     const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
@@ -76,38 +77,37 @@ function FormTeonaPass() {
       setImage(result.assets[0].uri);
     }
   };
-  interface MyJwtPayload {
-    userId: string;
-  }
+
   useEffect(() => {
     const fetchUserData = async () => {
+      let userId = null;
+      let token = null;
       try {
-        let token: string | null = null;
-
         if (Platform.OS === "web") {
+          userId = localStorage.getItem("userId");
           token = localStorage.getItem("authToken");
         } else {
+          userId = await SecureStore.getItemAsync("userId");
           token = await SecureStore.getItemAsync("authToken");
         }
 
-        if (!token) {
+        if (!userId) {
           console.error("No token found");
           Alert.alert("Error", "No authentication token found.");
           return;
         }
-        const jwtDecode = require("jwt-decode");
-        // const decodedToken = jwtDecode(token);
-        //const jwtDecode: <T>(token: string) => T = jwtDecodeModule as any;
-        // const jwtDecode = jwtDecodeModule.default;
-        console.log("Token:", typeof token);
-        const decodedToken = jwtDecode<any>(token);
-        console.log("Decoded Token:", decodedToken);
-        const userId = decodedToken?.userId;
+        if (token) {
+          setToken(token);
+          console.log("token:", token);
+        } else {
+          console.error("token not found ");
+          Alert.alert("Error", "Invalid token structure.");
+        }
         if (userId) {
           setUserId(userId);
           console.log("User ID:", userId);
         } else {
-          console.error("User ID not found in token");
+          console.error("User ID not found");
           Alert.alert("Error", "Invalid token structure.");
         }
       } catch (error) {
@@ -120,36 +120,36 @@ function FormTeonaPass() {
   }, []);
 
   const handleSubmit = async () => {
-    //   try {
-    //     const formData = {
-    //       firstName,
-    //       lastName,
-    //       streetName,
-    //       streetNameOptional,
-    //       postCode,
-    //       city,
-    //       phoneNumber,
-    //       country,
-    //       image,
-    //       userId: user.id,
-    //     };
-    //     const response = await fetch("http://your-backend-url/api/save-form", {
-    //       method: "POST",
-    //       headers: {
-    //         "Content-Type": "application/json",
-    //         Authorization: `Bearer ${user.token}`,
-    //       },
-    //       body: JSON.stringify(formData),
-    //     });
-    //     if (response.ok) {
-    //       Alert.alert("Success", "Form submitted successfully.");
-    //     } else {
-    //       Alert.alert("Error", "Failed to submit the form.");
-    //     }
-    //   } catch (error) {
-    //     console.error("Error submitting form:", error);
-    //     Alert.alert("Error", "An unexpected error occurred.");
-    //   }
+    try {
+      const formData = {
+        firstName,
+        lastName,
+        streetName,
+        streetNameOptional,
+        postCode,
+        city,
+        phoneNumber,
+        country,
+        image,
+        ...(userId && { userId }),
+      };
+      const response = await fetch("http://your-backend-url/api/save-form", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          ...(token && { Authorization: `Bearer ${token}` }),
+        },
+        body: JSON.stringify(formData),
+      });
+      if (response.ok) {
+        Alert.alert("Success", "Form submitted successfully.");
+      } else {
+        Alert.alert("Error", "Failed to submit the form.");
+      }
+    } catch (error) {
+      console.error("Error submitting form:", error);
+      Alert.alert("Error", "An unexpected error occurred.");
+    }
   };
 
   return (
