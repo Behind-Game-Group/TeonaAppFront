@@ -13,7 +13,8 @@ import * as ImagePicker from "expo-image-picker";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import ButtonTeonaPass from "@/components/ButtonTeonaPass";
 import * as SecureStore from "expo-secure-store";
-import jwtDecode, { JwtPayload } from "jwt-decode";
+//import jwtDecode from "jwt-decode";
+import { Platform } from "react-native";
 
 function FormTeonaPass() {
   const [firstName, setFirstName] = useState<string>("");
@@ -27,6 +28,7 @@ function FormTeonaPass() {
   const [image, setImage] = useState<string | null>(null);
   const [modalVisible, setModalVisible] = useState(false);
   const [email, setEmail] = useState<string | null>(null);
+  const [userId, setUserId] = useState<string>("");
 
   const requestPermissions = async () => {
     const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
@@ -40,7 +42,6 @@ function FormTeonaPass() {
     return true;
   };
 
-  // Fonction pour prendre une nouvelle photo
   const takePhoto = async () => {
     const { status } = await ImagePicker.requestCameraPermissionsAsync();
     if (status !== "granted") {
@@ -63,35 +64,52 @@ function FormTeonaPass() {
     }
   };
 
-  // Choisir une image à partir de la bibliothèque multimédia
   const pickImage = async () => {
     const hasPermission = await requestPermissions();
     if (!hasPermission) return;
 
-    // Ouvrir la galerie pour sélectionner une image
     const result = await ImagePicker.launchImageLibraryAsync({
       quality: 1,
     });
 
     if (!result.canceled) {
-      // Si l'utilisateur a choisi une image, on la met dans l'état
       setImage(result.assets[0].uri);
     }
   };
-
+  interface MyJwtPayload {
+    userId: string;
+  }
   useEffect(() => {
     const fetchUserData = async () => {
       try {
-        // Retrieve the token from SecureStore
-        const token = await SecureStore.getItemAsync("authToken");
-        if (!token) {
-          Alert.alert("Error", "No token found. Please log in.");
-          return;
+        let token: string | null = null;
+
+        if (Platform.OS === "web") {
+          token = localStorage.getItem("authToken");
+        } else {
+          token = await SecureStore.getItemAsync("authToken");
         }
 
+        if (!token) {
+          console.error("No token found");
+          Alert.alert("Error", "No authentication token found.");
+          return;
+        }
+        const jwtDecode = require("jwt-decode");
         // const decodedToken = jwtDecode(token);
-        // setEmail(decodedToken.email);
-        console.log("token:", token);
+        //const jwtDecode: <T>(token: string) => T = jwtDecodeModule as any;
+        // const jwtDecode = jwtDecodeModule.default;
+        console.log("Token:", typeof token);
+        const decodedToken = jwtDecode<any>(token);
+        console.log("Decoded Token:", decodedToken);
+        const userId = decodedToken?.userId;
+        if (userId) {
+          setUserId(userId);
+          console.log("User ID:", userId);
+        } else {
+          console.error("User ID not found in token");
+          Alert.alert("Error", "Invalid token structure.");
+        }
       } catch (error) {
         console.error("Error decoding token:", error);
         Alert.alert("Error", "Failed to decode token.");
@@ -100,40 +118,39 @@ function FormTeonaPass() {
 
     fetchUserData();
   }, []);
-  //   const handleSubmit = async () => {
-  //     try {
-  //       const formData = {
-  //         firstName,
-  //         lastName,
-  //         streetName,
-  //         streetNameOptional,
-  //         postCode,
-  //         city,
-  //         phoneNumber,
-  //         country,
-  //         image,
-  //         userId: user.id,
-  //       };
 
-  //       const response = await fetch("http://your-backend-url/api/save-form", {
-  //         method: "POST",
-  //         headers: {
-  //           "Content-Type": "application/json",
-  //           Authorization: `Bearer ${user.token}`,
-  //         },
-  //         body: JSON.stringify(formData),
-  //       });
-
-  //       if (response.ok) {
-  //         Alert.alert("Success", "Form submitted successfully.");
-  //       } else {
-  //         Alert.alert("Error", "Failed to submit the form.");
-  //       }
-  //     } catch (error) {
-  //       console.error("Error submitting form:", error);
-  //       Alert.alert("Error", "An unexpected error occurred.");
-  //     }
-  //   };
+  const handleSubmit = async () => {
+    //   try {
+    //     const formData = {
+    //       firstName,
+    //       lastName,
+    //       streetName,
+    //       streetNameOptional,
+    //       postCode,
+    //       city,
+    //       phoneNumber,
+    //       country,
+    //       image,
+    //       userId: user.id,
+    //     };
+    //     const response = await fetch("http://your-backend-url/api/save-form", {
+    //       method: "POST",
+    //       headers: {
+    //         "Content-Type": "application/json",
+    //         Authorization: `Bearer ${user.token}`,
+    //       },
+    //       body: JSON.stringify(formData),
+    //     });
+    //     if (response.ok) {
+    //       Alert.alert("Success", "Form submitted successfully.");
+    //     } else {
+    //       Alert.alert("Error", "Failed to submit the form.");
+    //     }
+    //   } catch (error) {
+    //     console.error("Error submitting form:", error);
+    //     Alert.alert("Error", "An unexpected error occurred.");
+    //   }
+  };
 
   return (
     <View style={styles.container}>
