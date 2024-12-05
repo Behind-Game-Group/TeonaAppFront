@@ -12,16 +12,8 @@ import {
 import axios from 'axios';
 import { useRouter } from 'expo-router';
 
-{
-  /*
-   ** 
-   Pour l'erreur sur axios ; vérifie que tu as bien axios parmis tes dépendances (dans ton fichier package.json) et 
-   à l'installer s'il n'est pas présent
-   **
-   */
-}
-// import Subtitles from 'react-native-subtitles'
-// import {OrderBlueCard} from '/assets/images/OrderBlueCard.png'
+// import Subtitles from 'react-native-subtitles';
+// import { OrderBlueCard } from '/assets/images/OrderBlueCard.png';
 
 // Tu peux créer une interface ici pour typer ta constante d'erreur voir le mettre dans un fichier à part dans un dossier "types" ou "interfaces" à la racine de ton projet avec un export default et pouvoir l'importer ici
 interface Errors {
@@ -35,7 +27,7 @@ interface Errors {
   country: string;
 }
 
-function PurchaseForm() {
+const PurchaseForm: React.FC = () => {
   const router = useRouter();
   //!\   N'omet pas de typer tes constantes /!\
   const [firstName, setFirstName] = useState<string>('');
@@ -247,26 +239,40 @@ function PurchaseForm() {
 
       {errors.city ? <Text style={styles.errorText}>{errors.city}</Text> : null}
 
-      <TextInput
-        style={[styles.input, errors.postalCode && styles.errorInput]}
-        placeholder='+995'
-        keyboardType='numeric'
-        value={countryCode}
-        onChangeText={setCountryCode}
-      />
-      {errors.countryCode ? (
-        <Text style={styles.errorText}>{errors.countryCode}</Text>
-      ) : null}
+      <View
+        style={{
+          width: '100%',
+          flexDirection: 'row',
+          justifyContent: 'space-between',
+          gap: 97,
+        }}
+      >
+        <View style={{ width: '49%', flexDirection: 'column', gap: 2 }}>
+          <Text>Country</Text>
 
-      <Text>Country</Text>
-      <TextInput
-        style={[styles.input, errors.postalCode && styles.errorInput]}
-        value={country}
-        onChangeText={setCountry}
-      />
-      {errors.country ? (
-        <Text style={styles.errorText}>{errors.country}</Text>
-      ) : null}
+          <TextInput
+            style={[styles.input, errors.postalCode && styles.errorInput]}
+            placeholder='+995'
+            keyboardType='numeric'
+            value={countryCode}
+            onChangeText={setCountryCode}
+          />
+          {errors.countryCode ? (
+            <Text style={styles.errorText}>{errors.countryCode}</Text>
+          ) : null}
+        </View>
+
+        <View style={{ width: '49%', flexDirection: 'column', gap: 2 }}>
+          <TextInput
+            style={[styles.input, errors.postalCode && styles.errorInput]}
+            value={country}
+            onChangeText={setCountry}
+          />
+          {errors.country ? (
+            <Text style={styles.errorText}>{errors.country}</Text>
+          ) : null}
+        </View>
+      </View>
 
       <Text style={{ textAlign: 'center', marginTop: 20 }}>
         Your card will arrive at your door within 7 working days
@@ -288,7 +294,7 @@ function PurchaseForm() {
       </TouchableOpacity>
     </ScrollView>
   );
-}
+};
 
 const styles = StyleSheet.create({
   container: {
