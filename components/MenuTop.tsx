@@ -10,7 +10,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 //   onPress: () => void;
 // };
 
-type RoutePath = '/' | '/wallet/TopUp' | '/wallet/PaymentDisplay' | '/wallet/FormTeonaPass';
+type RoutePath = '/' | '/wallet/TopUp' | '/wallet/PaymentDisplay' | '/wallet/FormTeonaPass' | '/wallet/TopUpFares';
 
 type PathOption = { path: string; title: string; back: RoutePath; };
 
@@ -49,6 +49,7 @@ const MenuTop: React.FC = ({
     { path: '/wallet/TopUp', title: 'TopUp Fares', back: '/' },
     { path: '/wallet/PaymentDisplay', title: 'Payment', back: '/wallet/TopUp' },
     { path: '/wallet/FormTeonaPass', title: 'Our Cards', back: '/' },
+    { path: '/wallet/TopUpFares', title: 'TopUp Fares', back: '/' },
   ];
   const [dimensions, setDimensions] = useState({
     window: windowDimensions,
