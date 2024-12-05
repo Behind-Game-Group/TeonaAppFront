@@ -77,10 +77,10 @@ function FormTeonaPass() {
     return (
         <View style={styles.container}>
             <View style={styles.content}>
-                <View style={styles.header}>
+                {/* <View style={styles.header}>
                     <Ionicons name="menu-outline" style={{marginLeft: 335, marginTop: 20}} size={40} color="white"/>
                     <Text style={styles.title}>Purchase Teona Pass</Text>
-                </View>
+                </View> */}
 
                 <Text style={styles.secondTitle}>
                     Fill this out and you will have it {'\n'} delivered to your door.
