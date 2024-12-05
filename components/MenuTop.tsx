@@ -66,6 +66,7 @@ const MenuTop: React.FC = (
     { path: '/wallet/TopUp', title: 'TopUp Fares', back: '/' },
     { path: '/wallet/PaymentDisplay', title: 'Payment', back: '/wallet/TopUp' },
     { path: '/wallet/FormTeonaPass', title: 'Our Cards', back: '/' },
+    { path: '/wallet/PurchaseForm', title: 'Our Cards', back: '/' },
   ];
   const [dimensions, setDimensions] = useState({
     window: windowDimensions,
