@@ -3,27 +3,26 @@ import {
   View,
   Text,
   TextInput,
-  Alert,
   ImageBackground,
   StyleSheet,
-  Dimensions,
+  useWindowDimensions,
 } from "react-native";
 import { useUser } from "@/app/hub/(register)/userInfoContext/UserInfo";
 import CustomButton from "@/components/ButtonInscriptionLogin";
 import { useRouter } from "expo-router";
-
-// Récupération des dimensions de l'écran
-const { width, height } = Dimensions.get("window");
 
 const PasswordCreation: React.FC = () => {
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [isPasswordValid, setIsPasswordValid] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const [passwordError, setPasswordError] = useState<string | null>(null);
+  const [confirmPasswordError, setConfirmPasswordError] = useState<string | null>(null);
 
-  const { user, updateUser } = useUser();
-
+  const { updateUser } = useUser();
   const router = useRouter();
+
+  const { width, height } = useWindowDimensions();
 
   const validatePassword = (input: string) => {
     const minLength = 12;
@@ -42,27 +41,39 @@ const PasswordCreation: React.FC = () => {
   const handlePasswordChange = (input: string) => {
     setPassword(input);
     validatePassword(input);
+    setPasswordError(null); // Clear error when user starts typing
+  };
+
+  const handleConfirmPasswordChange = (input: string) => {
+    setConfirmPassword(input);
+    setConfirmPasswordError(null); // Clear error when user starts typing
   };
 
   const handleSubmit = () => {
-    if (!isPasswordValid) {
-      Alert.alert(
-        "Invalid Password",
-        "Your password does not meet the required criteria."
-      );
-      return;
+    let isValid = true;
+
+    // Check if password is empty
+    if (!password) {
+      setPasswordError("Password cannot be empty.");
+      isValid = false;
+    } else if (!isPasswordValid) {
+      setPasswordError("Your password does not meet the required criteria.");
+      isValid = false;
     }
 
-    if (password !== confirmPassword) {
-      Alert.alert("Password Mismatch", "The passwords do not match.");
-      return;
+    // Check if confirm password is empty
+    if (!confirmPassword) {
+      setConfirmPasswordError("Please confirm your password.");
+      isValid = false;
+    } else if (password !== confirmPassword) {
+      setConfirmPasswordError("The passwords do not match.");
+      isValid = false;
     }
+
+    if (!isValid) return;
 
     setIsLoading(true);
-
     updateUser({ password });
-
-    Alert.alert("Success", "Your password has been created.");
 
     router.push("/hub/(register)/InformationsGeneralConditions");
 
@@ -72,28 +83,32 @@ const PasswordCreation: React.FC = () => {
   return (
     <ImageBackground
       source={require("@/assets/images/bgPasswordCreation.png")}
-      style={styles.backgroundImage}
+      style={[styles.backgroundImage, { width, height }]}
     >
       <View style={styles.container}>
         <Text style={styles.title}>Create a Password</Text>
 
         <TextInput
-          style={styles.input}
+          style={[styles.input, passwordError ? styles.inputError : {}]}
           placeholder="Enter your password"
           placeholderTextColor="#888"
           secureTextEntry
           value={password}
           onChangeText={handlePasswordChange}
         />
+        {passwordError && <Text style={styles.errorText}>{passwordError}</Text>}
 
         <TextInput
-          style={styles.input}
+          style={[styles.input, confirmPasswordError ? styles.inputError : {}]}
           placeholder="Confirm your password"
           placeholderTextColor="#888"
           secureTextEntry
           value={confirmPassword}
-          onChangeText={setConfirmPassword}
+          onChangeText={handleConfirmPasswordChange}
         />
+        {confirmPasswordError && (
+          <Text style={styles.errorText}>{confirmPasswordError}</Text>
+        )}
 
         <View style={styles.criteriaContainer}>
           <Text style={styles.criteriaTitle}>Password must include:</Text>
@@ -137,8 +152,6 @@ const PasswordCreation: React.FC = () => {
 
 const styles = StyleSheet.create({
   backgroundImage: {
-    width: width,
-    height: height,
     justifyContent: "center",
     alignItems: "center",
   },
@@ -170,6 +183,9 @@ const styles = StyleSheet.create({
     backgroundColor: "#fff",
     fontSize: 16,
   },
+  inputError: {
+    borderColor: "red",
+  },
   criteriaContainer: {
     width: "100%",
     marginVertical: 20,
@@ -188,6 +204,11 @@ const styles = StyleSheet.create({
   valid: {
     color: "#049500",
     fontWeight: "bold",
+  },
+  errorText: {
+    color: "red",
+    fontSize: 12,
+    marginTop: 5,
   },
 });
 

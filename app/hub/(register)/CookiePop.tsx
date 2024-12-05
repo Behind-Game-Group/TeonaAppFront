@@ -1,6 +1,5 @@
 import {SafeAreaProvider, SafeAreaView} from "react-native-safe-area-context";
 import {Dimensions, ImageBackground, StyleSheet, Text, TouchableOpacity, View} from "react-native";
-import TeoNotif from "@/components/TeoNotif/TeoNotif";
 import CustomButton from "@/components/ButtonInscriptionLogin";
 import {router} from "expo-router";
 
@@ -16,7 +15,6 @@ export default function CookiePop() {
 
             <SafeAreaView style={styles.content}>
 
-                <TeoNotif>
                     <Text
                         style={styles.cookieTitle}
                     > Teona Passenger uses cookies</Text>
@@ -56,8 +54,6 @@ export default function CookiePop() {
                             <Text style={styles.buttonCookieText}>Check the full list of cookies and third parties used on our website</Text>
                         </TouchableOpacity>
 </View>
-
-                </TeoNotif>
 
                 <View style={styles.cookieButton}>
                     <CustomButton

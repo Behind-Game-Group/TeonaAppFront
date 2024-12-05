@@ -6,7 +6,6 @@ import {
   StyleSheet,
   ImageBackground,
   ActivityIndicator,
-  Alert,
 } from "react-native";
 import ButtonInscriptionLogin from "@/components/ButtonInscriptionLogin";
 import { Picker } from "@react-native-picker/picker";
@@ -26,7 +25,13 @@ function InformationsEmail() {
   const [language, setLanguage] = useState<string | undefined>("English");
   const [languages, setLanguages] = useState<string[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
+  const [emailError, setEmailError] = useState<string | null>(null);
+  const [phoneError, setPhoneError] = useState<string | null>(null);
+  const [languageError, setLanguageError] = useState<string | null>(null);
   const router = useRouter();
+
+  const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+  const phoneNumberRegex = /^[+][0-9]{1,4}[0-9]{7,}$/;
 
   useEffect(() => {
     const fetchLanguages = async () => {
@@ -52,19 +57,42 @@ function InformationsEmail() {
   }, []);
 
   const handleContinue = () => {
-    if (!email.trim()) {
-      alert("Please enter a valid email address.");
-      return;
+    let valid = true;
+
+    // Vérification de l'email
+    if (!email.trim() || !emailRegex.test(email)) {
+      setEmailError("Please enter a valid email address.");
+      valid = false;
+    } else {
+      setEmailError(null);
+    }
+
+    // Vérification du numéro de téléphone
+    if (!phoneNumber.trim() || !phoneNumberRegex.test(`${countryCode}${phoneNumber}`)) {
+      setPhoneError("Please enter a valid phone number.");
+      valid = false;
+    } else {
+      setPhoneError(null);
     }
 
     if (!language) {
-      alert("Please select a language.");
-      return;
+      setLanguageError("Please select a language.");
+      valid = false;
+    } else {
+      setLanguageError(null);
     }
+
+    if (!valid) return;
 
     updateUser({ email, phoneNumber, language });
 
     router.push("/hub/(register)/ContactPreferences");
+  };
+
+  const handlePhoneNumberChange = (text: string) => {
+    // On ne permet que les chiffres et le "+"
+    const cleanedText = text.replace(/[^0-9+]/g, "");
+    setPhoneNumber(cleanedText);
   };
 
   return (
@@ -79,9 +107,8 @@ function InformationsEmail() {
           </Text>
           <Text style={styles.subtitle}>
             We’ll send newsletters you {"\n"} subscribe to and any changes to{" "}
-            {"\n"}
-            your journey to this email address.{"\n"} You will also use it to
-            login.
+            {"\n"} your journey to this email address.{"\n"} You will also use
+            it to login.
           </Text>
 
           {/* Email adresse */}
@@ -92,6 +119,7 @@ function InformationsEmail() {
             onChangeText={(text) => setEmail(text)}
             keyboardType="email-address"
           />
+          {emailError && <Text style={styles.error}>{emailError}</Text>}
 
           {/* Langue préférée */}
           <Text style={styles.label}>Preferred language</Text>
@@ -111,27 +139,28 @@ function InformationsEmail() {
               </Picker>
             </View>
           )}
+          {languageError && <Text style={styles.error}>{languageError}</Text>}
 
           {/* Phone number */}
           <Text style={styles.label}>Phone number</Text>
           <Text style={styles.details}>
-            If you provide your phone number, we can send you updates about any
-            changes to your trip
+            If you provide your phone number, we can send you updates about
+            any changes to your trip
           </Text>
           <View style={styles.phoneRow}>
             <TextInput
               style={[styles.input, styles.inputCountryCode]}
               value={countryCode}
               onChangeText={setCountryCode}
-              keyboardType="phone-pad"
             />
             <TextInput
               style={[styles.input, styles.inputPhone]}
               value={phoneNumber}
-              onChangeText={setPhoneNumber}
-              keyboardType="phone-pad"
+              onChangeText={handlePhoneNumberChange}
             />
           </View>
+          {phoneError && <Text style={styles.error}>{phoneError}</Text>}
+
           <ButtonInscriptionLogin
             text="Continue"
             color="blue"
@@ -224,6 +253,12 @@ const styles = StyleSheet.create({
     width: "55%",
     fontSize: 15,
     padding: 5,
+  },
+  error: {
+    color: "red",
+    fontSize: 12,
+    marginTop: 5,
+    alignSelf: "flex-start",
   },
 });
 

@@ -1,28 +1,42 @@
 import React, { useState } from "react";
 import {
-  Alert,
   ImageBackground,
   StyleSheet,
   Text,
   TextInput,
   View,
+  useWindowDimensions,
 } from "react-native";
 import { useRouter } from "expo-router";
 import axios from "axios";
 import CustomButton from "@/components/ButtonInscriptionLogin";
 
 const ForgotPassword: React.FC = () => {
+  const { width, height } = useWindowDimensions();
   const [email, setEmail] = useState<string>("");
   const [loading, setLoading] = useState<boolean>(false);
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  const [successMessage, setSuccessMessage] = useState<string | null>(null);
   const router = useRouter();
+
+  const validateEmail = (email: string): boolean => {
+    const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return regex.test(email);
+  };
 
   const handleResetPassword = async (): Promise<void> => {
     if (!email) {
-      Alert.alert("Error", "Please enter your email address.");
+      setErrorMessage("Please enter your email address.");
+      return;
+    }
+
+    if (!validateEmail(email)) {
+      setErrorMessage("Please enter a valid email address.");
       return;
     }
 
     setLoading(true);
+    setErrorMessage(null);
 
     try {
       const response = await axios.post(
@@ -32,19 +46,14 @@ const ForgotPassword: React.FC = () => {
         }
       );
 
-      // Succès
-      Alert.alert(
-        "Password Reset",
-        response.data.message || `A reset link has been sent to ${email}.`
-      );
-
+      // Success
+      setSuccessMessage(response.data.message || `A reset link has been sent to ${email}.`);
+      setEmail("");
       router.push("/hub/(login)/ResetPassword");
     } catch (error: any) {
-      // Erreur
-      console.error(error);
-      const errorMessage =
-        error.response?.data?.message || "An error occurred. Please try again.";
-      Alert.alert("Error", errorMessage);
+      // Error
+      const errorMessage = error.response?.data?.message || "An error occurred. Please try again.";
+      setErrorMessage(errorMessage);
     } finally {
       setLoading(false);
     }
@@ -53,9 +62,9 @@ const ForgotPassword: React.FC = () => {
   return (
     <ImageBackground
       source={require("@/assets/images/bgSignIn.png")}
-      style={styles.backgroundImage}
+      style={[styles.backgroundImage, { height: height }]}
     >
-      <View style={styles.container}>
+      <View style={[styles.container, { width: width * 0.85 }]}>
         <Text style={styles.title}>Forgot Your Password?</Text>
         <Text style={styles.instructions}>
           Enter your email address below, and we’ll send you a link to reset
@@ -70,6 +79,9 @@ const ForgotPassword: React.FC = () => {
           value={email}
           onChangeText={setEmail}
         />
+
+        {errorMessage && <Text style={styles.errorMessage}>{errorMessage}</Text>}
+        {successMessage && <Text style={styles.successMessage}>{successMessage}</Text>}
 
         <CustomButton
           text={loading ? "Sending..." : "Send Reset Link"}
@@ -88,7 +100,6 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   container: {
-    width: "85%",
     padding: 16,
     backgroundColor: "rgba(255, 255, 255, 0.85)",
     borderRadius: 10,
@@ -120,6 +131,16 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     backgroundColor: "#fff",
     fontSize: 16,
+  },
+  errorMessage: {
+    color: "red",
+    fontSize: 14,
+    marginVertical: 5,
+  },
+  successMessage: {
+    color: "green",
+    fontSize: 14,
+    marginVertical: 5,
   },
 });
 
