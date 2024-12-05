@@ -7,7 +7,6 @@ import { ThemedView } from '@/components/ThemedView';
 import { Link } from 'expo-router';
 
 export default function HomeScreen() {
-<<<<<<< HEAD
   return (
     <ParallaxScrollView
       headerBackgroundColor={{ light: '#A1CEDC', dark: '#1D3D47' }}
@@ -25,38 +24,14 @@ export default function HomeScreen() {
       <ThemedView style={styles.stepContainer}>
         <Link href={'/hub/login'}>Login</Link>
         <Link href={'/hub/register'}>Register</Link>
-        <Link href={'/wallet/wallet'}>Wallet</Link>
+        <Link href={'/wallet/FormTeonaPass'}>Wallet</Link>
+        <Link href={'/wallet/TopUp'}>Topup</Link>
         <Link href={'/bus/bus'}>Bus</Link>
+        <Link href={'/wallet/(teonaPass)/TopupFares'}>test</Link>
         <Link href={'/sky/sky'}>Sky</Link>
       </ThemedView>
     </ParallaxScrollView>
   );
-=======
-    return (
-        <ParallaxScrollView
-            headerBackgroundColor={{light: '#A1CEDC', dark: '#1D3D47'}}
-            headerImage={
-                <Image
-                    source={require('@/assets/images/partial-react-logo.png')}
-                    style={styles.reactLogo}
-                />
-            }>
-            <ThemedView style={styles.titleContainer}>
-                <ThemedText type="title">Welcome!</ThemedText>
-                <HelloWave/>
-            </ThemedView>
-            <ThemedView style={styles.stepContainer}>
-                <Link href={'/hub/login'}>Login</Link>
-                <Link href={'/hub/register'}>Register</Link>
-                <Link href={'/wallet/FormTeonaPass'}>Wallet</Link>
-                <Link href={'/wallet/TopUp'}>Topup</Link>
-                <Link href={'/bus/bus'}>Bus</Link>
-                <Link href={'/wallet/(teonaPass)/TopupFares'}>test</Link>
-                <Link href={'/sky/sky'}>Sky</Link>
-            </ThemedView>
-        </ParallaxScrollView>
-    );
->>>>>>> 8-souscrire-abonnement-teona-pass
 }
 
 const styles = StyleSheet.create({

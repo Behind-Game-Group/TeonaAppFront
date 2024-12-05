@@ -123,7 +123,7 @@ const PurchaseForm: React.FC = () => {
       </Text>
       {/* L'utilisation de la balise <Image/> ce fait comme suit, en utilisant les attributs source et la méthode require pour renseigner le chemin du fichier d'image à afficher ; l'import ne fonctionnait pas pour toi car il te manque le fichier "declarations.d.ts" à la racine de ton projet "./TeonaAppFront/declarations.d.ts" qui permet de définir les différents types de fichier d'image que Typescript doit prendre en compte ; je te fournirais un exemple de ce fichier */}
       <Image
-        source={require('../../assets/images/OrderBlueCard.png')}
+        source={require('../../../assets/images/OrderBlueCard.png')}
         style={{
           width: 190,
           height: 203,
