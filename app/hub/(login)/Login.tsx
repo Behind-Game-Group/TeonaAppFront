@@ -43,14 +43,17 @@ const LoginPage: React.FC = () => {
           password,
         }
       );
-      console.log(response);
-      const token = response.data;
+      console.log(response.data.jwt);
+      const token = response.data.jwt;
+      const userId = response.data.userId;
       console.log("Token type:", typeof token);
       console.log("Token:", token);
       if (Platform.OS === "web") {
         localStorage.setItem("authToken", token);
+        localStorage.setItem("userId", userId);
       } else {
         await SecureStore.setItemAsync("authToken", token);
+        await SecureStore.setItemAsync("userId", userId);
       }
 
       console.log("Token stored:");
