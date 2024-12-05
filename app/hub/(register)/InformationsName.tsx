@@ -5,7 +5,7 @@ import {
   TextInput,
   StyleSheet,
   ImageBackground,
-  Alert,
+  useWindowDimensions,
 } from "react-native";
 import { useRouter } from "expo-router";
 import ButtonInscriptionLogin from "@/components/ButtonInscriptionLogin";
@@ -17,50 +17,87 @@ function InformationsName() {
 
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
+  const [errors, setErrors] = useState({ firstName: "", lastName: "" });
+
+  const { width, height } = useWindowDimensions();
 
   const handleContinue = async () => {
-    if (!firstName || !lastName) {
-      Alert.alert("Error", "Please fill in both fields.");
-      return;
+    let hasErrors = false;
+    const newErrors = { firstName: "", lastName: "" };
+
+    if (!firstName) {
+      newErrors.firstName = "First name is required.";
+      hasErrors = true;
     }
+
+    if (!lastName) {
+      newErrors.lastName = "Last name is required.";
+      hasErrors = true;
+    }
+
+    setErrors(newErrors);
+
+    if (hasErrors) return;
 
     // Met à jour les données de l'utilisateur dans le contexte
     updateUser({ firstName, lastName });
-
     router.push("/hub/InformationsIdentity");
   };
-  console.log(firstName, lastName);
+
   return (
     <View style={styles.container}>
       <ImageBackground
         source={require("../../../assets/images/bgInformationsName.png")}
-        style={styles.backgroundImage}
+        style={[styles.backgroundImage, { width, height }]}
       >
-        <View style={styles.content}>
-          <Text style={styles.title}>
-            Let’s get started! {"\n"}
-            Let’s start with your {"\n"} name
+        <View style={[styles.content, { marginTop: height * 0.01 }]}>
+          <Text style={[styles.title, { fontSize: height * 0.025 }]}>
+            Let’s get started! {"\n"} Let’s start with your {"\n"} name
           </Text>
-          <Text style={styles.detailsContent}>
+          <Text style={[styles.detailsContent, { fontSize: height * 0.02 }]}>
             Enter your first and last name exactly as written on your passport
             or ID card.
           </Text>
 
-          <TextInput
-            style={styles.input}
-            placeholder="First Name"
-            placeholderTextColor="#888"
-            value={firstName}
-            onChangeText={setFirstName}
-          />
+          <View style={styles.inputContainer}>
+            <TextInput
+              style={[
+                styles.input,
+                { fontSize: height * 0.02 },
+                errors.firstName ? styles.inputError : null,
+              ]}
+              placeholder="First Name"
+              placeholderTextColor="#888"
+              value={firstName}
+              onChangeText={(text) => {
+                setFirstName(text);
+                if (text) setErrors((prev) => ({ ...prev, firstName: "" }));
+              }}
+            />
+            {errors.firstName ? (
+              <Text style={styles.errorText}>{errors.firstName}</Text>
+            ) : null}
+          </View>
 
-          <TextInput
-            style={styles.input}
-            placeholder="Last Name"
-            placeholderTextColor="#888"
-            value={lastName}
-            onChangeText={setLastName}
-          />
+          <View style={styles.inputContainer}>
+            <TextInput
+              style={[
+                styles.input,
+                { fontSize: height * 0.02 },
+                errors.lastName ? styles.inputError : null,
+              ]}
+              placeholder="Last Name"
+              placeholderTextColor="#888"
+              value={lastName}
+              onChangeText={(text) => {
+                setLastName(text);
+                if (text) setErrors((prev) => ({ ...prev, lastName: "" }));
+              }}
+            />
+            {errors.lastName ? (
+              <Text style={styles.errorText}>{errors.lastName}</Text>
+            ) : null}
+          </View>
 
           <ButtonInscriptionLogin
             text="Continue"
@@ -80,8 +117,6 @@ const styles = StyleSheet.create({
   },
   backgroundImage: {
     flex: 1,
-    width: "100%",
-    height: "100%",
     justifyContent: "center",
     alignItems: "center",
   },
@@ -96,20 +131,20 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.25,
     shadowRadius: 4,
     elevation: 5,
-    marginTop: 100,
   },
   title: {
-    fontSize: 20,
     fontWeight: "bold",
     color: "#606060",
     textAlign: "center",
   },
   detailsContent: {
-    fontSize: 20,
     color: "#606060",
     textAlign: "center",
     paddingTop: 10,
     marginBottom: 10,
+  },
+  inputContainer: {
+    width: "100%",
   },
   input: {
     width: "93%",
@@ -119,7 +154,16 @@ const styles = StyleSheet.create({
     borderColor: "#606060",
     borderRadius: 5,
     backgroundColor: "rgba(255, 255, 255, 0.3)",
-    fontSize: 16,
+  },
+  inputError: {
+    borderColor: "red",
+  },
+  errorText: {
+    color: "red",
+    fontSize: 12,
+    marginTop: -8,
+    marginBottom: 10,
+    marginLeft: "3.5%",
   },
 });
 

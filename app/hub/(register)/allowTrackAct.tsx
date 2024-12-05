@@ -1,6 +1,5 @@
 import {SafeAreaProvider, SafeAreaView} from "react-native-safe-area-context";
 import {Dimensions, ImageBackground, StyleSheet, Text, TouchableOpacity, View} from "react-native";
-import TeoNotif from "@/components/TeoNotif/TeoNotif";
 import {router} from "expo-router";
 
 const {width, height} = Dimensions.get('window');
@@ -12,7 +11,7 @@ export default function allowTrackAct() {
                 style={styles.backgroundImage}
                 >
                 <SafeAreaView>
-                    <TeoNotif>
+
                         <Text
                         style={styles.trackActiTitle}>
                             Allow "Teona Passenger" to track your activity across other companies' apps and websites?{'\n'}
@@ -27,7 +26,7 @@ export default function allowTrackAct() {
                             <Text>Allow</Text>
                         </TouchableOpacity>
                     </View>
-                    </TeoNotif>
+
                 </SafeAreaView>
             </ImageBackground>
         </SafeAreaProvider>

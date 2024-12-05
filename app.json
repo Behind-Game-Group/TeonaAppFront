@@ -30,6 +30,7 @@
       "favicon": "./assets/images/favicon.png"
     },
     "plugins": [
+
       "expo-router",
       [
         "expo-splash-screen",
@@ -43,12 +44,9 @@
       [
         "expo-notifications",
         {
-          "sounds": [
-            "./assets/sounds/teonapop.wav"
-          ]
+          "sounds": ["./assets/sounds/teonapop.wav"]
         }
-      ],
-      "expo-secure-store"
+      ]
     ],
     "experiments": {
       "typedRoutes": true
