@@ -35,7 +35,7 @@ interface Errors {
   country: string;
 }
 
-const PurchaseForm: React.FC = () => {
+function PurchaseForm() {
   const router = useRouter();
   //!\   N'omet pas de typer tes constantes /!\
   const [firstName, setFirstName] = useState<string>('');
@@ -288,7 +288,7 @@ const PurchaseForm: React.FC = () => {
       </TouchableOpacity>
     </ScrollView>
   );
-};
+}
 
 const styles = StyleSheet.create({
   container: {
