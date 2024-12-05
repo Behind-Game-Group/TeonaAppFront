@@ -3,7 +3,6 @@ import {
     View,
     Text,
     TextInput,
-    Alert,
     ImageBackground,
     StyleSheet,
     Modal,
@@ -21,12 +20,18 @@ const LoginPage: React.FC = () => {
     const [password, setPassword] = useState('');
     const [modalVisible, setModalVisible] = useState(false);
     const [loading, setLoading] = useState(false);
+    const [emailError, setEmailError] = useState('');
+    const [passwordError, setPasswordError] = useState('');
 
     const router = useRouter();
 
     const handleLogin = async () => {
+        setEmailError('');
+        setPasswordError('');
+
         if (!email || !password) {
-            Alert.alert('Error', 'Please fill in both fields.');
+            if (!email) setEmailError('Email is required.');
+            if (!password) setPasswordError('Password is required.');
             return;
         }
 
@@ -39,7 +44,6 @@ const LoginPage: React.FC = () => {
             });
 
             // Cas succès
-            Alert.alert('Success', `Welcome back, ${response.data.name || email}!`);
             setModalVisible(true);
         } catch (error: any) {
             console.error(error);
@@ -47,7 +51,11 @@ const LoginPage: React.FC = () => {
             // Cas erreur
             const errorMessage =
               error.response?.data?.message || 'An error occurred. Please try again.';
-            Alert.alert('Error', errorMessage);
+            if (errorMessage.includes('email')) {
+                setEmailError(errorMessage);
+            } else if (errorMessage.includes('password')) {
+                setPasswordError(errorMessage);
+            }
         } finally {
             setLoading(false);
         }
@@ -78,6 +86,7 @@ const LoginPage: React.FC = () => {
                     autoCapitalize="none"
                     autoCorrect={false}
                   />
+                  {emailError ? <Text style={styles.errorText}>{emailError}</Text> : null}
 
                   <TextInput
                     style={styles.input}
@@ -87,6 +96,7 @@ const LoginPage: React.FC = () => {
                     value={password}
                     onChangeText={setPassword}
                   />
+                  {passwordError ? <Text style={styles.errorText}>{passwordError}</Text> : null}
 
                   <View style={styles.forgotPasswordContainer}>
                       <Link href="/hub/(login)/ForgotPassword" style={styles.forgotPasswordLink}>
@@ -159,6 +169,12 @@ const styles = StyleSheet.create({
         borderRadius: 5,
         backgroundColor: '#fff',
         fontSize: 16,
+    },
+    errorText: {
+        color: 'red',
+        fontSize: 12,
+        alignSelf: 'flex-start',
+        marginLeft: 10,
     },
     forgotPasswordContainer: {
         alignSelf: 'flex-end',

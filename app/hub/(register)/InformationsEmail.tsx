@@ -25,6 +25,9 @@ function InformationsEmail() {
   const [language, setLanguage] = useState<string | undefined>("English");
   const [languages, setLanguages] = useState<string[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
+  const [emailError, setEmailError] = useState<string | null>(null);
+  const [phoneError, setPhoneError] = useState<string | null>(null);
+  const [languageError, setLanguageError] = useState<string | null>(null);
   const router = useRouter();
 
   const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
@@ -54,22 +57,32 @@ function InformationsEmail() {
   }, []);
 
   const handleContinue = () => {
+    let valid = true;
+
     // Vérification de l'email
     if (!email.trim() || !emailRegex.test(email)) {
-      alert("Please enter a valid email address.");
-      return;
+      setEmailError("Please enter a valid email address.");
+      valid = false;
+    } else {
+      setEmailError(null);
     }
 
     // Vérification du numéro de téléphone
     if (!phoneNumber.trim() || !phoneNumberRegex.test(`${countryCode}${phoneNumber}`)) {
-      alert("Please enter a valid phone number.");
-      return;
+      setPhoneError("Please enter a valid phone number.");
+      valid = false;
+    } else {
+      setPhoneError(null);
     }
 
     if (!language) {
-      alert("Please select a language.");
-      return;
+      setLanguageError("Please select a language.");
+      valid = false;
+    } else {
+      setLanguageError(null);
     }
+
+    if (!valid) return;
 
     updateUser({ email, phoneNumber, language });
 
@@ -106,6 +119,7 @@ function InformationsEmail() {
             onChangeText={(text) => setEmail(text)}
             keyboardType="email-address"
           />
+          {emailError && <Text style={styles.error}>{emailError}</Text>}
 
           {/* Langue préférée */}
           <Text style={styles.label}>Preferred language</Text>
@@ -125,6 +139,7 @@ function InformationsEmail() {
               </Picker>
             </View>
           )}
+          {languageError && <Text style={styles.error}>{languageError}</Text>}
 
           {/* Phone number */}
           <Text style={styles.label}>Phone number</Text>
@@ -144,6 +159,8 @@ function InformationsEmail() {
               onChangeText={handlePhoneNumberChange}
             />
           </View>
+          {phoneError && <Text style={styles.error}>{phoneError}</Text>}
+
           <ButtonInscriptionLogin
             text="Continue"
             color="blue"
@@ -236,6 +253,12 @@ const styles = StyleSheet.create({
     width: "55%",
     fontSize: 15,
     padding: 5,
+  },
+  error: {
+    color: "red",
+    fontSize: 12,
+    marginTop: 5,
+    alignSelf: "flex-start",
   },
 });
 

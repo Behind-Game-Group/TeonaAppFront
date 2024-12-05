@@ -5,7 +5,6 @@ import {
   StyleSheet,
   ImageBackground,
   ActivityIndicator,
-  Alert,
 } from "react-native";
 import { Picker } from "@react-native-picker/picker";
 import { useRouter } from "expo-router";
@@ -30,14 +29,13 @@ function InformationsIdentity() {
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
 
+  const [error] = useState<string>("");
+
   const router = useRouter();
 
   const handleContinue = async () => {
     if (!selectCountry || !month || !day || !year || !gender) {
-      Alert.alert(
-        "Missing Information",
-        "Please fill in all the fields before continuing."
-      );
+      setIsSubmitting(false);
       return;
     }
 
@@ -49,10 +47,15 @@ function InformationsIdentity() {
 
     setIsSubmitting(true);
 
-    updateUser(data);
-
-    router.push("/hub/InformationsEmail");
+    try {
+      updateUser(data);
+      router.push("/hub/InformationsEmail");
+    } catch (error) {
+      setIsSubmitting(false);
+      console.error("Error submitting data:", error);
+    }
   };
+
 
   useEffect(() => {
     const loadCountries = async () => {
@@ -93,7 +96,7 @@ function InformationsIdentity() {
     (i + 1).toString().padStart(2, "0")
   );
   const years = Array.from({ length: 100 }, (_, i) => (2024 - i).toString());
-  console.log(user);
+
   return (
     <View style={styles.container}>
       <ImageBackground
@@ -180,6 +183,8 @@ function InformationsIdentity() {
             </Picker>
           </View>
 
+          {error && <Text style={styles.error}>{error}</Text>}
+
           <ButtonInscriptionLogin
             text={isSubmitting ? "Submitting..." : "Continue"}
             color={"blue"}
@@ -257,6 +262,12 @@ const styles = StyleSheet.create({
   picker: {
     flex: 1,
     color: "#606060",
+  },
+  error: {
+    color: "red",
+    fontSize: 14,
+    marginTop: 10,
+    textAlign: "center",
   },
 });
 

@@ -5,7 +5,6 @@ import {
   TextInput,
   StyleSheet,
   ImageBackground,
-  Alert,
   useWindowDimensions,
 } from "react-native";
 import { useRouter } from "expo-router";
@@ -18,21 +17,32 @@ function InformationsName() {
 
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
+  const [errors, setErrors] = useState({ firstName: "", lastName: "" });
 
   const { width, height } = useWindowDimensions();
 
   const handleContinue = async () => {
-    if (!firstName || !lastName) {
-      Alert.alert("Error", "Please fill in both fields.");
-      return;
+    let hasErrors = false;
+    const newErrors = { firstName: "", lastName: "" };
+
+    if (!firstName) {
+      newErrors.firstName = "First name is required.";
+      hasErrors = true;
     }
+
+    if (!lastName) {
+      newErrors.lastName = "Last name is required.";
+      hasErrors = true;
+    }
+
+    setErrors(newErrors);
+
+    if (hasErrors) return;
 
     // Met à jour les données de l'utilisateur dans le contexte
     updateUser({ firstName, lastName });
-
     router.push("/hub/InformationsIdentity");
   };
-  console.log(firstName, lastName);
 
   return (
     <View style={styles.container}>
@@ -49,21 +59,45 @@ function InformationsName() {
             or ID card.
           </Text>
 
-          <TextInput
-            style={[styles.input, { fontSize: height * 0.02 }]}
-            placeholder="First Name"
-            placeholderTextColor="#888"
-            value={firstName}
-            onChangeText={setFirstName}
-          />
+          <View style={styles.inputContainer}>
+            <TextInput
+              style={[
+                styles.input,
+                { fontSize: height * 0.02 },
+                errors.firstName ? styles.inputError : null,
+              ]}
+              placeholder="First Name"
+              placeholderTextColor="#888"
+              value={firstName}
+              onChangeText={(text) => {
+                setFirstName(text);
+                if (text) setErrors((prev) => ({ ...prev, firstName: "" }));
+              }}
+            />
+            {errors.firstName ? (
+              <Text style={styles.errorText}>{errors.firstName}</Text>
+            ) : null}
+          </View>
 
-          <TextInput
-            style={[styles.input, { fontSize: height * 0.02 }]}
-            placeholder="Last Name"
-            placeholderTextColor="#888"
-            value={lastName}
-            onChangeText={setLastName}
-          />
+          <View style={styles.inputContainer}>
+            <TextInput
+              style={[
+                styles.input,
+                { fontSize: height * 0.02 },
+                errors.lastName ? styles.inputError : null,
+              ]}
+              placeholder="Last Name"
+              placeholderTextColor="#888"
+              value={lastName}
+              onChangeText={(text) => {
+                setLastName(text);
+                if (text) setErrors((prev) => ({ ...prev, lastName: "" }));
+              }}
+            />
+            {errors.lastName ? (
+              <Text style={styles.errorText}>{errors.lastName}</Text>
+            ) : null}
+          </View>
 
           <ButtonInscriptionLogin
             text="Continue"
@@ -109,6 +143,9 @@ const styles = StyleSheet.create({
     paddingTop: 10,
     marginBottom: 10,
   },
+  inputContainer: {
+    width: "100%",
+  },
   input: {
     width: "93%",
     padding: 12,
@@ -117,6 +154,16 @@ const styles = StyleSheet.create({
     borderColor: "#606060",
     borderRadius: 5,
     backgroundColor: "rgba(255, 255, 255, 0.3)",
+  },
+  inputError: {
+    borderColor: "red",
+  },
+  errorText: {
+    color: "red",
+    fontSize: 12,
+    marginTop: -8,
+    marginBottom: 10,
+    marginLeft: "3.5%",
   },
 });
 

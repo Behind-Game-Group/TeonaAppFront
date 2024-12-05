@@ -3,30 +3,30 @@ import {
   Text,
   View,
   TextInput,
-  Alert,
   ImageBackground,
   StyleSheet,
-  Dimensions,
+  useWindowDimensions,
 } from "react-native";
-import { useLocalSearchParams, useRouter } from "expo-router"; // Importez useLocalSearchParams
+import { useLocalSearchParams, useRouter } from "expo-router";
 import axios from "axios";
 import CustomButton from "@/components/ButtonInscriptionLogin";
-
-// Récupération des dimensions de l'écran
-const { width, height } = Dimensions.get("window");
 
 const ResetPassword: React.FC = () => {
   const [newPassword, setNewPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [isPasswordValid, setIsPasswordValid] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const [passwordError, setPasswordError] = useState<string | null>(null);
+  const [confirmPasswordError, setConfirmPasswordError] = useState<string | null>(null);
 
   const router = useRouter();
-  const { token } = useLocalSearchParams(); // Utilisez useLocalSearchParams pour récupérer le token
+  const { token } = useLocalSearchParams();
+
+  const { width, height } = useWindowDimensions();
 
   useEffect(() => {
     if (!token) {
-      Alert.alert("Error", "Token not found.");
+      setPasswordError("Token not found.");
     }
   }, [token]);
 
@@ -46,25 +46,28 @@ const ResetPassword: React.FC = () => {
 
   const handlePasswordChange = (input: string) => {
     setNewPassword(input);
+    setPasswordError(null);
     validatePassword(input);
+  };
+
+  const handleConfirmPasswordChange = (input: string) => {
+    setConfirmPassword(input);
+    setConfirmPasswordError(null);
   };
 
   const handleSubmit = async () => {
     if (!isPasswordValid) {
-      Alert.alert(
-        "Invalid Password",
-        "Your password does not meet the required criteria."
-      );
+      setPasswordError("Your password does not meet the required criteria.");
       return;
     }
 
     if (newPassword !== confirmPassword) {
-      Alert.alert("Password Mismatch", "The passwords do not match.");
+      setConfirmPasswordError("The passwords do not match.");
       return;
     }
 
     if (!token) {
-      Alert.alert("Error", "Token is missing.");
+      setPasswordError("Token is missing.");
       return;
     }
 
@@ -76,41 +79,43 @@ const ResetPassword: React.FC = () => {
         newPassword,
       });
 
-      Alert.alert("Success", "Your password has been successfully reset.");
+      setIsLoading(false);
       router.push("/hub/(login)/Login");
     } catch (error) {
-      console.error(error);
-      Alert.alert("Error", "An error occurred. Please try again.");
-    } finally {
       setIsLoading(false);
+      setPasswordError("An error occurred. Please try again.");
     }
   };
 
   return (
     <ImageBackground
       source={require("@/assets/images/verifyMailForgotPassword.png")}
-      style={styles.backgroundImage}
+      style={[styles.backgroundImage, { width, height }]}
     >
       <View style={styles.container}>
         <Text style={styles.title}>Reset Your Password</Text>
 
         <TextInput
-          style={styles.input}
+          style={[styles.input, passwordError ? styles.inputError : {}]}
           placeholder="Enter your new password"
           placeholderTextColor="#888"
           secureTextEntry
           value={newPassword}
           onChangeText={handlePasswordChange}
         />
+        {passwordError && <Text style={styles.errorText}>{passwordError}</Text>}
 
         <TextInput
-          style={styles.input}
+          style={[styles.input, confirmPasswordError ? styles.inputError : {}]}
           placeholder="Confirm your new password"
           placeholderTextColor="#888"
           secureTextEntry
           value={confirmPassword}
-          onChangeText={setConfirmPassword}
+          onChangeText={handleConfirmPasswordChange}
         />
+        {confirmPasswordError && (
+          <Text style={styles.errorText}>{confirmPasswordError}</Text>
+        )}
 
         <View style={styles.criteriaContainer}>
           <Text style={styles.criteriaTitle}>Password must include:</Text>
@@ -129,9 +134,7 @@ const ResetPassword: React.FC = () => {
           >
             - At least one lowercase letter
           </Text>
-          <Text
-            style={[styles.criteria, /\d/.test(newPassword) && styles.valid]}
-          >
+          <Text style={[styles.criteria, /\d/.test(newPassword) && styles.valid]}>
             - At least one number
           </Text>
           <Text
@@ -156,8 +159,6 @@ const ResetPassword: React.FC = () => {
 
 const styles = StyleSheet.create({
   backgroundImage: {
-    width: width,
-    height: height,
     justifyContent: "center",
     alignItems: "center",
   },
@@ -189,6 +190,9 @@ const styles = StyleSheet.create({
     backgroundColor: "#fff",
     fontSize: 16,
   },
+  inputError: {
+    borderColor: "red",
+  },
   criteriaContainer: {
     width: "100%",
     marginVertical: 20,
@@ -207,6 +211,11 @@ const styles = StyleSheet.create({
   valid: {
     color: "#049500",
     fontWeight: "bold",
+  },
+  errorText: {
+    color: "red",
+    fontSize: 12,
+    marginTop: 5,
   },
 });
 
