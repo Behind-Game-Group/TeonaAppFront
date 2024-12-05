@@ -13,7 +13,7 @@ const { width, height } = useWindowDimensions();
     return (
         <View style={styles.card}>
             <Image style={styles.image} source={card.image} />
-            <Text style={styles.texte}>{`${card.title} ${card.price} €`}</Text>
+            <Text style={styles.texte} numberOfLines={3} ellipsizeMode="tail">{`${card.title} ${card.price} €`}</Text>
             <View style={styles.buttonContainer}>
                 <TopUpButton title="TopUp" onPress={() => onTopUp(card)} />
             </View>
