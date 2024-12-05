@@ -1,14 +1,13 @@
 import React from 'react';
-import { View, StyleSheet, Image, Dimensions } from 'react-native';
+import { View, StyleSheet, Image, useWindowDimensions } from 'react-native';
 import { Stack, usePathname } from 'expo-router';
 import { UserProvider } from '@/app/hub/(register)/userInfoContext/UserInfo';
 
-const { width } = Dimensions.get('window');
-
-export default function LoginLayout() {
+export default function RegisterLayout() {
   const pathname = usePathname(); // Obtenez le chemin actuel
+  const { width } = useWindowDimensions(); // Utilise le hook pour obtenir la largeur dynamique
 
-  // Liste des pages où le layout ne doit pas être affiché
+  // Liste des pages avec lesquels le layout ne doit pas être affiché
   const excludedPages = ['/hub/BeginInscription', '/hub/CookiePPop'];
 
   // Déterminez si le footer doit être masqué
@@ -16,24 +15,23 @@ export default function LoginLayout() {
 
   return (
     <UserProvider>
-    <View style={styles.container}>
-      {/* Contenu principal */}
+      <View style={styles.container}>
+        {/* Contenu principal */}
         <View style={styles.content}>
           <Stack screenOptions={{ headerShown: false }} />
         </View>
 
-
-      {/* Footer avec le logo Teona */}
-      {!hideFooter && ( // Condition pour afficher le footer uniquement si ce n'est pas une page exclue
-        <View style={styles.footer}>
-          <Image
-            source={require('@/assets/images/teonaLogo.png')}
-            style={styles.logo}
-            resizeMode="contain"
-          />
-        </View>
-      )}
-    </View>
+        {/* Footer avec le logo Teona */}
+        {!hideFooter && ( // Condition pour afficher le footer uniquement si ce n'est pas une page exclut
+          <View style={styles.footer}>
+            <Image
+              source={require('@/assets/images/teonaLogo.png')}
+              style={[styles.logo, { width: width * 0.4 }]} // Appliquer la largeur dynamique
+              resizeMode="contain"
+            />
+          </View>
+        )}
+      </View>
     </UserProvider>
   );
 }
@@ -57,7 +55,6 @@ const styles = StyleSheet.create({
     alignItems: 'center'
   },
   logo: {
-    width: width * 0.4,
     height: '70%',
     marginBottom: 30,
     marginRight: 140
