@@ -1,14 +1,12 @@
 import React, {useState} from 'react';
 
-import {SafeAreaView, View, Text,  Dimensions, StyleSheet,  Alert, ScrollView} from "react-native";
+import {SafeAreaView, View, Text, useWindowDimensions, StyleSheet, Alert, ScrollView} from "react-native";
 
 import TopUpButton from "@/components/TopUpButton";
 import axios from 'axios';
 import {TeonaCardModel} from "@/components/TeonaCardModel";
 import TeonaCard from "@/components/TeonaCard";
 import MenuTop from '@/components/MenuTop';
-
-
 
 
 interface TopupFaresProps {
@@ -44,65 +42,76 @@ const cardData: TeonaCardModel[] = [
         price: '7.95',
     },
 ];
-const {width, height} = Dimensions.get('window');
-const TopupFares: React.FC<TopupFaresProps> = ({totalPrice, setCurrentBalance}) => {
-    const [loading, setLoading] = useState<boolean>(false);
-    const handleTopUp = async (selectedCard: TeonaCardModel) => {
-        setLoading(true);
+const {width, height} = useWindowDimensions();
+const TopupFares: React.FC<TopupFaresProps> = ({setCurrentBalance}) => {
+    const [selectedCards, setSelectedCards] = useState<TeonaCardModel[]>([]);
+
+    const handleTopUp = async () => {
+        const totalPrice = selectedCards.reduce((sum, card) => sum + parseFloat(card.price), 0);
+
         try {
             const response = await axios.post('XXX', {
-                cardId: selectedCard.id,
-                cardTitle: selectedCard.title,
-                cardPrice: selectedCard.price,
+                totalPrice,
+                selectedCards,
             });
             if (response.status === 200) {
-                Alert.alert('Success', `La carte ${selectedCard.title} a bien été ajoutée au panier.`);
+                Alert.alert('Success', 'The selected cards have been successfully added to the cart.');
             } else {
-                Alert.alert('Error', "Une erreur empèche l'ajout de votre carte dans le panier.");
+                Alert.alert('Error', 'An error occurred while adding the cards to the cart.');
             }
         } catch (error) {
-            console.error('Erreur durant la transmition des données:', error);
-            Alert.alert('Erreur', 'Nous ne pouvons pas contacter le serveur merci de bien vouloir réessayer plus tard .');
-        } finally {
-            setLoading(false);
+            console.error('Error during data transmission:', error);
+            Alert.alert('Error', 'We cannot contact the server. Please try again later.');
         }
     };
+
+    const toggleCardSelection = (card: TeonaCardModel) => {
+        setSelectedCards(prevSelectedCards => {
+            if (prevSelectedCards.includes(card)) {
+                return prevSelectedCards.filter(selectedCard => selectedCard.id !== card.id);
+            } else {
+                return [...prevSelectedCards, card];
+            }
+        });
+    };
+
     return (
-        <>
-
-            <ScrollView style={[styles.faresContainer]}>
+        <ScrollView
+            style={[{},styles.faresContainer]}
+            >
             <SafeAreaView>
-            <Text style={styles.headerText}>Let's TopUp your card!</Text>
-            <SafeAreaView style={[{}]}>
-
-                {cardData.map((card) => (
-                    <TeonaCard  key={card.id}
+                <Text style={styles.headerText}>Let's TopUp your card!</Text>
+                <SafeAreaView
+                    style={styles.innerContainer}>
+                    <View style={styles.faresContent}>
+                        {cardData.map((card) => (
+                            <TeonaCard
+                                key={card.id}
                                 card={card}
-                                onTopUp={() => handleTopUp(card)} // Envoyer les données au backend lors du clic
-                    />
-                ))}
-
-
-                <View style={styles.faresTotalCard}>
-                    <Text style={styles.faresTotalPrice}>{`${totalPrice} €`}</Text>
-                    <View style={styles.faresButtonContainer}>
-                        <TopUpButton title={loading ? 'Loading...' : 'TopUp'}
-                                     onPress={setCurrentBalance}
-                                     disabled={loading} />
+                                onTopUp={() => toggleCardSelection(card)}
+                            />
+                        ))}
+                        <View style={styles.faresTotalCard}>
+                            <Text style={styles.faresTotalPrice}>
+                                {`${selectedCards.reduce((sum, card) => sum + parseFloat(card.price), 0)} €`}
+                            </Text>
+                            <View style={styles.faresButtonContainer}>
+                                <TopUpButton
+                                    title='TopUp'
+                                    onPress={handleTopUp}
+                                />
+                            </View>
+                        </View>
                     </View>
-                </View>
+                </SafeAreaView>
             </SafeAreaView>
-        </SafeAreaView>
         </ScrollView>
-        </>
-        
-        
     );
 };
 const styles = StyleSheet.create({
     faresContainer: {
         // flex: 1,
-backgroundColor:'#FFFFFF',
+        backgroundColor: '#FFFFFF',
         padding: 6,
     },
     headerText: {
@@ -111,35 +120,44 @@ backgroundColor:'#FFFFFF',
         textAlign: 'center',
 
     },
+    innerContainer: {
+        flex: 1,
+    },
+    faresCard: {
+        width: width,
+    },
     faresContent: {
         flex: 1,
         justifyContent: 'center',
         alignItems: 'center',
-        width: width*0.8,
-        height:height *0.6,
-       },
+        width: width,
+
+    },
     faresTotalCard: {
         flexDirection: 'row',
         justifyContent: 'space-evenly',
         alignItems: 'center',
-        width: '100%',
-       
+        flex: 1,
+
+        backgroundColor: 'red',
+        width: width,
 
     },
     faresTotalPrice: {
         borderColor: "black",
         borderWidth: 3,
-        padding:3,
-        textAlign: 'center',
-        flex: 1,
+        borderRadius: 9,
+        paddingVertical: 12,
+        paddingHorizontal: 24,
+        flexDirection: 'row',
+        justifyContent: 'center',
+        alignItems: 'center',
     },
     faresButtonContainer: {
-        alignContent: 'center',
-        justifyContent:'space-evenly',
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'flex-end',
 
-        flexDirection :'row',
-        flex: 1,
-padding:10,
     },
 });
 export default TopupFares;
