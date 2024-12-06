@@ -1,34 +1,39 @@
-import React, {useState} from 'react';
+import React, { useEffect, useState } from "react";
 import {
     View,
     Text,
     TextInput,
     StyleSheet,
+    Alert,
     Image,
     TouchableOpacity,
     Modal,
-} from 'react-native';
-import * as ImagePicker from 'expo-image-picker';
+} from "react-native";
+import * as ImagePicker from "expo-image-picker";
 import ButtonWallet from "@/components/ButtonWallet";
+import * as SecureStore from "expo-secure-store";
+import { Platform } from "react-native";
 
 function FormTeonaPass() {
-    const [firstName, setFirstName] = useState<string>('');
-    const [lastName, setLastName] = useState<string>('');
-    const [streetName, setStreetName] = useState<string>('');
-    const [streetNameOptional, setStreetNameOptional] = useState<string>('');
-    const [postCode, setPostCode] = useState('');
-    const [city, setCity] = useState<string>('');
-    const [phoneNumber, setPhoneNumber] = useState('');
-    const [country, setCountry] = useState<string>('');
+    const [firstName, setFirstName] = useState<string>("");
+    const [lastName, setLastName] = useState<string>("");
+    const [streetName, setStreetName] = useState<string>("");
+    const [streetNameOptional, setStreetNameOptional] = useState<string>("");
+    const [postCode, setPostCode] = useState("");
+    const [city, setCity] = useState<string>("");
+    const [phoneNumber, setPhoneNumber] = useState("");
+    const [country, setCountry] = useState<string>("");
     const [image, setImage] = useState<string | null>(null);
     const [modalVisible, setModalVisible] = useState(false);
     const [alertModalVisible, setAlertModalVisible] = useState(false);
     const [message, setMessage] = useState('');
+    const [userId, setUserId] = useState("");
+    const [token, setToken] = useState("");
 
-// Fonction pour prendre une nouvelle photo
+    // Fonction pour prendre une nouvelle photo
     const takePhoto = async () => {
         const { status } = await ImagePicker.requestCameraPermissionsAsync();
-        if (status !== 'granted') {
+        if (status !== "granted") {
             setMessage('Camera permission is required to take a photo.');
             setAlertModalVisible(true);
             return;
@@ -46,8 +51,7 @@ function FormTeonaPass() {
         }
     };
 
-
-// Choisir une image à partir de la bibliothèque multimédia
+    // Choisir une image à partir de la bibliothèque multimédia
     const pickImage = async () => {
         const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
 
@@ -66,33 +70,120 @@ function FormTeonaPass() {
         }
     };
 
+    useEffect(() => {
+        const fetchUserData = async () => {
+            let userId = null;
+            let token = null;
+            try {
+                if (Platform.OS === "web") {
+                    if (
+                        localStorage.getItem("authToken") ||
+                        localStorage.getItem("userId") ||
+                        localStorage.getItem("userId") ||
+                        localStorage.getItem("authToken")
+                    ) {
+                        userId = localStorage.getItem("userId");
+                        token = localStorage.getItem("authToken");
+
+                        userId = localStorage.getItem("userId");
+                        token = localStorage.getItem("authToken");
+                    }
+                } else {
+                    userId = await SecureStore.getItemAsync("userId");
+                    token = await SecureStore.getItemAsync("authToken");
+                }
+
+                if (!userId) {
+                    console.error("No token found");
+                    Alert.alert("Error", "No authentication token found.");
+                    return;
+                }
+                if (token) {
+                    setToken(token);
+                    console.log("token:", token);
+                } else {
+                    console.error("token not found ");
+                    Alert.alert("Error", "Invalid token structure.");
+                }
+                if (userId) {
+                    setUserId(userId);
+                    console.log("User ID:", userId);
+                } else {
+                    console.error("User ID not found");
+                    Alert.alert("Error", "Invalid token structure.");
+                }
+            } catch (error) {
+                console.error("Error decoding token:", error);
+                Alert.alert("Error", "Failed to decode token.");
+            }
+        };
+
+        fetchUserData();
+    }, []);
+
+    const handleSubmit = async () => {
+        try {
+            const formData = {
+                firstName,
+                lastName,
+                streetName,
+                streetNameOptional,
+                postCode,
+                city,
+                phoneNumber,
+                country,
+                image,
+                ...(userId && { userId }),
+            };
+            const response = await fetch("http://localhost:8082/api/add/adress", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    ...(token && { Authorization: `Bearer ${token}` }),
+                },
+                body: JSON.stringify(formData),
+            });
+            if (response.ok) {
+                Alert.alert("Success", "Form submitted successfully.");
+            } else {
+                Alert.alert("Error", "Failed to submit the form.");
+            }
+        } catch (error) {
+            console.error("Error submitting form:", error);
+            Alert.alert("Error", "An unexpected error occurred.");
+        }
+    };
+
     return (
         <View style={styles.container}>
             <View style={styles.content}>
-                {/* <View style={styles.header}>
-                    <Ionicons name="menu-outline" style={{marginLeft: 335, marginTop: 20}} size={40} color="white"/>
+                <View style={styles.header}>
                     <Text style={styles.title}>Purchase Teona Pass</Text>
-                </View> */}
+                </View>
 
                 <Text style={styles.secondTitle}>
-                    Fill this out and you will have it {'\n'} delivered to your door.
+                    Fill this out and you will have it {"\n"} delivered to your door.
                 </Text>
 
                 <View style={styles.cardImageContainer}>
                     {/* Affiche l'image choisie ou un logo par défaut */}
                     {image ? (
-                        <Image source={{uri: image}} style={styles.profilePic}/>
+                        <Image source={{ uri: image }} style={styles.profilePic} />
                     ) : (
                         <Image
-                            source={require('../../../assets/images/user-logo.png')}
-                            style={[styles.logoUser, {tintColor: '#606060'}]}
+                            source={require("../../../assets/images/user-logo.png")}
+                            style={[styles.logoUser, { tintColor: "#606060" }]}
                         />
                     )}
 
                     {/* Bouton pour ajouter une image */}
-                    <TouchableOpacity style={styles.addImageButton} onPress={() => setModalVisible(true)}>
+                    <TouchableOpacity
+                        style={styles.addImageButton}
+                        onPress={() => setModalVisible(true)}
+                    >
                         <Text style={styles.addImageButtonText}>+</Text>
                     </TouchableOpacity>
+
 
                     {/* Modal pour les options */}
                     <Modal
@@ -132,7 +223,6 @@ function FormTeonaPass() {
                             </View>
                         </View>
                     </Modal>
-
                 </View>
 
                 <View style={styles.form}>
@@ -206,11 +296,11 @@ function FormTeonaPass() {
                         />
                     </View>
                     <Text style={styles.details}>
-                        Your card will arrive to your door within the next 7 working days).
+                        Your card will arrive to your door within the next 7 working days.
                     </Text>
                 </View>
                 <View style={styles.buttonContainer}>
-                    <ButtonWallet text="Continue" onPress={() => console.log('Purchased')}/>
+                    <ButtonWallet text="Continue" onPress={handleSubmit}/>
                 </View>
             </View>
         </View>
@@ -220,31 +310,31 @@ function FormTeonaPass() {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: '#fff',
+        backgroundColor: "#fff",
     },
     content: {
         flex: 1,
-        width: '100%',
-        height: '100%',
+        width: "100%",
+        height: "100%",
     },
     header: {
-        width: '100%',
+        width: "100%",
         height: 100,
-        backgroundColor: '#599AD0',
+        backgroundColor: "#599AD0",
     },
     title: {
         fontSize: 20,
-        fontWeight: 'bold',
-        color: '#FFFFFF',
-        textAlign: 'center',
-        fontFamily: 'Roboto',
+        fontWeight: "bold",
+        color: "#FFFFFF",
+        textAlign: "center",
+        fontFamily: "Roboto",
         marginBottom: 20,
     },
     secondTitle: {
         fontSize: 17,
-        color: '#606060',
-        textAlign: 'center',
-        fontWeight: 'bold',
+        color: "#606060",
+        textAlign: "center",
+        fontWeight: "bold",
         marginTop: 10,
     },
     cardImageContainer: {
@@ -261,8 +351,8 @@ const styles = StyleSheet.create({
         marginLeft: 240,
     },
     profilePic: {
-        width: '100%',
-        height: '100%',
+        width: "100%",
+        height: "100%",
         resizeMode: "cover",
     },
     logoUser: {
@@ -289,24 +379,24 @@ const styles = StyleSheet.create({
         fontWeight: "bold",
     },
     form: {
-        width: '100%',
-        alignItems: 'flex-start',
+        width: "100%",
+        alignItems: "flex-start",
         marginTop: 15,
         paddingLeft: 20,
     },
     inputRow: {
-        flexDirection: 'row',
+        flexDirection: "row",
         marginBottom: 15,
-        width: '100%',
+        width: "100%",
     },
     inputFirstName: {
         width: 172,
         padding: 12,
         height: 37,
         borderWidth: 1,
-        borderColor: '#606060',
+        borderColor: "#606060",
         borderRadius: 10,
-        backgroundColor: '#D9D9D9BF',
+        backgroundColor: "#D9D9D9BF",
         fontSize: 16,
     },
     inputLastName: {
@@ -314,9 +404,9 @@ const styles = StyleSheet.create({
         padding: 12,
         height: 37,
         borderWidth: 1,
-        borderColor: '#606060',
+        borderColor: "#606060",
         borderRadius: 10,
-        backgroundColor: '#D9D9D9BF',
+        backgroundColor: "#D9D9D9BF",
         fontSize: 16,
         marginLeft: 5,
     },
@@ -325,9 +415,9 @@ const styles = StyleSheet.create({
         padding: 12,
         height: 37,
         borderWidth: 1,
-        borderColor: '#606060',
+        borderColor: "#606060",
         borderRadius: 10,
-        backgroundColor: '#D9D9D9BF',
+        backgroundColor: "#D9D9D9BF",
         fontSize: 16,
         marginBottom: 15,
     },
@@ -336,9 +426,9 @@ const styles = StyleSheet.create({
         padding: 12,
         height: 37,
         borderWidth: 1,
-        borderColor: '#606060',
+        borderColor: "#606060",
         borderRadius: 10,
-        backgroundColor: '#D9D9D9BF',
+        backgroundColor: "#D9D9D9BF",
         fontSize: 16,
     },
     inputCity: {
@@ -346,9 +436,9 @@ const styles = StyleSheet.create({
         padding: 12,
         height: 37,
         borderWidth: 1,
-        borderColor: '#606060',
+        borderColor: "#606060",
         borderRadius: 10,
-        backgroundColor: '#D9D9D9BF',
+        backgroundColor: "#D9D9D9BF",
         fontSize: 16,
         marginLeft: 5,
     },
@@ -357,9 +447,9 @@ const styles = StyleSheet.create({
         padding: 12,
         height: 37,
         borderWidth: 1,
-        borderColor: '#606060',
+        borderColor: "#606060",
         borderRadius: 10,
-        backgroundColor: '#D9D9D9BF',
+        backgroundColor: "#D9D9D9BF",
         fontSize: 16,
     },
     inputCountry: {
@@ -367,14 +457,14 @@ const styles = StyleSheet.create({
         padding: 12,
         height: 37,
         borderWidth: 1,
-        borderColor: '#606060',
+        borderColor: "#606060",
         borderRadius: 10,
-        backgroundColor: '#D9D9D9BF',
+        backgroundColor: "#D9D9D9BF",
         fontSize: 16,
         marginLeft: 5,
     },
     details: {
-        color: '#606060',
+        color: "#606060",
         fontSize: 12,
     },
     buttonContainer: {
@@ -384,16 +474,16 @@ const styles = StyleSheet.create({
     //Modal
     modalContainer: {
         flex: 1,
-        justifyContent: 'flex-end',
-        alignItems: 'center',
+        justifyContent: "flex-end",
+        alignItems: "center",
     },
     modalContent: {
-        width: '100%',
+        width: "100%",
         padding: 20,
-        backgroundColor: '#fff',
-        alignItems: 'center',
-        position: 'absolute',
-        borderColor: '#606060',
+        backgroundColor: "#fff",
+        alignItems: "center",
+        position: "absolute",
+        borderColor: "#606060",
         borderWidth: 1,
         borderTopLeftRadius: 67,
         borderTopRightRadius: 67,
@@ -401,37 +491,37 @@ const styles = StyleSheet.create({
         height: 200,
     },
     modalText1: {
-        color: '#606060',
+        color: "#606060",
         fontSize: 20,
         marginTop: 30,
     },
     modalText2: {
-        color: '#606060',
+        color: "#606060",
         fontSize: 20,
         marginTop: 10,
     },
     line: {
-        width: '85%',
+        width: "85%",
         height: 1,
-        backgroundColor: '#606060',
+        backgroundColor: "#606060",
         marginTop: 10,
     },
     modalButton: {
-        width: '50%',
+        width: "50%",
         padding: 15,
         borderRadius: 5,
-        backgroundColor: '#fff',
-        borderColor: '#599AD0',
+        backgroundColor: "#fff",
+        borderColor: "#599AD0",
         borderWidth: 2,
-        justifyContent: 'center',
-        alignItems: 'center',
+        justifyContent: "center",
+        alignItems: "center",
         marginTop: 20,
         height: 35,
     },
     modalButtonText: {
-        color: '#599AD0',
+        color: "#599AD0",
         fontSize: 16,
-        textAlign: 'center',
+        textAlign: "center",
     },
     // Modal alerte
     modalContainerA: {
@@ -468,3 +558,4 @@ const styles = StyleSheet.create({
 });
 
 export default FormTeonaPass;
+
