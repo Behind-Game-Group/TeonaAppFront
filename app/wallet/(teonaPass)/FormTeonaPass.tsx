@@ -133,7 +133,7 @@ function FormTeonaPass() {
         image,
         ...(userId && { userId }),
       };
-      const response = await fetch("http://your-backend-url/api/save-form", {
+      const response = await fetch("http://localhost:8082/api/add/adress", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -283,10 +283,7 @@ function FormTeonaPass() {
             Your card will arrive to your door within the next 7 working days).
           </Text>
         </View>
-        <ButtonTeonaPass
-          text="Continue"
-          onPress={(handleSubmit) => console.log("Purchased")}
-        />
+        <ButtonTeonaPass text="Continue" onPress={handleSubmit} />
       </View>
     </View>
   );
