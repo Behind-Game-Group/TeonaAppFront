@@ -1,0 +1,63 @@
+name: Expo CI
+
+on:
+  push:
+    branches:
+      - main  # Exécute les jobs lors de chaque push sur la branche principale
+  pull_request:
+    branches:
+      - main  # Exécute également les jobs lors de chaque pull request vers la branche principale
+
+jobs:
+  expo-ci:
+    runs-on: ubuntu-latest
+
+    steps:
+      # 1. Vérification du code et récupération du dépôt
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      # 2. Mise en cache des modules Node.js pour accélérer les installations futures
+      - name: Cache node modules
+        uses: actions/cache@v3
+        with:
+          path: ~/.npm
+          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node-
+
+      # 3. Configuration de Node.js sur la version 20
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      # 4. Installation des outils nécessaires pour Expo et EAS CLI
+      - name: Install Expo CLI
+        run: npm install -g expo-cli eas-cli
+
+      # 5. Installation des dépendances du projet
+      - name: Install dependencies
+        run: npm install
+
+      # 6. Lancer le linter pour vérifier la qualité du code
+      - name: Run lint
+        run: npm run lint
+
+#      # 7. Création de la version Android avec EAS Build
+#      - name: Build Android
+#        if: github.ref == 'refs/heads/main'  # Exécute le job uniquement si le push est sur la branche principale
+#        run: |
+#          eas build --platform android --profile preview --non-interactive
+#        env:
+#          EAS_BUILD_PROFILE: preview
+#          EXPO_TOKEN: ${{ secrets.EXPO_TOKEN }}
+#
+#      # 9. Création de la version iOS avec EAS Build
+#      - name: Build iOS
+#        if: github.ref == 'refs/heads/main' # Exécute le job uniquement si le push est sur la branche principale
+#        run: |
+#          eas build --platform ios --profile preview --non-interactive
+#        env:
+#          EAS_BUILD_PROFILE: preview
+#          EXPO_TOKEN: ${{ secrets.EXPO_TOKEN }}
