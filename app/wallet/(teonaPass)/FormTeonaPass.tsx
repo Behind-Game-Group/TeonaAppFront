@@ -4,13 +4,11 @@ import {
     Text,
     TextInput,
     StyleSheet,
-    Alert,
     Image,
     TouchableOpacity,
     Modal,
 } from 'react-native';
 import * as ImagePicker from 'expo-image-picker';
-import Ionicons from '@expo/vector-icons/Ionicons';
 import ButtonWallet from "@/components/ButtonWallet";
 
 function FormTeonaPass() {
@@ -24,25 +22,15 @@ function FormTeonaPass() {
     const [country, setCountry] = useState<string>('');
     const [image, setImage] = useState<string | null>(null);
     const [modalVisible, setModalVisible] = useState(false);
+    const [alertModalVisible, setAlertModalVisible] = useState(false);
+    const [message, setMessage] = useState('');
 
-    // Demander la permission d'accéder à la bibliothèque multimédia
-    const requestPermissions = async () => {
-        const {status} = await ImagePicker.requestMediaLibraryPermissionsAsync();
-        if (status !== 'granted') {
-            Alert.alert(
-                'Permission refusée',
-                'Nous avons besoin de votre permission pour accéder à la galerie.'
-            );
-            return false;
-        }
-        return true;
-    };
-
-    // Fonction pour prendre une nouvelle photo
+// Fonction pour prendre une nouvelle photo
     const takePhoto = async () => {
-        const {status} = await ImagePicker.requestCameraPermissionsAsync();
+        const { status } = await ImagePicker.requestCameraPermissionsAsync();
         if (status !== 'granted') {
-            Alert.alert('Permission refusée', 'Nous avons besoin de votre permission pour accéder à l’appareil photo.');
+            setMessage('Camera permission is required to take a photo.');
+            setAlertModalVisible(true);
             return;
         }
 
@@ -58,18 +46,22 @@ function FormTeonaPass() {
         }
     };
 
-    // Choisir une image à partir de la bibliothèque multimédia
-    const pickImage = async () => {
-        const hasPermission = await requestPermissions();
-        if (!hasPermission) return;
 
-        // Ouvrir la galerie pour sélectionner une image
+// Choisir une image à partir de la bibliothèque multimédia
+    const pickImage = async () => {
+        const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
+
+        if (status !== 'granted') {
+            setMessage('We need your permission to access the gallery');
+            setAlertModalVisible(true);
+            return;
+        }
+
         const result = await ImagePicker.launchImageLibraryAsync({
-            quality: 1, // Qualité maximale de l'image
+            quality: 1,
         });
 
         if (!result.canceled) {
-            // Si l'utilisateur a choisi une image, on la met dans l'état
             setImage(result.assets[0].uri);
         }
     };
@@ -77,10 +69,10 @@ function FormTeonaPass() {
     return (
         <View style={styles.container}>
             <View style={styles.content}>
-                <View style={styles.header}>
+                {/* <View style={styles.header}>
                     <Ionicons name="menu-outline" style={{marginLeft: 335, marginTop: 20}} size={40} color="white"/>
                     <Text style={styles.title}>Purchase Teona Pass</Text>
-                </View>
+                </View> */}
 
                 <Text style={styles.secondTitle}>
                     Fill this out and you will have it {'\n'} delivered to your door.
@@ -119,6 +111,23 @@ function FormTeonaPass() {
                                     onPress={() => setModalVisible(false)}
                                 >
                                     <Text style={styles.modalButtonText}>Cancel</Text>
+                                </TouchableOpacity>
+                            </View>
+                        </View>
+                    </Modal>
+
+                    <Modal
+                        transparent={true}
+                        animationType="fade"
+                        visible={alertModalVisible}
+                        onRequestClose={() => setAlertModalVisible(false)}
+                    >
+                        <View style={styles.modalContainerA}>
+                            <View style={styles.modalContentA}>
+                                <Text style={styles.modalTextA}>{message}</Text>
+                                <TouchableOpacity style={styles.modalButtonA}
+                                                  onPress={() => setAlertModalVisible(false)}>
+                                    <Text style={styles.modalButtonTextA}>Authorize</Text>
                                 </TouchableOpacity>
                             </View>
                         </View>
@@ -200,7 +209,9 @@ function FormTeonaPass() {
                         Your card will arrive to your door within the next 7 working days).
                     </Text>
                 </View>
-                <ButtonWallet text="Continue" onPress={() => console.log('Purchased')}/>
+                <View style={styles.buttonContainer}>
+                    <ButtonWallet text="Continue" onPress={() => console.log('Purchased')}/>
+                </View>
             </View>
         </View>
     );
@@ -366,28 +377,9 @@ const styles = StyleSheet.create({
         color: '#606060',
         fontSize: 12,
     },
-    footer: {
-        position: 'absolute',
-        bottom: 0,
-        left: 0,
-        height: 70,
-        width: '100%',
-        backgroundColor: '#DF8D22',
-    },
-    rowImages: {
-        flexDirection: 'row',
-        justifyContent: 'space-around',
-    },
-    logo: {
-        width: 60,
-        height: 60,
-        resizeMode: 'contain',
-        tintColor: '#606060',
-    },
-    logoBus: {
-        width: 65,
-        height: 65,
-        resizeMode: 'contain',
+    buttonContainer: {
+        alignItems: 'center',
+        marginTop: 10,
     },
     //Modal
     modalContainer: {
@@ -440,6 +432,38 @@ const styles = StyleSheet.create({
         color: '#599AD0',
         fontSize: 16,
         textAlign: 'center',
+    },
+    // Modal alerte
+    modalContainerA: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+        backgroundColor: 'rgba(0, 0, 0, 0.5)',
+    },
+    modalContentA: {
+        backgroundColor: 'white',
+        padding: 20,
+        borderRadius: 10,
+        width: 250,
+    },
+    modalTextA: {
+        fontSize: 16,
+        marginBottom: 20,
+        color: '#606060',
+        textAlign: 'center',
+        fontWeight: 'bold',
+    },
+    modalButtonA: {
+        backgroundColor: '#606060',
+        paddingVertical: 10,
+        paddingHorizontal: 20,
+        borderRadius: 10,
+        marginTop: 10,
+        alignItems: 'center',
+    },
+    modalButtonTextA: {
+        color: 'white',
+        fontWeight: 'bold',
     },
 });
 
