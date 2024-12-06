@@ -157,11 +157,7 @@ function FormTeonaPass() {
     return (
         <View style={styles.container}>
             <View style={styles.content}>
-                <View style={styles.header}>
-                    <Text style={styles.title}>Purchase Teona Pass</Text>
-                </View>
-
-                <Text style={styles.secondTitle}>
+                <Text style={styles.title}>
                     Fill this out and you will have it {"\n"} delivered to your door.
                 </Text>
 
@@ -317,20 +313,7 @@ const styles = StyleSheet.create({
         width: "100%",
         height: "100%",
     },
-    header: {
-        width: "100%",
-        height: 100,
-        backgroundColor: "#599AD0",
-    },
     title: {
-        fontSize: 20,
-        fontWeight: "bold",
-        color: "#FFFFFF",
-        textAlign: "center",
-        fontFamily: "Roboto",
-        marginBottom: 20,
-    },
-    secondTitle: {
         fontSize: 17,
         color: "#606060",
         textAlign: "center",
