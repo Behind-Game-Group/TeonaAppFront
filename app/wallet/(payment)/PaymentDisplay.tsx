@@ -1,20 +1,19 @@
 import React, {useState} from 'react';
 import {View, Text, StyleSheet, Image, TouchableOpacity, TextInput, Pressable} from 'react-native';
-import {useLocalSearchParams} from 'expo-router';
+import {useLocalSearchParams, useRouter} from 'expo-router';
 import ButtonWallet from "@/components/ButtonWallet";
 
 const CardPaymentPage: React.FC = () => {
+    const router = useRouter();
     const [email, setEmail] = useState('');
     const [isChecked, setIsChecked] = useState(false);
+    const [isFirstCard, setIsFirstCard] = useState<boolean>(true);
 
     const toggleCheckbox = () => setIsChecked(!isChecked);
-    // Récupérer les paramètres avec useLocalSearchParams
     const params = useLocalSearchParams();
 
-    // Extraire et valider les paramètres
     const cardType = params.cardType && typeof params.cardType === 'string' ? params.cardType : '';
     const price = params.price && !isNaN(Number(params.price)) ? Number(params.price) : 0;
-    const [isFirstCard, setIsFirstCard] = useState<boolean>(true);
 
     // Vérification des données
     if (!cardType || price <= 0) {
@@ -25,13 +24,19 @@ const CardPaymentPage: React.FC = () => {
         );
     }
 
-    // Calcul des frais et du total
     const cardFee = isFirstCard
         ? cardType === 'TopUp'
             ? 5
             : 7.5
         : 0;
     const currentBalance = price + cardFee; // Total calculé
+
+    const handleCB = (price: number) => {
+        router.push({
+            pathname:'/wallet/PaymentInformations',
+            params: {price},
+        });
+    };
 
     return (
         <View style={styles.container}>
@@ -73,7 +78,7 @@ const CardPaymentPage: React.FC = () => {
             <TouchableOpacity
                 style={styles.button}
             >
-                <Text style={styles.buttonText}>Debit/credit card </Text>
+                <Text style={styles.buttonText}>Debit/credit card</Text>
             </TouchableOpacity>
 
             <TouchableOpacity
@@ -103,7 +108,7 @@ const CardPaymentPage: React.FC = () => {
                 </Text>
             </View>
 
-            <ButtonWallet text="Continue" onPress={() => console.log('Purchased')}/>
+            <ButtonWallet text="Continue" onPress={() => handleCB(price)}/>
 
             {/*<PaymentOptions price={currentBalance} cardType={cardType}/>*/}
 

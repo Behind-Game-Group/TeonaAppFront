@@ -6,13 +6,13 @@ type CustomButtonProps = {
     onPress: (event: GestureResponderEvent) => void;
 };
 
-const CustomButton: React.FC<CustomButtonProps> = ({ text,  onPress }) => {
+const CustomButton: React.FC<CustomButtonProps> = ({text, onPress}) => {
 
     return (
         <View style={styles.container}>
-        <TouchableOpacity style={styles.button} onPress={onPress}>
-            <Text style={styles.text}>{text}</Text>
-        </TouchableOpacity>
+            <TouchableOpacity style={styles.button} onPress={onPress}>
+                <Text style={styles.text}>{text}</Text>
+            </TouchableOpacity>
         </View>
     );
 };
