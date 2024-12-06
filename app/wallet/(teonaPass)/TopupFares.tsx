@@ -1,14 +1,12 @@
 import React, {useState} from 'react';
 
-import {SafeAreaView, View, Text,  Dimensions, StyleSheet,  Alert, ScrollView} from "react-native";
+import {SafeAreaView, View, Text, useWindowDimensions, StyleSheet, Modal, ScrollView,Image, TouchableOpacity} from "react-native";
 
 import TopUpButton from "@/components/TopUpButton";
 import axios from 'axios';
 import {TeonaCardModel} from "@/components/TeonaCardModel";
 import TeonaCard from "@/components/TeonaCard";
 import MenuTop from '@/components/MenuTop';
-
-
 
 
 interface TopupFaresProps {
@@ -44,102 +42,153 @@ const cardData: TeonaCardModel[] = [
         price: '7.95',
     },
 ];
-const {width, height} = Dimensions.get('window');
-const TopupFares: React.FC<TopupFaresProps> = ({totalPrice, setCurrentBalance}) => {
-    const [loading, setLoading] = useState<boolean>(false);
-    const handleTopUp = async (selectedCard: TeonaCardModel) => {
-        setLoading(true);
+const {width, height} = useWindowDimensions();
+const TopupFares: React.FC<TopupFaresProps> = ({setCurrentBalance}) => {
+    const [selectedCard, setSelectedCard] = useState<TeonaCardModel | null>(null);
+    const [modalVisible, setModalVisible] = useState(false);
+    const [modalMessage, setModalMessage] = useState('');
+
+    const handleTopUp = async () => {
+        if (!selectedCard) {
+            setModalMessage('Merci de bien vouloir selectionner une carte .');
+            setModalVisible(true);
+            return;
+        }
+
         try {
             const response = await axios.post('XXX', {
-                cardId: selectedCard.id,
-                cardTitle: selectedCard.title,
-                cardPrice: selectedCard.price,
+                totalPrice: parseFloat(selectedCard.price),
+                selectedCard,
             });
             if (response.status === 200) {
-                Alert.alert('Success', `La carte ${selectedCard.title} a bien été ajoutée au panier.`);
+                setModalMessage('La carte a bien été ajoutée au panier.');
             } else {
-                Alert.alert('Error', "Une erreur empèche l'ajout de votre carte dans le panier.");
+                setModalMessage("Une erreur est survenu lors de l'ajout de la carte.");
             }
         } catch (error) {
-            console.error('Erreur durant la transmition des données:', error);
-            Alert.alert('Erreur', 'Nous ne pouvons pas contacter le serveur merci de bien vouloir réessayer plus tard .');
+            console.error('Erreur durant la transmission des informations:', error);
+            setModalMessage('Serveur injoignable , Veuillez réessayer ultérieurement .');
         } finally {
-            setLoading(false);
+            setModalVisible(true);
         }
     };
+
+    const selectCard = (card: TeonaCardModel) => {
+        setSelectedCard(card);
+    };
+
     return (
-        <>
-
-            <ScrollView style={[styles.faresContainer]}>
+        <ScrollView style={styles.faresContainer}>
             <SafeAreaView>
-            <Text style={styles.headerText}>Let's TopUp your card!</Text>
-            <SafeAreaView style={[{}]}>
-
-                {cardData.map((card) => (
-                    <TeonaCard  key={card.id}
+                <Text style={styles.headerText}>Let's TopUp your card!</Text>
+                <SafeAreaView style={styles.innerContainer}>
+                    <View style={styles.faresContent}>
+                        {cardData.map((card) => (
+                            <TeonaCard
+                                key={card.id}
                                 card={card}
-                                onTopUp={() => handleTopUp(card)} // Envoyer les données au backend lors du clic
-                    />
-                ))}
+                                onTopUp={() => selectCard(card)}
+                            />
+                        ))}
+                        <Text style={styles.selectedCardText}> Carte Selectionnée </Text>
+                        <View style={styles.faresTotalCard}>
 
+                            {selectedCard && (
+                                <TeonaCard card={selectedCard} onTopUp={handleTopUp}/>
+                            )}
 
-                <View style={styles.faresTotalCard}>
-                    <Text style={styles.faresTotalPrice}>{`${totalPrice} €`}</Text>
-                    <View style={styles.faresButtonContainer}>
-                        <TopUpButton title={loading ? 'Loading...' : 'TopUp'}
-                                     onPress={setCurrentBalance}
-                                     disabled={loading} />
+                        </View>
+                    </View>
+                </SafeAreaView>
+            </SafeAreaView>
+            <Modal
+                animationType="slide"
+                transparent={true}
+                visible={modalVisible}
+                onRequestClose={() => setModalVisible(false)}
+            >
+                <View style={styles.modalContainer}>
+                    <View style={styles.modalView}>
+                        <Text style={styles.modalText}>{modalMessage}</Text>
+                        <TouchableOpacity
+                            style={styles.closeButton}
+                            onPress={() => setModalVisible(false)}
+                        >
+                            <Text style={styles.closeButtonText}>Fermer</Text>
+                        </TouchableOpacity>
                     </View>
                 </View>
-            </SafeAreaView>
-        </SafeAreaView>
+            </Modal>
         </ScrollView>
-        </>
-        
-        
     );
 };
+
 const styles = StyleSheet.create({
     faresContainer: {
-        // flex: 1,
-backgroundColor:'#FFFFFF',
+        backgroundColor: '#FFFFFF',
         padding: 6,
     },
     headerText: {
         fontSize: 24,
         fontWeight: 'bold',
         textAlign: 'center',
-
+    },
+    innerContainer: {
+        flex: 1,
+    },
+    selectedCardImage: {
+        width: width * 0.2,
+        height: height * 0.2,
+        resizeMode: 'contain',
     },
     faresContent: {
         flex: 1,
         justifyContent: 'center',
         alignItems: 'center',
-        width: width*0.8,
-        height:height *0.6,
-       },
+        width: width,
+    },
+    selectedCardText:{
+        justifyContent: 'center',
+        alignItems: 'center',
+    }
+    ,
     faresTotalCard: {
         flexDirection: 'row',
-        justifyContent: 'space-evenly',
         alignItems: 'center',
-        width: '100%',
+        justifyContent: 'center',
+        width: width,
+
        
-
+        resizeMode: 'contain',
     },
-    faresTotalPrice: {
-        borderColor: "black",
-        borderWidth: 3,
-        padding:3,
+
+
+    modalContainer: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+        backgroundColor: 'rgba(0, 0, 0, 0.5)',
+    },
+    modalView: {
+        width: 300,
+        padding: 20,
+        backgroundColor: 'white',
+        borderRadius: 10,
+        alignItems: 'center',
+    },
+    modalText: {
+        fontSize: 18,
+        marginBottom: 20,
         textAlign: 'center',
-        flex: 1,
     },
-    faresButtonContainer: {
-        alignContent: 'center',
-        justifyContent:'space-evenly',
-
-        flexDirection :'row',
-        flex: 1,
-padding:10,
+    closeButton: {
+        backgroundColor: '#2196F3',
+        padding: 10,
+        borderRadius: 5,
+    },
+    closeButtonText: {
+        color: 'white',
+        fontSize: 16,
     },
 });
 export default TopupFares;

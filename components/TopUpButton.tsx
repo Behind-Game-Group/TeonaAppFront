@@ -8,6 +8,7 @@ interface OrangeButtonProps {
 }
 
 const OrangeButton: React.FC<OrangeButtonProps> = ({ title, onPress, style }) => {
+    console.log(onPress);
     return (
         <TouchableOpacity
             style={[styles.button, style]}
