@@ -1,7 +1,6 @@
 export interface TeonaCardModel {
-    id: string;
-    image: any;
-    title: string;
-    price: string;
-
+  id: string;
+  image: any;
+  title: string;
+  price: string;
 }
