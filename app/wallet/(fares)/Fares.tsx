@@ -1,6 +1,6 @@
-import {View, Text, Image, SafeAreaView, useWindowDimensions, StyleSheet} from "react-native";
-import React from "react";
-import TopUpButton from "@/components/TopUpButton";
+import {View, Text, Image, SafeAreaView, useWindowDimensions, StyleSheet} from 'react-native';
+import React from 'react';
+import TopUpButton from '@/components/TopUpButton';
 
 interface FaresProps {
 
@@ -30,13 +30,15 @@ const Fares: React.FC<FaresProps> = ({}) => {
                     </View>
                 </View>
                 <View style={styles.faresPass}>
-                    <Text style={styles.faresTextAva}>My Teona Pass</Text>
-                    <View style={styles.faresAvaContainer}>
 
+                    <View style={styles.faresAvaContainer}>
+                        <Text style={styles.faresTextAva}>My Teona Pass</Text>
+                        <View style={styles.faresAvaTop}>
                         <Image style={styles.faresAvaImag} source={require('@/assets/images/avatarteona.png')}/>
                         <TopUpButton title={"TopUp"} onPress={function(): void {
                             throw new Error("Function not implemented.");
                         } }/>
+                        </View>
                     </View>
                     <View style={styles.faresCardContainer}>
                         <Image style={styles.faresCardImag} source={require('@/assets/images/duopassteona.png')}/>
@@ -58,6 +60,7 @@ const styles = StyleSheet.create({
         fontSize: 20,
         fontWeight: 'bold',
         textAlign: 'center',
+        alignItems: 'center',
 margin:0,
         padding:0,
     },
@@ -89,6 +92,7 @@ padding:0,
         justifyContent: 'center',
         margin: 0,
         padding: 0,
+        marginTop:0,
     },
     faresTextSub: {
         fontSize: 5,
@@ -108,11 +112,13 @@ padding:0,
     },
     faresPass: {
 
-        width:'100%',
-        backgroundColor: '#BBBBBF',
         alignItems: 'center',
-        justifyContent: 'space-evenly',
-        flexDirection: 'row',
+        justifyContent: 'center',
+        padding: 0,
+        flexDirection:"row",
+        backgroundColor: '#BBBBBF',
+
+
     },
      faresCard: {
         backgroundColor: '#FFFFFF',
@@ -130,17 +136,26 @@ padding:0,
     },
     faresAvaContainer: {
         backgroundColor: '#DD8C6C',
-        padding: 0,
-flex:1,
-
-        flexDirection:'row',
         alignItems: 'center',
-        justifyContent: 'space-between',
+        justifyContent: 'center',
+        padding: 0,
+        flex:1,
+        margin:0,
+    },
+    faresAvaTop: {
+        backgroundColor: '#DD8C6C',
+        alignItems: 'center',
+        justifyContent: 'space-evenly',
+        padding: 0,
+        flexDirection:"row",
+        flex:1,
+
+
     },
     faresCardContainer: {
         backgroundColor: '#BB8C6C',
         alignItems: 'center',
-        justifyContent: 'space-between',
+        justifyContent: 'center',
         padding: 0,
         flex:1,
     },
@@ -171,14 +186,17 @@ flex:1,
         flexDirection: 'row',
         margin: 0,
         padding: 0,
+        marginBottom: 0,
     },
     faresAvaImag: {
         width: width * 0.3,
         height: height * 0.2,
-
+        margin: 0,
+        padding: 0,
         resizeMode: 'contain',
-        alignItems: 'flex-start',
-        justifyContent: 'center',
+        alignItems: 'center',
+        justifyContent: 'flex-start',
+        flex: 1,
     },
     faresText: {
         fontSize: 18,
