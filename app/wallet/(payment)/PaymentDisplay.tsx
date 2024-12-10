@@ -17,7 +17,7 @@ const CardPaymentPage: React.FC<CardPaymentPageProps> = ({ route }) => {
   const [isFirstCard, setIsFirstCard] = useState<boolean>(true);
 
   // Calcul des frais de carte si c'est la première carte
-  const cardFee = isFirstCard ? 7.50 : 0;
+  const cardFee = isFirstCard ? 7.5 : 0;
   const total = price + cardFee; // Calcul du total avec frais de carte
 
   return (
@@ -26,7 +26,9 @@ const CardPaymentPage: React.FC<CardPaymentPageProps> = ({ route }) => {
         <Text style={styles.cardTitle}>Carte : {cardType}</Text>
         <Text style={styles.cardText}>Prix de la carte : {price} €</Text>
         <Text style={styles.cardText}>Solde actuel : {currentBalance} €</Text>
-        {isFirstCard && <Text style={styles.cardText}>Frais de carte : {cardFee} €</Text>}
+        {isFirstCard && (
+          <Text style={styles.cardText}>Frais de carte : {cardFee} €</Text>
+        )}
         <Text style={styles.cardText}>Total : {total} €</Text>
       </View>
 
@@ -43,24 +45,24 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 20,
-    backgroundColor: '#fff'
+    backgroundColor: '#fff',
   },
   cardInfo: {
-    marginBottom: 20
+    marginBottom: 20,
   },
   cardTitle: {
     fontSize: 22,
-    fontWeight: 'bold'
+    fontWeight: 'bold',
   },
   cardText: {
     fontSize: 16,
-    marginTop: 10
+    marginTop: 10,
   },
   separator: {
     height: 1,
     backgroundColor: '#ccc',
-    marginVertical: 20
-  }
+    marginVertical: 20,
+  },
 });
 
 export default CardPaymentPage;

@@ -15,10 +15,7 @@
       "supportsTablet": true
     },
     "android": {
-      "permissions": [
-        "ACCESS_FINE_LOCATION",
-        "ACCESS_COARSE_LOCATION"
-      ],
+      "permissions": ["ACCESS_FINE_LOCATION", "ACCESS_COARSE_LOCATION"],
       "adaptiveIcon": {
         "foregroundImage": "./assets/images/adaptive-icon.png",
         "backgroundColor": "#ffffff"
@@ -44,9 +41,7 @@
       [
         "expo-notifications",
         {
-          "sounds": [
-            "./assets/sounds/teonapop.wav"
-          ]
+          "sounds": ["./assets/sounds/teonapop.wav"]
         }
       ]
     ],

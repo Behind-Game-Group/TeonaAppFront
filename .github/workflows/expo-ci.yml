@@ -3,12 +3,12 @@ name: Expo CI - Development Branch
 on:
   push:
     branches:
-      - developpement  # Exécute les jobs lors de chaque push sur la branche development
+      - developpement # Exécute les jobs lors de chaque push sur la branche development
   pull_request:
     branches:
-      - developpement  # Exécute également les jobs lors de chaque pull request vers la branche development
+      - developpement # Exécute également les jobs lors de chaque pull request vers la branche development
   schedule:
-    - cron: '0 18 * * *'  # Planifie l'exécution quotidienne à 18h00 (UTC)
+    - cron: '0 18 * * *' # Planifie l'exécution quotidienne à 18h00 (UTC)
 
 jobs:
   check-and-test:
@@ -54,8 +54,8 @@ jobs:
 
   build:
     runs-on: ubuntu-latest
-    needs: check-and-test  # S'exécute uniquement après le succès de 'check-and-test'
-    if: github.event_name == 'schedule'  # S'exécute uniquement lors de la planification (fin de journée)
+    needs: check-and-test # S'exécute uniquement après le succès de 'check-and-test'
+    if: github.event_name == 'schedule' # S'exécute uniquement lors de la planification (fin de journée)
 
     steps:
       # 1. Vérification du code et récupération du dépôt
