@@ -3,10 +3,10 @@ name: Expo CI
 on:
   push:
     branches:
-      - main  # Exécute les jobs lors de chaque push sur la branche principale
+      - main # Exécute les jobs lors de chaque push sur la branche principale
   pull_request:
     branches:
-      - main  # Exécute également les jobs lors de chaque pull request vers la branche principale
+      - main # Exécute également les jobs lors de chaque pull request vers la branche principale
 
 jobs:
   expo-ci:
@@ -43,7 +43,6 @@ jobs:
       # 6. Lancer le linter pour vérifier la qualité du code
       - name: Run lint
         run: npm run lint
-
 #      # 7. Création de la version Android avec EAS Build
 #      - name: Build Android
 #        if: github.ref == 'refs/heads/main'  # Exécute le job uniquement si le push est sur la branche principale

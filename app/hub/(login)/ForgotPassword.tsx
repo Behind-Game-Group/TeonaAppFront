@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState } from 'react';
 import {
   ImageBackground,
   StyleSheet,
@@ -6,14 +6,14 @@ import {
   TextInput,
   View,
   useWindowDimensions,
-} from "react-native";
-import { useRouter } from "expo-router";
-import axios from "axios";
-import CustomButton from "@/components/ButtonInscriptionLogin";
+} from 'react-native';
+import { useRouter } from 'expo-router';
+import axios from 'axios';
+import CustomButton from '@/components/ButtonInscriptionLogin';
 
 const ForgotPassword: React.FC = () => {
   const { width, height } = useWindowDimensions();
-  const [email, setEmail] = useState<string>("");
+  const [email, setEmail] = useState<string>('');
   const [loading, setLoading] = useState<boolean>(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
@@ -26,12 +26,12 @@ const ForgotPassword: React.FC = () => {
 
   const handleResetPassword = async (): Promise<void> => {
     if (!email) {
-      setErrorMessage("Please enter your email address.");
+      setErrorMessage('Please enter your email address.');
       return;
     }
 
     if (!validateEmail(email)) {
-      setErrorMessage("Please enter a valid email address.");
+      setErrorMessage('Please enter a valid email address.');
       return;
     }
 
@@ -40,19 +40,22 @@ const ForgotPassword: React.FC = () => {
 
     try {
       const response = await axios.post(
-        "http://localhost:8082/api/user/forgot-password",
+        'http://localhost:8082/api/user/forgot-password',
         {
           email,
-        }
+        },
       );
 
       // Success
-      setSuccessMessage(response.data.message || `A reset link has been sent to ${email}.`);
-      setEmail("");
-      router.push("/hub/(login)/ResetPassword");
+      setSuccessMessage(
+        response.data.message || `A reset link has been sent to ${email}.`,
+      );
+      setEmail('');
+      router.push('/hub/(login)/ResetPassword');
     } catch (error: any) {
       // Error
-      const errorMessage = error.response?.data?.message || "An error occurred. Please try again.";
+      const errorMessage =
+        error.response?.data?.message || 'An error occurred. Please try again.';
       setErrorMessage(errorMessage);
     } finally {
       setLoading(false);
@@ -61,7 +64,7 @@ const ForgotPassword: React.FC = () => {
 
   return (
     <ImageBackground
-      source={require("@/assets/images/bgSignIn.png")}
+      source={require('@/assets/images/bgSignIn.png')}
       style={[styles.backgroundImage, { height: height }]}
     >
       <View style={[styles.container, { width: width * 0.85 }]}>
@@ -73,19 +76,23 @@ const ForgotPassword: React.FC = () => {
 
         <TextInput
           style={styles.input}
-          placeholder="Email Address"
-          placeholderTextColor="#888"
-          keyboardType="email-address"
+          placeholder='Email Address'
+          placeholderTextColor='#888'
+          keyboardType='email-address'
           value={email}
           onChangeText={setEmail}
         />
 
-        {errorMessage && <Text style={styles.errorMessage}>{errorMessage}</Text>}
-        {successMessage && <Text style={styles.successMessage}>{successMessage}</Text>}
+        {errorMessage && (
+          <Text style={styles.errorMessage}>{errorMessage}</Text>
+        )}
+        {successMessage && (
+          <Text style={styles.successMessage}>{successMessage}</Text>
+        )}
 
         <CustomButton
-          text={loading ? "Sending..." : "Send Reset Link"}
-          color="blue"
+          text={loading ? 'Sending...' : 'Send Reset Link'}
+          color='blue'
           onPress={handleResetPassword}
         />
       </View>
@@ -96,49 +103,49 @@ const ForgotPassword: React.FC = () => {
 const styles = StyleSheet.create({
   backgroundImage: {
     flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   container: {
     padding: 16,
-    backgroundColor: "rgba(255, 255, 255, 0.85)",
+    backgroundColor: 'rgba(255, 255, 255, 0.85)',
     borderRadius: 10,
-    alignItems: "center",
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.25,
-    shadowRadius: 4,
+    alignItems: 'center',
+    boxShadowColor: '#000',
+    boxShadowOffset: { width: 0, height: 2 },
+    boxShadowOpacity: 0.25,
+    boxShadowRadius: 4,
     elevation: 5,
   },
   title: {
     fontSize: 28,
-    fontWeight: "bold",
-    color: "#333",
+    fontWeight: 'bold',
+    color: '#333',
     marginBottom: 10,
   },
   instructions: {
     fontSize: 16,
-    color: "#666",
-    textAlign: "center",
+    color: '#666',
+    textAlign: 'center',
     marginBottom: 20,
   },
   input: {
-    width: "100%",
+    width: '100%',
     padding: 12,
     marginVertical: 10,
     borderWidth: 1,
-    borderColor: "#ccc",
+    borderColor: '#ccc',
     borderRadius: 5,
-    backgroundColor: "#fff",
+    backgroundColor: '#fff',
     fontSize: 16,
   },
   errorMessage: {
-    color: "red",
+    color: 'red',
     fontSize: 14,
     marginVertical: 5,
   },
   successMessage: {
-    color: "green",
+    color: 'green',
     fontSize: 14,
     marginVertical: 5,
   },

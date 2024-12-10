@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect } from 'react';
 import {
   Text,
   View,
@@ -6,18 +6,20 @@ import {
   ImageBackground,
   StyleSheet,
   useWindowDimensions,
-} from "react-native";
-import { useLocalSearchParams, useRouter } from "expo-router";
-import axios from "axios";
-import CustomButton from "@/components/ButtonInscriptionLogin";
+} from 'react-native';
+import { useLocalSearchParams, useRouter } from 'expo-router';
+import axios from 'axios';
+import CustomButton from '@/components/ButtonInscriptionLogin';
 
 const ResetPassword: React.FC = () => {
-  const [newPassword, setNewPassword] = useState("");
-  const [confirmPassword, setConfirmPassword] = useState("");
+  const [newPassword, setNewPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
   const [isPasswordValid, setIsPasswordValid] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [passwordError, setPasswordError] = useState<string | null>(null);
-  const [confirmPasswordError, setConfirmPasswordError] = useState<string | null>(null);
+  const [confirmPasswordError, setConfirmPasswordError] = useState<
+    string | null
+  >(null);
 
   const router = useRouter();
   const { token } = useLocalSearchParams();
@@ -26,7 +28,7 @@ const ResetPassword: React.FC = () => {
 
   useEffect(() => {
     if (!token) {
-      setPasswordError("Token not found.");
+      setPasswordError('Token not found.');
     }
   }, [token]);
 
@@ -40,7 +42,11 @@ const ResetPassword: React.FC = () => {
     const validLength = input.length >= minLength && input.length <= maxLength;
 
     setIsPasswordValid(
-      hasUpperCase && hasLowerCase && hasNumber && hasSpecialChar && validLength
+      hasUpperCase &&
+        hasLowerCase &&
+        hasNumber &&
+        hasSpecialChar &&
+        validLength,
     );
   };
 
@@ -57,39 +63,39 @@ const ResetPassword: React.FC = () => {
 
   const handleSubmit = async () => {
     if (!isPasswordValid) {
-      setPasswordError("Your password does not meet the required criteria.");
+      setPasswordError('Your password does not meet the required criteria.');
       return;
     }
 
     if (newPassword !== confirmPassword) {
-      setConfirmPasswordError("The passwords do not match.");
+      setConfirmPasswordError('The passwords do not match.');
       return;
     }
 
     if (!token) {
-      setPasswordError("Token is missing.");
+      setPasswordError('Token is missing.');
       return;
     }
 
     setIsLoading(true);
 
     try {
-      await axios.post("http://localhost:8082/api/user/reset-password", {
+      await axios.post('http://localhost:8082/api/user/reset-password', {
         token,
         newPassword,
       });
 
       setIsLoading(false);
-      router.push("/hub/(login)/Login");
+      router.push('/hub/(login)/Login');
     } catch (error) {
       setIsLoading(false);
-      setPasswordError("An error occurred. Please try again.");
+      setPasswordError('An error occurred. Please try again.');
     }
   };
 
   return (
     <ImageBackground
-      source={require("@/assets/images/verifyMailForgotPassword.png")}
+      source={require('@/assets/images/verifyMailForgotPassword.png')}
       style={[styles.backgroundImage, { width, height }]}
     >
       <View style={styles.container}>
@@ -97,8 +103,8 @@ const ResetPassword: React.FC = () => {
 
         <TextInput
           style={[styles.input, passwordError ? styles.inputError : {}]}
-          placeholder="Enter your new password"
-          placeholderTextColor="#888"
+          placeholder='Enter your new password'
+          placeholderTextColor='#888'
           secureTextEntry
           value={newPassword}
           onChangeText={handlePasswordChange}
@@ -107,8 +113,8 @@ const ResetPassword: React.FC = () => {
 
         <TextInput
           style={[styles.input, confirmPasswordError ? styles.inputError : {}]}
-          placeholder="Confirm your new password"
-          placeholderTextColor="#888"
+          placeholder='Confirm your new password'
+          placeholderTextColor='#888'
           secureTextEntry
           value={confirmPassword}
           onChangeText={handleConfirmPasswordChange}
@@ -134,7 +140,9 @@ const ResetPassword: React.FC = () => {
           >
             - At least one lowercase letter
           </Text>
-          <Text style={[styles.criteria, /\d/.test(newPassword) && styles.valid]}>
+          <Text
+            style={[styles.criteria, /\d/.test(newPassword) && styles.valid]}
+          >
             - At least one number
           </Text>
           <Text
@@ -148,8 +156,8 @@ const ResetPassword: React.FC = () => {
         </View>
 
         <CustomButton
-          text={isLoading ? "Resetting..." : "Reset Password"}
-          color="blue"
+          text={isLoading ? 'Resetting...' : 'Reset Password'}
+          color='blue'
           onPress={handleSubmit}
         />
       </View>
@@ -159,61 +167,61 @@ const ResetPassword: React.FC = () => {
 
 const styles = StyleSheet.create({
   backgroundImage: {
-    justifyContent: "center",
-    alignItems: "center",
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   container: {
-    width: "85%",
+    width: '85%',
     padding: 16,
-    backgroundColor: "rgba(255, 255, 255, 0.85)",
+    backgroundColor: 'rgba(255, 255, 255, 0.85)',
     borderRadius: 10,
-    alignItems: "center",
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.25,
-    shadowRadius: 4,
+    alignItems: 'center',
+    boxShadowColor: '#000',
+    boxShadowOffset: { width: 0, height: 2 },
+    boxShadowOpacity: 0.25,
+    boxShadowRadius: 4,
     elevation: 5,
   },
   title: {
     fontSize: 28,
-    fontWeight: "bold",
-    color: "#333",
+    fontWeight: 'bold',
+    color: '#333',
     marginBottom: 20,
   },
   input: {
-    width: "100%",
+    width: '100%',
     padding: 12,
     marginVertical: 10,
     borderWidth: 1,
-    borderColor: "#ccc",
+    borderColor: '#ccc',
     borderRadius: 5,
-    backgroundColor: "#fff",
+    backgroundColor: '#fff',
     fontSize: 16,
   },
   inputError: {
-    borderColor: "red",
+    borderColor: 'red',
   },
   criteriaContainer: {
-    width: "100%",
+    width: '100%',
     marginVertical: 20,
   },
   criteriaTitle: {
     fontSize: 16,
-    fontWeight: "bold",
-    color: "#333",
+    fontWeight: 'bold',
+    color: '#333',
     marginBottom: 8,
   },
   criteria: {
     fontSize: 14,
-    color: "#888",
+    color: '#888',
     marginVertical: 2,
   },
   valid: {
-    color: "#049500",
-    fontWeight: "bold",
+    color: '#049500',
+    fontWeight: 'bold',
   },
   errorText: {
-    color: "red",
+    color: 'red',
     fontSize: 12,
     marginTop: 5,
   },

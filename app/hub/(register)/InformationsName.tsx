@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState } from 'react';
 import {
   View,
   Text,
@@ -6,32 +6,32 @@ import {
   StyleSheet,
   ImageBackground,
   useWindowDimensions,
-} from "react-native";
-import { useRouter } from "expo-router";
-import ButtonInscriptionLogin from "@/components/ButtonInscriptionLogin";
-import { useUser } from "@/app/hub/(register)/userInfoContext/UserInfo";
+} from 'react-native';
+import { useRouter } from 'expo-router';
+import ButtonInscriptionLogin from '@/components/ButtonInscriptionLogin';
+import { useUser } from '@/app/hub/(register)/userInfoContext/UserInfo';
 
 function InformationsName() {
   const router = useRouter();
   const { updateUser } = useUser();
 
-  const [firstName, setFirstName] = useState("");
-  const [lastName, setLastName] = useState("");
-  const [errors, setErrors] = useState({ firstName: "", lastName: "" });
+  const [firstName, setFirstName] = useState('');
+  const [lastName, setLastName] = useState('');
+  const [errors, setErrors] = useState({ firstName: '', lastName: '' });
 
   const { width, height } = useWindowDimensions();
 
   const handleContinue = async () => {
     let hasErrors = false;
-    const newErrors = { firstName: "", lastName: "" };
+    const newErrors = { firstName: '', lastName: '' };
 
     if (!firstName) {
-      newErrors.firstName = "First name is required.";
+      newErrors.firstName = 'First name is required.';
       hasErrors = true;
     }
 
     if (!lastName) {
-      newErrors.lastName = "Last name is required.";
+      newErrors.lastName = 'Last name is required.';
       hasErrors = true;
     }
 
@@ -41,18 +41,18 @@ function InformationsName() {
 
     // Met à jour les données de l'utilisateur dans le contexte
     updateUser({ firstName, lastName });
-    router.push("/hub/InformationsIdentity");
+    router.push('/hub/InformationsIdentity');
   };
 
   return (
     <View style={styles.container}>
       <ImageBackground
-        source={require("../../../assets/images/bgInformationsName.png")}
+        source={require('../../../assets/images/bgInformationsName.png')}
         style={[styles.backgroundImage, { width, height }]}
       >
         <View style={[styles.content, { marginTop: height * 0.01 }]}>
           <Text style={[styles.title, { fontSize: height * 0.025 }]}>
-            Let’s get started! {"\n"} Let’s start with your {"\n"} name
+            Let’s get started! {'\n'} Let’s start with your {'\n'} name
           </Text>
           <Text style={[styles.detailsContent, { fontSize: height * 0.02 }]}>
             Enter your first and last name exactly as written on your passport
@@ -66,12 +66,12 @@ function InformationsName() {
                 { fontSize: height * 0.02 },
                 errors.firstName ? styles.inputError : null,
               ]}
-              placeholder="First Name"
-              placeholderTextColor="#888"
+              placeholder='First Name'
+              placeholderTextColor='#888'
               value={firstName}
               onChangeText={(text) => {
                 setFirstName(text);
-                if (text) setErrors((prev) => ({ ...prev, firstName: "" }));
+                if (text) setErrors((prev) => ({ ...prev, firstName: '' }));
               }}
             />
             {errors.firstName ? (
@@ -86,12 +86,12 @@ function InformationsName() {
                 { fontSize: height * 0.02 },
                 errors.lastName ? styles.inputError : null,
               ]}
-              placeholder="Last Name"
-              placeholderTextColor="#888"
+              placeholder='Last Name'
+              placeholderTextColor='#888'
               value={lastName}
               onChangeText={(text) => {
                 setLastName(text);
-                if (text) setErrors((prev) => ({ ...prev, lastName: "" }));
+                if (text) setErrors((prev) => ({ ...prev, lastName: '' }));
               }}
             />
             {errors.lastName ? (
@@ -100,8 +100,8 @@ function InformationsName() {
           </View>
 
           <ButtonInscriptionLogin
-            text="Continue"
-            color="blue"
+            text='Continue'
+            color='blue'
             onPress={handleContinue}
           />
         </View>
@@ -113,57 +113,57 @@ function InformationsName() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#000",
+    backgroundColor: '#000',
   },
   backgroundImage: {
     flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   content: {
-    width: "70%",
+    width: '70%',
     padding: 16,
-    backgroundColor: "rgba(255, 255, 255, 0.7)",
+    backgroundColor: 'rgba(255, 255, 255, 0.7)',
     borderRadius: 25,
-    alignItems: "center",
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.25,
-    shadowRadius: 4,
+    alignItems: 'center',
+    boxShadowColor: '#000',
+    boxShadowOffset: { width: 0, height: 2 },
+    boxShadowOpacity: 0.25,
+    boxShadowRadius: 4,
     elevation: 5,
   },
   title: {
-    fontWeight: "bold",
-    color: "#606060",
-    textAlign: "center",
+    fontWeight: 'bold',
+    color: '#606060',
+    textAlign: 'center',
   },
   detailsContent: {
-    color: "#606060",
-    textAlign: "center",
+    color: '#606060',
+    textAlign: 'center',
     paddingTop: 10,
     marginBottom: 10,
   },
   inputContainer: {
-    width: "100%",
+    width: '100%',
   },
   input: {
-    width: "93%",
+    width: '93%',
     padding: 12,
     marginVertical: 10,
     borderWidth: 1,
-    borderColor: "#606060",
+    borderColor: '#606060',
     borderRadius: 5,
-    backgroundColor: "rgba(255, 255, 255, 0.3)",
+    backgroundColor: 'rgba(255, 255, 255, 0.3)',
   },
   inputError: {
-    borderColor: "red",
+    borderColor: 'red',
   },
   errorText: {
-    color: "red",
+    color: 'red',
     fontSize: 12,
     marginTop: -8,
     marginBottom: 10,
-    marginLeft: "3.5%",
+    marginLeft: '3.5%',
   },
 });
 

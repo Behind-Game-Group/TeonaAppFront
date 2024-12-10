@@ -1,6 +1,18 @@
-import React, {useEffect, useState } from 'react';
-import {View, Text, TouchableOpacity, StyleSheet, Image, Dimensions} from 'react-native';
-import { useRouter, RelativePathString, ExternalPathString, usePathname } from 'expo-router';
+import React, { useEffect, useState } from 'react';
+import {
+  View,
+  Text,
+  TouchableOpacity,
+  StyleSheet,
+  Image,
+  Dimensions,
+} from 'react-native';
+import {
+  useRouter,
+  RelativePathString,
+  ExternalPathString,
+  usePathname,
+} from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
 import { NavigationOptions } from 'expo-router/build/global-state/routing';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -10,41 +22,47 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 //   onPress: () => void;
 // };
 
-type RoutePath = '/' | '/wallet/TopUp' | '/wallet/PaymentDisplay' | '/wallet/FormTeonaPass' | '/wallet/TopUpFares';
+type RoutePath =
+  | '/'
+  | '/wallet/TopUp'
+  | '/wallet/PaymentDisplay'
+  | '/wallet/FormTeonaPass'
+  | '/wallet/TopUpFares';
 
-type PathOption = { path: string; title: string; back: RoutePath; };
-
+type PathOption = { path: string; title: string; back: RoutePath };
 
 const windowDimensions = Dimensions.get('window');
 const screenDimensions = Dimensions.get('screen');
 
-const MenuTop: React.FC = ({
-  // text,
-  // onPress
-}) => {
+const MenuTop: React.FC = (
+  {
+    // text,
+    // onPress
+  },
+) => {
   const router = useRouter();
   const [showMenu, setShowMenu] = useState<boolean>(false);
-    const [isDesktop, setIsDesktop] = useState <boolean>(false);
-    // useEffect(() => {
-    //       const handleResize = () => {
-    //           setIsDesktop(Dimensions.get('window').width >= 1024);
-    //       };
-    //       handleResize(); // Initialiser
-    //       Dimensions.addEventListener('change', handleResize ); // Ajouter un écouteur
+  const [isDesktop, setIsDesktop] = useState<boolean>(false);
+  // useEffect(() => {
+  //       const handleResize = () => {
+  //           setIsDesktop(Dimensions.get('window').width >= 1024);
+  //       };
+  //       handleResize(); // Initialiser
+  //       Dimensions.addEventListener('change', handleResize ); // Ajouter un écouteur
 
-    //       return () => {
-    //           Dimensions.removeEventListener('change', handleResize);  // Nettoyer
-    //       };
-    //   }, []);
+  //       return () => {
+  //           Dimensions.removeEventListener('change', handleResize);  // Nettoyer
+  //       };
+  //   }, []);
 
   /**
    * Test à partir de la doc : "https://reactnative.dev/docs/0.74/dimensions"
-  */
+   */
   /**
-   * Tableau des différents chemin "path" possible 
-   * ainsi que le "title" des pages qui y sont liées 
+   * Tableau des différents chemin "path" possible
+   * ainsi que le "title" des pages qui y sont liées
    * et "back" pour la route du retour en arrière
-   */ 
+   */
   const pathOptions: PathOption[] = [
     { path: '/wallet/TopUp', title: 'TopUp Fares', back: '/' },
     { path: '/wallet/PaymentDisplay', title: 'Payment', back: '/wallet/TopUp' },
@@ -60,8 +78,7 @@ const MenuTop: React.FC = ({
       'change',
       ({ window, screen }) => {
         setDimensions({ window, screen });
-      }
-      
+      },
     );
     return () => subscription?.remove();
   });
@@ -76,72 +93,79 @@ const MenuTop: React.FC = ({
 
   return (
     <>
-    <StatusBar style={"light"} backgroundColor="#599AD0" />
-    <View style={[styles.header]}>
-      <TouchableOpacity 
-        style={styles.viewEnd}
-        onPress={() => {
-          const currentOption = pathOptions.find(option => option.path === pathname);
-          if (currentOption?.back) {
-            try {
-              router.push(currentOption.back);
-            }
-            catch (error) { console.error(`Navigation error: ${error}`); }
-          } else {
-            router.back();
-          }
-        }} >
-        <Image source={require('@/assets/images/chevron-bottom-normal.png')} style={styles.image} />
-      </TouchableOpacity>
-
-      <View style={[styles.viewCenter]}>
-        <Text style={styles.title}>
-          {
-            /*Rechercher l'objet correspondant au path dans pathOptions et afficher la valeur du title lié en tant que titre*/
-            pathOptions.find(option => option.path === pathname)?.title || 'Page Not Found'
-          }
-        </Text>
-      </View> {/* Titre */}
-
-      {/* Menu Burger ou Navbar */}
-      {isDesktop ? (
-        <View style={styles.navbar}>
-          <Text style={styles.navItem}>Home</Text>
-          <Text style={styles.navItem}>About</Text>
-          <Text style={styles.navItem}>Contact</Text>
-        </View>
-      ) : (
+      <StatusBar style={'light'} backgroundColor='#599AD0' />
+      <View style={[styles.header]}>
         <TouchableOpacity
-          style={[styles.viewStart]}
-          onPress={() => setShowMenu(!showMenu)}
+          style={styles.viewEnd}
+          onPress={() => {
+            const currentOption = pathOptions.find(
+              (option) => option.path === pathname,
+            );
+            if (currentOption?.back) {
+              try {
+                router.push(currentOption.back);
+              } catch (error) {
+                console.error(`Navigation error: ${error}`);
+              }
+            } else {
+              router.back();
+            }
+          }}
         >
-          <Text style={styles.menu}>☰</Text> {/* Menu Burger */}
+          <Image
+            source={require('@/assets/images/chevron-bottom-normal.png')}
+            style={styles.image}
+          />
         </TouchableOpacity>
-      )}
-    </View>
-
-    {/* Drawer pour le menu burger sur mobile */}
-    {showMenu && !isDesktop && (
-      <View style={styles.drawer}>
-        <Text style={styles.drawerItem} onPress={() => setShowMenu(false)}>
-          Home
-        </Text>
-        <Text style={styles.drawerItem} onPress={() => setShowMenu(false)}>
-          About
-        </Text>
-        <Text style={styles.drawerItem} onPress={() => setShowMenu(false)}>
-          Contact
-        </Text>
+        <View style={[styles.viewCenter]}>
+          <Text style={styles.title}>
+            {
+              /*Rechercher l'objet correspondant au path dans pathOptions et afficher la valeur du title lié en tant que titre*/
+              pathOptions.find((option) => option.path === pathname)?.title ||
+                'Page Not Found'
+            }
+          </Text>
+        </View>{' '}
+        {/* Titre */}
+        {/* Menu Burger ou Navbar */}
+        {isDesktop ? (
+          <View style={styles.navbar}>
+            <Text style={styles.navItem}>Home</Text>
+            <Text style={styles.navItem}>About</Text>
+            <Text style={styles.navItem}>Contact</Text>
+          </View>
+        ) : (
+          <TouchableOpacity
+            style={[styles.viewStart]}
+            onPress={() => setShowMenu(!showMenu)}
+          >
+            <Text style={styles.menu}>☰</Text> {/* Menu Burger */}
+          </TouchableOpacity>
+        )}
       </View>
-    )}
 
-    {/* Contenu principal */}
-    {/* <View style={styles.content}>
+      {/* Drawer pour le menu burger sur mobile */}
+      {showMenu && !isDesktop && (
+        <View style={styles.drawer}>
+          <Text style={styles.drawerItem} onPress={() => setShowMenu(false)}>
+            Home
+          </Text>
+          <Text style={styles.drawerItem} onPress={() => setShowMenu(false)}>
+            About
+          </Text>
+          <Text style={styles.drawerItem} onPress={() => setShowMenu(false)}>
+            Contact
+          </Text>
+        </View>
+      )}
+
+      {/* Contenu principal */}
+      {/* <View style={styles.content}>
       <Text>Contenu principal de l'application.</Text>
     </View> */}
-  </>
+    </>
   );
-}
+};
 
 // Styles
 const styles = StyleSheet.create({
@@ -154,18 +178,18 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
     paddingVertical: 10,
   },
-  viewEnd: { 
-    alignItems: 'center', 
-    justifyContent : 'flex-end', 
+  viewEnd: {
+    alignItems: 'center',
+    justifyContent: 'flex-end',
     height: '100%',
     width: 40,
-    },
- viewCenter: {
+  },
+  viewCenter: {
     height: '100%',
     // backgroundColor: 'green',
-    justifyContent: 'center'
+    justifyContent: 'center',
   },
- viewStart: {
+  viewStart: {
     alignItems: 'center',
     justifyContent: 'flex-start',
     height: '60%',
@@ -187,7 +211,7 @@ const styles = StyleSheet.create({
     height: 40,
     resizeMode: 'contain',
     alignSelf: 'center',
-},
+  },
   menu: {
     color: '#fff',
     fontSize: 24,
@@ -203,29 +227,29 @@ const styles = StyleSheet.create({
     gap: 16,
   },
   navItem: {
-      color: '#FFFFFF',
-      fontSize: 16,
-      paddingHorizontal: 8,
-      paddingVertical: 4,
+    color: '#FFFFFF',
+    fontSize: 16,
+    paddingHorizontal: 8,
+    paddingVertical: 4,
   },
   drawer: {
-      position: 'absolute',
-      zIndex: 2,
-      top: 60,
-      right: 0,
-      backgroundColor: '#FFFFFF',
-      width: '50%',
-      shadowColor: '#000',
-      shadowOffset: { width: 0, height: 2 },
-      shadowOpacity: 0.25,
-      shadowRadius: 4,
-      elevation: 5,
-      padding: 16,
+    position: 'absolute',
+    zIndex: 2,
+    top: 60,
+    right: 0,
+    backgroundColor: '#FFFFFF',
+    width: '50%',
+    boxShadowColor: '#000',
+    boxShadowOffset: { width: 0, height: 2 },
+    boxShadowOpacity: 0.25,
+    boxShadowRadius: 4,
+    elevation: 5,
+    padding: 16,
   },
   drawerItem: {
-      fontSize: 18,
-      marginVertical: 8,
-      color: '#333',
+    fontSize: 18,
+    marginVertical: 8,
+    color: '#333',
   },
 });
 
