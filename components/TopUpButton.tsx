@@ -5,17 +5,19 @@ interface OrangeButtonProps {
   title: string; // Texte du bouton
   onPress: () => void; // Fonction à exécuter lors du clic
   style?: object; // Style supplémentaire optionnel
+  light?: boolean;
 }
 
 const OrangeButton: React.FC<OrangeButtonProps> = ({
   title,
   onPress,
   style,
+  light,
 }) => {
   console.log(onPress);
   return (
     <TouchableOpacity style={[styles.button, style]} onPress={onPress}>
-      <Text style={styles.buttonText}>{title}</Text>
+      <Text style={[styles.buttonText, light && styles.light]}>{title}</Text>
     </TouchableOpacity>
   );
 };
@@ -33,6 +35,9 @@ const styles = StyleSheet.create({
     color: '#FFA500',
     fontSize: 16,
     fontWeight: 'bold',
+  },
+  light: {
+    color: '#FFFFFF',
   },
 });
 

@@ -67,6 +67,8 @@ const MenuTop: React.FC = (
     { path: '/wallet/PaymentDisplay', title: 'Payment', back: '/wallet/TopUp' },
     { path: '/wallet/FormTeonaPass', title: 'Our Cards', back: '/' },
     { path: '/wallet/PurchaseForm', title: 'Our Cards', back: '/' },
+    { path: '/wallet/successTransction', title: ' ', back: '/' },
+    { path: '/wallet/congrat', title: 'congrats !', back: '/' },
   ];
   const [dimensions, setDimensions] = useState({
     window: windowDimensions,
@@ -93,7 +95,12 @@ const MenuTop: React.FC = (
   return (
     <>
       <StatusBar style={'light'} backgroundColor='#599AD0' />
-      <View style={[styles.header]}>
+      <View
+        style={[
+          styles.header,
+          pathname.match('successTransction') ? styles.darck : '',
+        ]}
+      >
         <TouchableOpacity
           style={styles.viewEnd}
           onPress={() => {
@@ -168,6 +175,7 @@ const MenuTop: React.FC = (
 
 // Styles
 const styles = StyleSheet.create({
+  darck: { backgroundColor: '#606060' },
   header: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -196,7 +204,7 @@ const styles = StyleSheet.create({
     // backgroundColor: 'red',
   },
   back: {
-    color: '#fff',
+    color: '#FFF',
     fontSize: 18,
   },
   title: {
