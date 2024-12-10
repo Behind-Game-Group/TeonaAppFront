@@ -12,8 +12,10 @@ import {
 import axios from 'axios';
 import { useRouter } from 'expo-router';
 
+
 // import Subtitles from 'react-native-subtitles';
 // import { OrderBlueCard } from '/assets/images/OrderBlueCard.png';
+
 
 // Tu peux créer une interface ici pour typer ta constante d'erreur voir le mettre dans un fichier à part dans un dossier "types" ou "interfaces" à la racine de ton projet avec un export default et pouvoir l'importer ici
 interface Errors {
@@ -26,6 +28,7 @@ interface Errors {
   countryCode: string;
   country: string;
 }
+
 
 const PurchaseForm: React.FC = () => {
   const router = useRouter();
@@ -41,6 +44,7 @@ const PurchaseForm: React.FC = () => {
   const [postalCode, setPostalCode] = useState<string>('');
   const [loading, setLoading] = useState<boolean>(false);
 
+
   //!\ Utiliser l'interface Errors de la ligne ≃ 27 pour typer les valeurs des champs de cette constante /!\
   const [errors, setErrors] = useState<Errors>({
     firstName: '',
@@ -53,22 +57,25 @@ const PurchaseForm: React.FC = () => {
     country: '',
   });
 
+
   const validateFields = () => {
     const newErrors: typeof errors = {
-      firstName: firstName ? '' : 'First Name is required.',
-      lastName: lastName ? '' : 'Last Name is required.',
+      firstName: firstName ? '' : '',
+      lastName: lastName ? '' : '',
       //address: address ? '' : 'Address is required.',
-      streetName: streetName ? '' : 'Number and Street  are required.',
-      Optional: Optional ? '' : ' is optional.',
-      postalCode: postalCode ? '' : 'Postal Code is required.',
+      streetName: streetName ? '' : '',
+      Optional: Optional ? '' : ' ',
+      postalCode: postalCode ? '' : '',
 
-      city: city ? '' : 'City is required.',
-      countryCode: countryCode ? '' : 'CountryCode is required.',
-      country: country ? '' : 'Country is required.',
+
+      city: city ? '' : '',
+      countryCode: countryCode ? '' : '',
+      country: country ? '' : '',
     };
     setErrors(newErrors);
     return !Object.values(newErrors).some((error) => error !== '');
   };
+
 
   const handleSubmit = () => {
     if (!validateFields()) {
@@ -79,7 +86,9 @@ const PurchaseForm: React.FC = () => {
       return;
     }
 
+
     setLoading(true);
+
 
     try {
       const response = axios.post('XXXXXXXXXXXXXXXXXXXXXXXX', {
@@ -90,11 +99,13 @@ const PurchaseForm: React.FC = () => {
         postalCode,
       });
 
+
       // Cas succès
       Alert.alert('Success', 'Address submitted successfully!');
       router.push('/'); // Redirige après le succès
     } catch (error: unknown) {
       console.error(error);
+
 
       let errorMessage = 'An error occurred. Please try again.';
       if (axios.isAxiosError(error) && error.response) {
@@ -106,11 +117,10 @@ const PurchaseForm: React.FC = () => {
     }
   };
 
+
   return (
     <ScrollView contentContainerStyle={styles.container}>
-      <Text style={styles.title}>Our cards </Text>
-
-      <Text style={[styles.subtitles, { color: '#df8D22' }]}>
+      <Text style={[styles.subtitles, { color: '#df8D22', marginTop: 15 }]}>
         Fill this out and you will have it delivered to your door
       </Text>
       {/* L'utilisation de la balise <Image/> ce fait comme suit, en utilisant les attributs source et la méthode require pour renseigner le chemin du fichier d'image à afficher ; l'import ne fonctionnait pas pour toi car il te manque le fichier "declarations.d.ts" à la racine de ton projet "./TeonaAppFront/declarations.d.ts" qui permet de définir les différents types de fichier d'image que Typescript doit prendre en compte ; je te fournirais un exemple de ce fichier */}
@@ -134,7 +144,7 @@ const PurchaseForm: React.FC = () => {
         }}
       >
         <View style={{ width: '49%', flexDirection: 'column', gap: 2 }}>
-          <Text> First name*</Text>
+          <Text style={{ marginLeft: 10 }}>First name*</Text>
           <TextInput
             style={[styles.input, errors.firstName && styles.errorInput]}
             value={firstName}
@@ -142,7 +152,7 @@ const PurchaseForm: React.FC = () => {
           />
         </View>
         <View style={{ width: '49%', flexDirection: 'column', gap: 2 }}>
-          <Text>Last Name</Text>
+          <Text style={{ marginLeft: 10 }}>Last name*</Text>
           <TextInput
             style={[styles.input, errors.lastName && styles.errorInput]}
             value={lastName}
@@ -151,15 +161,14 @@ const PurchaseForm: React.FC = () => {
         </View>
       </View>
 
-      {errors.firstName ? (
-        <Text style={styles.errorText}>{errors.firstName}</Text>
-      ) : null}
 
       {errors.lastName ? (
         <Text style={styles.errorText}>{errors.lastName}</Text>
       ) : null}
 
-      <Text>Address*</Text>
+
+      <Text style={{ marginLeft: 10 }}>Address*</Text>
+
 
       <TextInput
         style={[styles.input, errors.city && styles.errorInput]}
@@ -172,6 +181,7 @@ const PurchaseForm: React.FC = () => {
         placeholder='Address line2 (optional) '
         value={Optional}
       />
+
 
       {/* Nouvel exemple de comment structurer tes input sur une ligne en CSS avec un premier conteneur en flexDirection row qui permet d'afficher tous les éléments de ce conteneur sur une seule et même ligne ainsi qu'un justifyContent flex-start qui permet de positionner chaque éléments (au début) à gauche de l'écran. Conteneur qui contiendra deux autres conteneurs qui eux contiendront chaque text et chaque input en flexDirection column pour les afficher en column et gap 2 pour mettre un espace entre les deux éléments de ces deux conteneurs. */}
       <View
@@ -187,11 +197,12 @@ const PurchaseForm: React.FC = () => {
           style={{
             flexDirection: 'column',
             gap: 2,
-            width: '25%',
+            width: 94,
             height: 'auto',
           }}
         >
-          <Text>Post Code*</Text>
+          <Text style={{ marginLeft: 10 }}>Post code*</Text>
+
 
           <TextInput
             style={[
@@ -208,6 +219,7 @@ const PurchaseForm: React.FC = () => {
           />
         </View>
 
+
         <View
           style={{
             flexDirection: 'column',
@@ -216,7 +228,8 @@ const PurchaseForm: React.FC = () => {
             height: 'auto',
           }}
         >
-          <Text>City*</Text>
+          <Text style={{ marginLeft: 10 }}>City*</Text>
+
 
           <TextInput
             style={[
@@ -233,50 +246,73 @@ const PurchaseForm: React.FC = () => {
         </View>
       </View>
 
+
       {errors.postalCode ? (
         <Text style={styles.errorText}>{errors.postalCode}</Text>
       ) : null}
 
+
       {errors.city ? <Text style={styles.errorText}>{errors.city}</Text> : null}
+
 
       <View
         style={{
-          width: '100%',
+          width: '25%',
           flexDirection: 'row',
-          justifyContent: 'space-between',
-          gap: 97,
+          justifyContent: 'flex-start',
+          gap: 12,
         }}
       >
-        <View style={{ width: '49%', flexDirection: 'column', gap: 2 }}>
-          <Text>Country</Text>
+        <View style={{ flexDirection: 'column', width: '100%' }}>
+          <Text style={{ marginLeft: 10 }}>Country*</Text>
 
-          <TextInput
-            style={[styles.input, errors.postalCode && styles.errorInput]}
-            placeholder='+995'
-            keyboardType='numeric'
-            value={countryCode}
-            onChangeText={setCountryCode}
-          />
-          {errors.countryCode ? (
-            <Text style={styles.errorText}>{errors.countryCode}</Text>
-          ) : null}
-        </View>
 
-        <View style={{ width: '49%', flexDirection: 'column', gap: 2 }}>
-          <TextInput
-            style={[styles.input, errors.postalCode && styles.errorInput]}
-            value={country}
-            onChangeText={setCountry}
-          />
-          {errors.country ? (
-            <Text style={styles.errorText}>{errors.country}</Text>
+          <View style={{ flexDirection: 'row', alignItems: 'center', gap: 5 }}>
+            <View
+              style={{ flexDirection: 'row', alignItems: 'center', gap: 5 }}
+            >
+              <TextInput
+                style={[
+                  styles.input,
+                  errors.countryCode && styles.errorInput,
+                  { width: 50 },
+                ]}
+                placeholder='+995'
+                keyboardType='numeric'
+                value={countryCode}
+                onChangeText={setCountryCode}
+              />
+            </View>
+
+
+            <TextInput
+              style={[
+                styles.input,
+                errors.country && styles.errorInput,
+                { width: 145 },
+              ]}
+              value={country}
+              onChangeText={setCountry}
+            />
+          </View>
+          {errors.countryCode || errors.country ? (
+            <View>
+              {errors.countryCode ? (
+                <Text style={styles.errorText}>{errors.countryCode}</Text>
+              ) : null}
+              {errors.country ? (
+                <Text style={styles.errorText}>{errors.country}</Text>
+              ) : null}
+            </View>
           ) : null}
         </View>
       </View>
 
-      <Text style={{ textAlign: 'center', marginTop: 20 }}>
+
+      <Text style={{ textAlign: 'left', marginTop: 20 }}>
         Your card will arrive at your door within 7 working days
       </Text>
+
 
       <TouchableOpacity
         style={[
@@ -295,6 +331,7 @@ const PurchaseForm: React.FC = () => {
     </ScrollView>
   );
 };
+
 
 const styles = StyleSheet.create({
   container: {
@@ -352,4 +389,8 @@ const styles = StyleSheet.create({
   },
 });
 
+
 export default PurchaseForm;
+
+
+
