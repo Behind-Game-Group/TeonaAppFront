@@ -35,7 +35,7 @@ const PurchaseForm: React.FC = () => {
   const [lastName, setLastName] = useState<string>('');
   const [address, setAddress] = useState<string>('');
   const [streetName, setStreetName] = useState<string>('');
-  const [Optional, setOptional] =useState<string>('');
+  const [Optional, setOptional] = useState<string>('');
   const [countryCode, setCountryCode] = useState<string>('');
   const [country, setCountry] = useState<string>('');
   const [city, setCity] = useState<string>('');
@@ -186,13 +186,11 @@ const PurchaseForm: React.FC = () => {
         ) : null}
 
         {/* Champ d'entrée optionnel */}
-
         <TextInput
           style={[styles.input]}
           placeholder='Address line2 (optional)'
           value={Optional}
-          onChangeText={setStreetName}
-        
+          onChangeText={(text) => setOptional(text)} // Met à jour l'état "Optional"
         />
       </View>
 
@@ -291,10 +289,8 @@ const PurchaseForm: React.FC = () => {
                 placeholder='+995'
                 keyboardType='numeric'
                 value={countryCode}
-                onChangeText={setCountryCode}
+                onChangeText={(text) => setCountryCode(text)}
               />
-
-             
             </View>
 
             <TextInput
@@ -307,11 +303,7 @@ const PurchaseForm: React.FC = () => {
               onChangeText={setCountry}
             />
           </View>
-          {errors.countryCode || errors.country ? (
-            <View>
-         
-            </View>
-          ) : null}
+          {errors.countryCode || errors.country ? <View></View> : null}
         </View>
       </View>
 
