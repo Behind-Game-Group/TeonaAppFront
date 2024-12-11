@@ -13,8 +13,8 @@ import * as ImagePicker from "expo-image-picker";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import ButtonTeonaPass from "@/components/ButtonTeonaPass";
 import * as SecureStore from "expo-secure-store";
-//import jwtDecode from "jwt-decode";
 import { Platform } from "react-native";
+import { useRouter } from "expo-router";
 
 function FormTeonaPass() {
   const [firstName, setFirstName] = useState<string>("");
@@ -30,6 +30,8 @@ function FormTeonaPass() {
   const [email, setEmail] = useState<string | null>(null);
   const [userId, setUserId] = useState("");
   const [token, setToken] = useState("");
+
+  const router = useRouter();
 
   const requestPermissions = async () => {
     const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
@@ -80,9 +82,10 @@ function FormTeonaPass() {
 
   useEffect(() => {
     const fetchUserData = async () => {
-      let userId = null;
-      let token = null;
       try {
+        let userId = null;
+        let token = null;
+
         if (Platform.OS === "web") {
           userId = localStorage.getItem("userId");
           token = localStorage.getItem("authToken");
@@ -91,28 +94,21 @@ function FormTeonaPass() {
           token = await SecureStore.getItemAsync("authToken");
         }
 
-        if (!userId) {
-          console.error("No token found");
-          Alert.alert("Error", "No authentication token found.");
-          return;
-        }
         if (token) {
           setToken(token);
-          console.log("token:", token);
+          console.log("Token found:", token);
         } else {
-          console.error("token not found ");
-          Alert.alert("Error", "Invalid token structure.");
+          console.warn("Token not found");
         }
+
         if (userId) {
           setUserId(userId);
-          console.log("User ID:", userId);
+          console.log("User ID found:", userId);
         } else {
-          console.error("User ID not found");
-          Alert.alert("Error", "Invalid token structure.");
+          console.warn("User ID not found");
         }
       } catch (error) {
-        console.error("Error decoding token:", error);
-        Alert.alert("Error", "Failed to decode token.");
+        console.error("Error fetching user data:", error);
       }
     };
 
@@ -131,18 +127,24 @@ function FormTeonaPass() {
         phoneNumber,
         country,
         image,
-        ...(userId && { userId }),
+        userId,
       };
-      const response = await fetch("http://localhost:8082/api/add/adress", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          ...(token && { Authorization: `Bearer ${token}` }),
-        },
-        body: JSON.stringify(formData),
-      });
+      const response = await fetch(
+        "http://localhost:8082/api/add/saveAddress",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            ...(token && { Authorization: `Bearer ${token}` }),
+          },
+          body: JSON.stringify(formData),
+        }
+      );
+
       if (response.ok) {
         Alert.alert("Success", "Form submitted successfully.");
+
+        router.push("/wallet/TopupFares");
       } else {
         Alert.alert("Error", "Failed to submit the form.");
       }
@@ -174,7 +176,6 @@ function FormTeonaPass() {
             />
           )}
 
-          {/* Bouton pour ajouter une image */}
           <TouchableOpacity
             style={styles.addImageButton}
             onPress={() => setModalVisible(true)}
@@ -182,7 +183,6 @@ function FormTeonaPass() {
             <Text style={styles.addImageButtonText}>+</Text>
           </TouchableOpacity>
 
-          {/* Modal pour les options */}
           <Modal
             transparent={true}
             animationType="slide"
@@ -280,7 +280,7 @@ function FormTeonaPass() {
             />
           </View>
           <Text style={styles.details}>
-            Your card will arrive to your door within the next 7 working days).
+            Your card will arrive to your door within the next 7 working days.
           </Text>
         </View>
         <ButtonTeonaPass text="Continue" onPress={handleSubmit} />

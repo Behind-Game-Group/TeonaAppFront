@@ -47,12 +47,15 @@ const ForgotPassword: React.FC = () => {
       );
 
       // Success
-      setSuccessMessage(response.data.message || `A reset link has been sent to ${email}.`);
+      setSuccessMessage(
+        response.data.message || `A reset link has been sent to ${email}.`
+      );
       setEmail("");
       router.push("/hub/(login)/ResetPassword");
     } catch (error: any) {
       // Error
-      const errorMessage = error.response?.data?.message || "An error occurred. Please try again.";
+      const errorMessage =
+        error.response?.data?.message || "An error occurred. Please try again.";
       setErrorMessage(errorMessage);
     } finally {
       setLoading(false);
@@ -80,8 +83,12 @@ const ForgotPassword: React.FC = () => {
           onChangeText={setEmail}
         />
 
-        {errorMessage && <Text style={styles.errorMessage}>{errorMessage}</Text>}
-        {successMessage && <Text style={styles.successMessage}>{successMessage}</Text>}
+        {errorMessage && (
+          <Text style={styles.errorMessage}>{errorMessage}</Text>
+        )}
+        {successMessage && (
+          <Text style={styles.successMessage}>{successMessage}</Text>
+        )}
 
         <CustomButton
           text={loading ? "Sending..." : "Send Reset Link"}
@@ -104,7 +111,8 @@ const styles = StyleSheet.create({
     backgroundColor: "rgba(255, 255, 255, 0.85)",
     borderRadius: 10,
     alignItems: "center",
-    shadowColor: "#000",
+    boxShadow: "0px 2px 8px rgba(0, 0, 0, 0.2)",
+    // shadowColor: "#000",
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.25,
     shadowRadius: 4,
