@@ -8,7 +8,7 @@ import {
   TextInput,
   Pressable,
 } from 'react-native';
-import { useLocalSearchParams } from 'expo-router';
+import { router, useLocalSearchParams } from 'expo-router';
 import ButtonWallet from '@/components/ButtonWallet';
 
 const CardPaymentPage: React.FC = () => {
@@ -103,7 +103,15 @@ const CardPaymentPage: React.FC = () => {
         </Text>
       </View>
 
-      <ButtonWallet text='Continue' onPress={() => console.log('Purchased')} />
+      <ButtonWallet
+        text='Continue'
+        onPress={() => {
+          router.push({
+            pathname: '/wallet/(successTransction)/successTransction',
+            params: { cardType, currentBalance },
+          });
+        }}
+      />
 
       {/*<PaymentOptions price={currentBalance} cardType={cardType}/>*/}
     </View>
