@@ -82,15 +82,32 @@ const PurchaseForm: React.FC = () => {
     }
 
     setLoading(true);
-
+/**
+ * {
+  "firstName":"james",
+  "lastName":"camerone",
+  "streetName":"16 rue du country",
+  "streetNameOptional": "",
+  "postCode":"75000",
+  "city":"Paris",
+  "phoneNumber":"+336708970",
+  "country":"France",
+  "image":"img"
+}
+ */
     try {
-      const response = axios.post('XXXXXXXXXXXXXXXXXXXXXXXX', {
-        firstName,
-        lastName,
-        address,
-        city,
-        postalCode,
-      });
+      const response = axios.post('http://localhost:8082/api/add/card', {
+          "firstName":"name",
+               "lastName":"nom",
+               "streetName":"address",
+               "city":"cyton",
+               "country":"villed",
+               "phoneNumber":"156102",
+               "postCode":564,
+               "TopUp":10
+               }
+      );
+//console.log(response);
 
       // Cas succès
       Alert.alert('Success', 'Address submitted successfully!');
