@@ -1,5 +1,11 @@
 import React from 'react';
-import { View, StyleSheet, Image, Dimensions, TouchableOpacity } from 'react-native';
+import {
+  View,
+  StyleSheet,
+  Image,
+  Dimensions,
+  TouchableOpacity,
+} from 'react-native';
 import { useRouter } from 'expo-router';
 
 const { width } = Dimensions.get('window');
@@ -14,7 +20,7 @@ const NavbarWallet = () => {
         <Image
           source={require('@/assets/images/home-wallet-footer.png')}
           style={styles.footerIcon}
-          resizeMode="contain"
+          resizeMode='contain'
         />
       </TouchableOpacity>
 
@@ -23,7 +29,7 @@ const NavbarWallet = () => {
         <Image
           source={require('@/assets/images/bus-wallet-footer.png')}
           style={styles.footerIcon}
-          resizeMode="contain"
+          resizeMode='contain'
         />
       </TouchableOpacity>
 
@@ -32,7 +38,7 @@ const NavbarWallet = () => {
         <Image
           source={require('@/assets/images/teona-wallet-footer.png')}
           style={styles.footerIcon}
-          resizeMode="contain"
+          resizeMode='contain'
         />
       </TouchableOpacity>
     </View>

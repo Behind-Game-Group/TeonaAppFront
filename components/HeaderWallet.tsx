@@ -8,7 +8,6 @@ const Header = () => {
   const router = useRouter();
   const segments = useSegments();
 
-  
   // Détermine le titre en fonction du segment actuel
   // const getTitle = () => {
   //   const page = segments[segments.length - 1];

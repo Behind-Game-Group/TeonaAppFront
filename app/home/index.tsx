@@ -1,5 +1,12 @@
 import React from 'react';
-import { View, ImageBackground, StyleSheet, TouchableOpacity, Image, useWindowDimensions } from 'react-native';
+import {
+  View,
+  ImageBackground,
+  StyleSheet,
+  TouchableOpacity,
+  Image,
+  useWindowDimensions,
+} from 'react-native';
 import { StatusBar } from 'expo-status-bar';
 import { ExternalPathString, RelativePathString, useRouter } from 'expo-router';
 
@@ -35,11 +42,11 @@ const Home: React.FC = () => {
 
   return (
     <View style={styles.container}>
-      <StatusBar style="light" />
+      <StatusBar style='light' />
       <ImageBackground
         source={require('@/assets/images/bgTeonaService.png')}
         style={[styles.backgroundImage, { width, height }]}
-        resizeMode="cover"
+        resizeMode='cover'
       >
         <View style={styles.contentContainer}>
           <TouchableOpacity
@@ -58,7 +65,11 @@ const Home: React.FC = () => {
                 style={[styles.iconWrapper, styles.whiteBackground]}
                 onPress={() => router.push(icon.route)}
               >
-                <Image source={icon.image} style={styles.icon} resizeMode="contain" />
+                <Image
+                  source={icon.image}
+                  style={styles.icon}
+                  resizeMode='contain'
+                />
               </TouchableOpacity>
             </View>
           ))}

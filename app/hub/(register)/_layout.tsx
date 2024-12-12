@@ -27,7 +27,7 @@ export default function RegisterLayout() {
             <Image
               source={require('@/assets/images/teonaLogo.png')}
               style={[styles.logo, { width: width * 0.4 }]} // Appliquer la largeur dynamique
-              resizeMode="contain"
+              resizeMode='contain'
             />
           </View>
         )}
@@ -39,10 +39,10 @@ export default function RegisterLayout() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#f5f5f5'
+    backgroundColor: '#f5f5f5',
   },
   content: {
-    flex: 1
+    flex: 1,
   },
   footer: {
     position: 'absolute',
@@ -52,11 +52,11 @@ const styles = StyleSheet.create({
     width: '100%',
     backgroundColor: 'rgba(96, 96, 96, 0.35)',
     justifyContent: 'center',
-    alignItems: 'center'
+    alignItems: 'center',
   },
   logo: {
     height: '70%',
     marginBottom: 30,
-    marginRight: 140
-  }
+    marginRight: 140,
+  },
 });
