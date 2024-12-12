@@ -10,7 +10,7 @@ import {
 } from 'react-native';
 import CustomButton from '@/components/ButtonInscriptionLogin';
 import { useRouter } from 'expo-router';
-import { useUser } from '@/app/hub/(register)/userInfoContext/UserInfo';
+import { useUser } from './userInfoContext/UserInfo';
 
 const NotificationPreferencesPage: React.FC = () => {
   const router = useRouter();
@@ -129,10 +129,10 @@ const styles = StyleSheet.create({
     backgroundColor: 'rgba(255, 255, 255, 0.85)',
     borderRadius: 10,
     alignItems: 'center',
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.25,
-    shadowRadius: 4,
+    boxShadowColor: '#000',
+    boxShadowOffset: { width: 0, height: 2 },
+    boxShadowOpacity: 0.25,
+    boxShadowRadius: 4,
     elevation: 5,
   },
   title: {
