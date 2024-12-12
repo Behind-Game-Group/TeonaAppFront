@@ -1,17 +1,30 @@
-import { View, Text, Image, SafeAreaView, useWindowDimensions, StyleSheet, Pressable } from 'react-native';
+import {
+  View,
+  Text,
+  Image,
+  SafeAreaView,
+  useWindowDimensions,
+  StyleSheet,
+  Pressable,
+} from 'react-native';
 import React, { useState } from 'react';
 
 import TopUpButton from '@/components/TopUpButton';
 import { Link } from 'expo-router';
 
-interface FaresProps {
-}
+// interface FaresProps {}
 
-const { width, height } = useWindowDimensions();
-const Fares: React.FC<FaresProps> = ({}) => {
-  const [showTextPass, setShowTextPass] = useState(false);
-  const [showTextCard, setShowTextCard] = useState(false);
-  const [isChecked, setIsChecked] = useState(false);
+export const getWindowDimensions = () => {
+  return {
+    width: useWindowDimensions,
+    height: useWindowDimensions,
+  };
+};
+
+const Fares = () => {
+  const [showTextPass, setShowTextPass] = useState<boolean>(false);
+  const [showTextCard, setShowTextCard] = useState<boolean>(false);
+  const [isChecked, setIsChecked] = useState<boolean>(false);
   const cardSelect = () => {
     setShowTextCard(!showTextCard);
   };
@@ -27,10 +40,10 @@ const Fares: React.FC<FaresProps> = ({}) => {
       cardSelect();
     }
   };
-  const handleTeonaPassPress =()=>{
-    if(showTextPass) {
-      console.log('Checkbox is', isChecked ? 'checked' : 'unchecked')
-    }else{
+  const handleTeonaPassPress = () => {
+    if (showTextPass) {
+      console.log('Checkbox is', isChecked ? 'checked' : 'unchecked');
+    } else {
       passSelect();
     }
   };
@@ -38,7 +51,8 @@ const Fares: React.FC<FaresProps> = ({}) => {
     <SafeAreaView style={styles.faresContainer}>
       <SafeAreaView style={styles.faresContent}>
         <Text style={styles.faresTitleP}>
-          Don'Have a card ? Purshase it <Link href={'/wallet/(topUpCard)/TopUp'}>here</Link>
+          Don'Have a card ? Purshase it{' '}
+          <Link href={'/wallet/(topUpCard)/TopUp'}>here</Link>
         </Text>
         <Text style={styles.faresTitleTop}>Topup your teona pass</Text>
         <View style={styles.faresContainerCard}>
@@ -49,7 +63,9 @@ const Fares: React.FC<FaresProps> = ({}) => {
             />
             <Text>For occasional trips</Text>
           </View>
-          <View style={styles.faresContainerCardTop}>
+          <View
+            style={[styles.faresContainerCardTop, { backgroundColor: 'red' }]}
+          >
             <Text style={styles.faresTextCard}>TopUp Card</Text>
             {showTextCard ? (
               <>
@@ -57,43 +73,64 @@ const Fares: React.FC<FaresProps> = ({}) => {
                   Anyone can use it! For occasional trips 5,00€ card fee
                   (optional){' '}
                 </Text>
-                <View style={styles.containerCheckbox}>
+                <View
+                  style={[
+                    styles.containerCheckbox,
+                    { backgroundColor: 'yellow' },
+                  ]}
+                >
                   <Pressable
-                    value={isChecked}
-                    onPress={setIsChecked}
-                    style={[styles.checkCard, isChecked && styles.checked]}
+                    // value={isChecked}
+                    onPress={() => setIsChecked(!isChecked)}
+                    style={[
+                      styles.checkCard,
+                      isChecked && styles.checked,
+                      { backgroundColor: 'blue' },
+                    ]}
                   >
-                    {' '}
-                    {isChecked && <Text style={styles.checkmark}>✓</Text>}
+                    {isChecked && <Text style={styles.checkmark}> ✓</Text>}
                   </Pressable>
-                  <View style={styles.checkboxCont}>
-                    <Text style={styles.checkboxTxt}>I want my card sent home to me</Text>
+                  <View
+                    style={[styles.checkboxCont, { backgroundColor: 'green' }]}
+                  >
+                    <Text style={styles.checkboxTxt}>
+                      I want my card sent home to me
+                    </Text>
                     <Text style={styles.checkboxSub}> (5,00€ card fee) </Text>
-                    <TopUpButton color={'#FFA500'}  title={'Purchase'} onPress={handleTopUpPress} />
                   </View>
-
                 </View>
-
+                <TopUpButton
+                  color={'#FFA500'}
+                  title={'Purchase'}
+                  onPress={handleTopUpPress}
+                />
               </>
             ) : (
               <TopUpButton title={'TopUp'} onPress={handleTopUpPress} />
             )}
-            <>
-            </>
-
+            <></>
           </View>
         </View>
         <View style={styles.faresPassContainer}>
           <View style={styles.faresAvaContainer}>
             <Text style={styles.faresTextAva}>My Teona Pass</Text>
-            <View style={[styles.faresAvaTop, showTextPass && styles.faresAvaContainerColumn]}>
+            <View
+              style={[
+                styles.faresAvaTop,
+                showTextPass && styles.faresAvaContainerColumn,
+              ]}
+            >
               {showTextPass ? (
                 <>
                   <Text style={styles.dynamicTextPass}>
                     Personal use only For regular communiting Unlimited trips
                     7,50€ card fee
                   </Text>
-                  <TopUpButton color={'#FFA500'}  title={'Purchase'} onPress={handleTeonaPassPress} />
+                  <TopUpButton
+                    color={'#FFA500'}
+                    title={'Purchase'}
+                    onPress={handleTeonaPassPress}
+                  />
                 </>
               ) : (
                 <>
@@ -105,8 +142,7 @@ const Fares: React.FC<FaresProps> = ({}) => {
                 </>
               )}
 
-              <>
-              </>
+              <></>
             </View>
           </View>
           <View style={styles.faresCardContainer}>
@@ -126,6 +162,7 @@ const Fares: React.FC<FaresProps> = ({}) => {
     </SafeAreaView>
   );
 };
+const dimensions = getWindowDimensions();
 const styles = StyleSheet.create({
   faresContainer: {
     flex: 1,
@@ -153,6 +190,7 @@ const styles = StyleSheet.create({
     padding: 0,
   },
   checkboxCont: {
+    flex: 1,
     flexDirection: 'column',
     alignItems: 'center',
     justifyContent: 'center',
@@ -175,11 +213,10 @@ const styles = StyleSheet.create({
     margin: 0,
     padding: 0,
     color: 'black',
-
   },
   dynamicTextCard: {
     fontSize: 15,
-    whiteSpace: '',
+    // whiteSpace: 'normal',
     fontWeight: 'bold',
     textAlign: 'center',
     flexDirection: 'row',
@@ -193,10 +230,10 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: '#606060',
     borderRadius: 5,
-    justifyContent: 'center',
-    alignItems: 'center',
+    // justifyContent: 'center',
+    // alignItems: 'center',
     backgroundColor: 'rgba(255, 255, 255, 0.1)',
-    marginBottom: 10,
+    // marginBottom: 10,
   },
   checkmark: {
     color: '#606060',
@@ -206,6 +243,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     marginTop: 20,
+    padding: 5,
   },
   dynamicTextPass: {
     fontSize: 20,
@@ -241,17 +279,17 @@ const styles = StyleSheet.create({
     margin: 0,
     padding: 0,
     color: '#FFA500',
-    textDecorationLine:'underline',
+    textDecorationLine: 'underline',
   },
   faresContent: {
     flex: 1,
-    width: width,
+    width: '100%',
     backgroundColor: '#FFFFFF',
     alignItems: 'center',
     justifyContent: 'center',
   },
   faresPassContainer: {
-    width:width,
+    width: '100%',
     backgroundColor: '#FFFFFF',
     alignItems: 'center',
     justifyContent: 'center',
@@ -265,16 +303,15 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     padding: 0,
     margin: 0,
-    flex:1,
-    height: height *0.455,
+    flex: 1,
+    height: dimensions.height.arguments * 0.455,
   },
   faresContainerCardTop: {
-
     alignItems: 'center',
     justifyContent: 'center',
     padding: 0,
     flex: 1,
-    height: height *0.455,
+    height: dimensions.height.arguments * 0.455,
   },
   faresAvaContainer: {
     backgroundColor: '#FFFFFF',
@@ -282,7 +319,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     padding: 0,
     margin: 0,
-flex:1,
+    flex: 1,
   },
   faresAvaContainerColumn: {
     flexDirection: 'column',
@@ -297,7 +334,7 @@ flex:1,
     alignItems: 'center',
     justifyContent: 'center',
     padding: 0,
-flex:1,
+    flex: 1,
   },
   faresCardContainer: {
     backgroundColor: '#FFFFFF',
@@ -305,17 +342,16 @@ flex:1,
     justifyContent: 'center',
     padding: 0,
     flexDirection: 'column',
-flex:1,
-    height: height *0.455,
+    flex: 1,
+    height: dimensions.height.arguments * 0.455,
   },
 
   faresContainerCard: {
-
     backgroundColor: '#FFFFFF',
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
-    flex:1,
+    flex: 1,
   },
   checkCard: {
     width: 15,
@@ -323,35 +359,33 @@ flex:1,
     borderWidth: 1,
     borderColor: '#606060',
     borderRadius: 5,
-    justifyContent: 'center',
-    alignItems: 'center',
+    // justifyContent: 'center',
+    // alignItems: 'center',
     backgroundColor: 'rgba(255, 255, 255, 0.1)',
-    marginBottom: 10,
+    // marginBottom: 10,
   },
   faresPassImag: {
     alignItems: 'center',
     justifyContent: 'flex-start',
-    width: width * 0.3,
-    height: height * 0.3,
+    width: dimensions.width.arguments * 0.3,
+    height: dimensions.height.arguments * 0.3,
     resizeMode: 'contain',
     margin: 0,
     padding: 0,
-
   },
   faresCardImag: {
     alignItems: 'center',
     justifyContent: 'center',
-    width: width * 0.3,
-    height: height * 0.3,
+    width: dimensions.width.arguments * 0.3,
+    height: dimensions.height.arguments * 0.3,
     resizeMode: 'contain',
     margin: 0,
     padding: 0,
-
   },
 
   faresAvaImag: {
-    width: width * 0.3,
-    height: height * 0.2,
+    width: dimensions.width.arguments * 0.3,
+    height: dimensions.height.arguments * 0.2,
     margin: 0,
     padding: 0,
     resizeMode: 'contain',

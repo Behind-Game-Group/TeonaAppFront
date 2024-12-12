@@ -1,6 +1,9 @@
 import React from 'react';
 import {
-  StyleSheet, Text, TouchableOpacity, GestureResponderEvent,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  GestureResponderEvent,
 } from 'react-native';
 
 interface OrangeButtonProps {
@@ -12,12 +15,12 @@ interface OrangeButtonProps {
 }
 
 const OrangeButton: React.FC<OrangeButtonProps> = ({
-                                                     title,
-                                                     onPress,
-                                                     style,
-                                                     color = '#FFA500',
-                                                     backgroundColor = '#FFFFFF',
-                                                   }) => {
+  title,
+  onPress,
+  style,
+  color = '#FFA500',
+  backgroundColor = '#FFFFFF',
+}) => {
   const buttonStyles = [
     styles.button,
     color === '#FFA500' ? styles.orangeButton : styles.whiteButton,
