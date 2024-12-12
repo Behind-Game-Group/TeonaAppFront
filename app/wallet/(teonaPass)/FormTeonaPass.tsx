@@ -15,6 +15,7 @@ import ButtonTeonaPass from "@/components/ButtonTeonaPass";
 import * as SecureStore from "expo-secure-store";
 import { Platform } from "react-native";
 import { useRouter } from "expo-router";
+import axios from "axios";
 
 function FormTeonaPass() {
   const [firstName, setFirstName] = useState<string>("");
@@ -30,6 +31,7 @@ function FormTeonaPass() {
   const [email, setEmail] = useState<string | null>(null);
   const [userId, setUserId] = useState("");
   const [token, setToken] = useState("");
+  const [adressId, setAdressId] = useState("");
 
   const router = useRouter();
 
@@ -129,19 +131,30 @@ function FormTeonaPass() {
         image,
         userId,
       };
-      const response = await fetch(
+      const response = await axios.post(
         "http://localhost:8082/api/add/saveAddress",
+        formData,
         {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
             ...(token && { Authorization: `Bearer ${token}` }),
           },
-          body: JSON.stringify(formData),
         }
       );
 
-      if (response.ok) {
+      if (response.status === 200 || (response.data && response.data.id)) {
+        const { id } = response.data;
+        console.log("the id of the adress:", response.data.id);
+        setAdressId(id);
+        if (Platform.OS === "web") {
+          localStorage.setItem("addressId", id);
+          console.log("Address ID saved to localStorage:", id);
+        } else {
+          await SecureStore.setItemAsync("addressId", id);
+          console.log("Address ID saved to SecureStore:", id);
+        }
+
         Alert.alert("Success", "Form submitted successfully.");
 
         router.push("/wallet/TopupFares");
@@ -172,7 +185,9 @@ function FormTeonaPass() {
           ) : (
             <Image
               source={require("../../../assets/images/user-logo.png")}
-              style={[styles.logoUser, { tintColor: "#606060" }]}
+              tintColor="#606060"
+              resizeMode="contain"
+              // style={[styles.logoUser]}
             />
           )}
 
@@ -464,13 +479,13 @@ const styles = StyleSheet.create({
   logo: {
     width: 60,
     height: 60,
-    resizeMode: "contain",
-    tintColor: "#606060",
+    // resizeMode: "contain",
+    // tintColor: "#606060",
   },
   logoBus: {
     width: 65,
     height: 65,
-    resizeMode: "contain",
+    // resizeMode: "contain",
   },
   //Modal
   modalContainer: {
