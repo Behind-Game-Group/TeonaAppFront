@@ -18,11 +18,11 @@ interface VerifyEmailProps {
 }
 
 const VerifyEmailComponent: React.FC<VerifyEmailProps> = ({
-                                                            title,
-                                                            subtitle,
-                                                            pinNotReceivedLink,
-                                                            onSubmit,
-                                                          }) => {
+  title,
+  subtitle,
+  pinNotReceivedLink,
+  onSubmit,
+}) => {
   const [pinCode, setPinCode] = useState('');
 
   const handleVerify = () => {
@@ -44,9 +44,9 @@ const VerifyEmailComponent: React.FC<VerifyEmailProps> = ({
 
         <TextInput
           style={styles.input}
-          placeholder="Enter PIN Code"
-          placeholderTextColor="#888"
-          keyboardType="numeric"
+          placeholder='Enter PIN Code'
+          placeholderTextColor='#888'
+          keyboardType='numeric'
           value={pinCode}
           onChangeText={setPinCode}
           maxLength={6}
@@ -58,11 +58,7 @@ const VerifyEmailComponent: React.FC<VerifyEmailProps> = ({
           </Link>
         </View>
 
-        <CustomButton
-          text="Verify"
-          color="blue"
-          onPress={handleVerify}
-        />
+        <CustomButton text='Verify' color='blue' onPress={handleVerify} />
       </View>
     </ImageBackground>
   );
@@ -80,10 +76,10 @@ const styles = StyleSheet.create({
     backgroundColor: 'rgba(255, 255, 255, 0.85)',
     borderRadius: 10,
     alignItems: 'center',
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.25,
-    shadowRadius: 4,
+    boxShadowColor: '#000',
+    boxShadowOffset: { width: 0, height: 2 },
+    boxShadowOpacity: 0.25,
+    boxShadowRadius: 4,
     elevation: 5,
   },
   title: {

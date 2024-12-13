@@ -1,15 +1,27 @@
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, Alert, ImageBackground, TouchableOpacity, useWindowDimensions } from 'react-native';
+import {
+  View,
+  Text,
+  StyleSheet,
+  Alert,
+  ImageBackground,
+  TouchableOpacity,
+  useWindowDimensions,
+} from 'react-native';
 import CustomButton from '@/components/ButtonInscriptionLogin';
 import { useRouter } from 'expo-router';
-import { useUser } from '@/app/hub/(register)/userInfoContext/UserInfo';
+import { useUser } from './userInfoContext/UserInfo';
 
 const NotificationPreferencesPage: React.FC = () => {
   const router = useRouter();
   const { user, updateUser } = useUser();
 
-  const [emailNotifications, setEmailNotifications] = useState(user.teonaGroup || false);
-  const [promotionalEmails, setPromotionalEmails] = useState(user.teonaPassenger || false);
+  const [emailNotifications, setEmailNotifications] = useState(
+    user.teonaGroup || false,
+  );
+  const [promotionalEmails, setPromotionalEmails] = useState(
+    user.teonaPassenger || false,
+  );
 
   const { width, height } = useWindowDimensions();
 
@@ -33,40 +45,74 @@ const NotificationPreferencesPage: React.FC = () => {
     router.push('/hub/(register)/PasswordCreation');
   };
 
-  const toggleCheckbox = (currentValue: boolean, setValue: React.Dispatch<React.SetStateAction<boolean>>) => {
+  const toggleCheckbox = (
+    currentValue: boolean,
+    setValue: React.Dispatch<React.SetStateAction<boolean>>,
+  ) => {
     setValue(!currentValue);
   };
 
   return (
-    <ImageBackground source={require('@/assets/images/bgSignIn.png')} style={[styles.backgroundImage, { width, height }]}>
+    <ImageBackground
+      source={require('@/assets/images/bgSignIn.png')}
+      style={[styles.backgroundImage, { width, height }]}
+    >
       <View style={[styles.container, { width: width * 0.85 }]}>
         <Text style={styles.title}>Please set your contact preferences</Text>
 
         <View style={styles.preferenceContainer}>
           <TouchableOpacity
             style={styles.preferenceRow}
-            onPress={() => toggleCheckbox(emailNotifications, setEmailNotifications)}
+            onPress={() =>
+              toggleCheckbox(emailNotifications, setEmailNotifications)
+            }
           >
-            <View style={[styles.checkbox, emailNotifications && styles.checkboxChecked]} />
-            <Text style={styles.preferenceText}>Subscribe to Teona Group updates</Text>
+            <View
+              style={[
+                styles.checkbox,
+                emailNotifications && styles.checkboxChecked,
+              ]}
+            />
+            <Text style={styles.preferenceText}>
+              Subscribe to Teona Group updates
+            </Text>
           </TouchableOpacity>
           <Text style={styles.preferenceDescription}>
-            If you would like to receive emails from TeonaPassenger with updates about the programme and personalized offers from TeonaGroup and its partners, simply subscribe using the toggle above. You can unsubscribe at any time.
+            If you would like to receive emails from TeonaPassenger with updates
+            about the programme and personalized offers from TeonaGroup and its
+            partners, simply subscribe using the toggle above. You can
+            unsubscribe at any time.
           </Text>
 
           <TouchableOpacity
             style={styles.preferenceRow}
-            onPress={() => toggleCheckbox(promotionalEmails, setPromotionalEmails)}
+            onPress={() =>
+              toggleCheckbox(promotionalEmails, setPromotionalEmails)
+            }
           >
-            <View style={[styles.checkbox, promotionalEmails && styles.checkboxChecked]} />
-            <Text style={styles.preferenceText}>Subscribe to Teona Passenger updates</Text>
+            <View
+              style={[
+                styles.checkbox,
+                promotionalEmails && styles.checkboxChecked,
+              ]}
+            />
+            <Text style={styles.preferenceText}>
+              Subscribe to Teona Passenger updates
+            </Text>
           </TouchableOpacity>
           <Text style={styles.preferenceDescription}>
-            To receive updates and personalized offers from Georgina Passenger and its partners, simply subscribe above. Georgina Passenger will send you updates and offers via e-mail and social media. You can unsubscribe at any time.
+            To receive updates and personalized offers from Georgina Passenger
+            and its partners, simply subscribe above. Georgina Passenger will
+            send you updates and offers via e-mail and social media. You can
+            unsubscribe at any time.
           </Text>
         </View>
 
-        <CustomButton text="Save Preferences" color="blue" onPress={handleSavePreferences} />
+        <CustomButton
+          text='Save Preferences'
+          color='blue'
+          onPress={handleSavePreferences}
+        />
       </View>
     </ImageBackground>
   );
@@ -83,10 +129,10 @@ const styles = StyleSheet.create({
     backgroundColor: 'rgba(255, 255, 255, 0.85)',
     borderRadius: 10,
     alignItems: 'center',
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.25,
-    shadowRadius: 4,
+    boxShadowColor: '#000',
+    boxShadowOffset: { width: 0, height: 2 },
+    boxShadowOpacity: 0.25,
+    boxShadowRadius: 4,
     elevation: 5,
   },
   title: {

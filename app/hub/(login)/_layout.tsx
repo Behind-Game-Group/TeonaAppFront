@@ -6,7 +6,6 @@ import { UserProvider } from '@/app/hub/(register)/userInfoContext/UserInfo';
 export default function LoginLayout() {
   const { width } = useWindowDimensions();
 
-
   return (
     <UserProvider>
       <View style={styles.container}>
@@ -16,13 +15,13 @@ export default function LoginLayout() {
         </View>
 
         {/* Footer avec le logo Teona */}
-          <View style={styles.footer}>
-            <Image
-              source={require('@/assets/images/teonaLogo.png')}
-              style={[styles.logo, { width: width * 0.4 }]}
-              resizeMode="contain"
-            />
-          </View>
+        <View style={styles.footer}>
+          <Image
+            source={require('@/assets/images/teonaLogo.png')}
+            style={[styles.logo, { width: width * 0.4 }]}
+            resizeMode='contain'
+          />
+        </View>
       </View>
     </UserProvider>
   );
@@ -31,10 +30,10 @@ export default function LoginLayout() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#f5f5f5'
+    backgroundColor: '#f5f5f5',
   },
   content: {
-    flex: 1
+    flex: 1,
   },
   footer: {
     position: 'absolute',
@@ -44,11 +43,11 @@ const styles = StyleSheet.create({
     width: '100%',
     backgroundColor: 'rgba(96, 96, 96, 0.35)',
     justifyContent: 'center',
-    alignItems: 'center'
+    alignItems: 'center',
   },
   logo: {
     height: '70%',
     marginBottom: 30,
-    marginRight: 140
-  }
+    marginRight: 140,
+  },
 });
