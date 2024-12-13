@@ -3,16 +3,16 @@ import {
     View,
     Text,
     TextInput,
-    StyleSheet,
     Alert,
     Image,
     TouchableOpacity,
     Modal,
+    StyleSheet,
+    Platform,
 } from "react-native";
 import * as ImagePicker from "expo-image-picker";
 import ButtonWallet from "@/components/ButtonWallet";
 import * as SecureStore from "expo-secure-store";
-import { Platform } from "react-native";
 
 function FormTeonaPass() {
     const [firstName, setFirstName] = useState<string>("");
@@ -32,13 +32,16 @@ function FormTeonaPass() {
 
     // Fonction pour prendre une nouvelle photo
     const takePhoto = async () => {
+        console.log("Requesting camera permissions...");
         const { status } = await ImagePicker.requestCameraPermissionsAsync();
         if (status !== "granted") {
+            console.log("Camera permission denied.");
             setMessage('Camera permission is required to take a photo.');
             setAlertModalVisible(true);
             return;
         }
 
+        console.log("Launching camera...");
         const result = await ImagePicker.launchCameraAsync({
             allowsEditing: true,
             aspect: [4, 3],
@@ -46,6 +49,7 @@ function FormTeonaPass() {
         });
 
         if (!result.canceled) {
+            console.log("Photo taken:", result.assets[0].uri);
             setImage(result.assets[0].uri);
             setModalVisible(false);
         }
@@ -53,68 +57,56 @@ function FormTeonaPass() {
 
     // Choisir une image à partir de la bibliothèque multimédia
     const pickImage = async () => {
+        console.log("Requesting media library permissions...");
         const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
 
         if (status !== 'granted') {
+            console.log("Media library permission denied.");
             setMessage('We need your permission to access the gallery');
             setAlertModalVisible(true);
             return;
         }
 
+        console.log("Opening media library...");
         const result = await ImagePicker.launchImageLibraryAsync({
             quality: 1,
         });
 
         if (!result.canceled) {
+            console.log("Image selected:", result.assets[0].uri);
             setImage(result.assets[0].uri);
         }
     };
 
     useEffect(() => {
         const fetchUserData = async () => {
+            console.log("Fetching user data...");
             let userId = null;
             let token = null;
             try {
                 if (Platform.OS === "web") {
-                    if (
-                        localStorage.getItem("authToken") ||
-                        localStorage.getItem("userId") ||
-                        localStorage.getItem("userId") ||
-                        localStorage.getItem("authToken")
-                    ) {
-                        userId = localStorage.getItem("userId");
-                        token = localStorage.getItem("authToken");
-
-                        userId = localStorage.getItem("userId");
-                        token = localStorage.getItem("authToken");
-                    }
+                    console.log("Using web localStorage...");
+                    userId = localStorage.getItem("userId");
+                    token = localStorage.getItem("authToken");
                 } else {
+                    console.log("Using SecureStore...");
                     userId = await SecureStore.getItemAsync("userId");
                     token = await SecureStore.getItemAsync("authToken");
                 }
 
-                if (!userId) {
-                    console.error("No token found");
-                    Alert.alert("Error", "No authentication token found.");
+                if (!userId || !token) {
+                    console.error("User ID or token not found.");
+                    Alert.alert("Error", "Authentication information is missing.");
                     return;
                 }
-                if (token) {
-                    setToken(token);
-                    console.log("token:", token);
-                } else {
-                    console.error("token not found ");
-                    Alert.alert("Error", "Invalid token structure.");
-                }
-                if (userId) {
-                    setUserId(userId);
-                    console.log("User ID:", userId);
-                } else {
-                    console.error("User ID not found");
-                    Alert.alert("Error", "Invalid token structure.");
-                }
+
+                console.log("User ID:", userId);
+                console.log("Token:", token);
+                setUserId(userId);
+                setToken(token);
             } catch (error) {
-                console.error("Error decoding token:", error);
-                Alert.alert("Error", "Failed to decode token.");
+                console.error("Error fetching user data:", error);
+                Alert.alert("Error", "Failed to fetch user data.");
             }
         };
 
@@ -122,6 +114,7 @@ function FormTeonaPass() {
     }, []);
 
     const handleSubmit = async () => {
+        console.log("Submitting form...");
         try {
             const formData = {
                 firstName,
@@ -135,6 +128,9 @@ function FormTeonaPass() {
                 image,
                 ...(userId && { userId }),
             };
+
+            console.log("Form data:", formData);
+
             const response = await fetch("http://localhost:8082/api/add/adress", {
                 method: "POST",
                 headers: {
@@ -143,9 +139,12 @@ function FormTeonaPass() {
                 },
                 body: JSON.stringify(formData),
             });
+
             if (response.ok) {
+                console.log("Form submitted successfully.");
                 Alert.alert("Success", "Form submitted successfully.");
             } else {
+                console.error("Failed to submit the form. Status:", response.status);
                 Alert.alert("Error", "Failed to submit the form.");
             }
         } catch (error) {
