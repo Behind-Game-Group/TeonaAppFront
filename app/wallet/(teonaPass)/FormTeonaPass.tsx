@@ -14,7 +14,8 @@ import * as ImagePicker from "expo-image-picker";
 import ButtonWallet from "@/components/ButtonWallet";
 import * as SecureStore from "expo-secure-store";
 //import jwtDecode from "jwt-decode";
-import { Platform } from "react-native";
+import { useRouter } from "expo-router";
+import axios from "axios";
 
 function FormTeonaPass() {
   const [firstName, setFirstName] = useState<string>("");
@@ -28,6 +29,8 @@ function FormTeonaPass() {
   const [image, setImage] = useState<string | null>(null);
   const [modalVisible, setModalVisible] = useState(false);
   const [email, setEmail] = useState<string | null>(null);
+  const [alertModalVisible, setAlertModalVisible] = useState(false);
+  const [message, setMessage] = useState('');
   const [userId, setUserId] = useState("");
   const [token, setToken] = useState("");
   const [adressId, setAdressId] = useState("");
