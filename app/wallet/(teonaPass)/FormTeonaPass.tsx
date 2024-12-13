@@ -13,22 +13,26 @@ import {
 import * as ImagePicker from "expo-image-picker";
 import ButtonWallet from "@/components/ButtonWallet";
 import * as SecureStore from "expo-secure-store";
+//import jwtDecode from "jwt-decode";
+import { Platform } from "react-native";
 
 function FormTeonaPass() {
-    const [firstName, setFirstName] = useState<string>("");
-    const [lastName, setLastName] = useState<string>("");
-    const [streetName, setStreetName] = useState<string>("");
-    const [streetNameOptional, setStreetNameOptional] = useState<string>("");
-    const [postCode, setPostCode] = useState("");
-    const [city, setCity] = useState<string>("");
-    const [phoneNumber, setPhoneNumber] = useState("");
-    const [country, setCountry] = useState<string>("");
-    const [image, setImage] = useState<string | null>(null);
-    const [modalVisible, setModalVisible] = useState(false);
-    const [alertModalVisible, setAlertModalVisible] = useState(false);
-    const [message, setMessage] = useState('');
-    const [userId, setUserId] = useState("");
-    const [token, setToken] = useState("");
+  const [firstName, setFirstName] = useState<string>("");
+  const [lastName, setLastName] = useState<string>("");
+  const [streetName, setStreetName] = useState<string>("");
+  const [streetNameOptional, setStreetNameOptional] = useState<string>("");
+  const [postCode, setPostCode] = useState("");
+  const [city, setCity] = useState<string>("");
+  const [phoneNumber, setPhoneNumber] = useState("");
+  const [country, setCountry] = useState<string>("");
+  const [image, setImage] = useState<string | null>(null);
+  const [modalVisible, setModalVisible] = useState(false);
+  const [email, setEmail] = useState<string | null>(null);
+  const [userId, setUserId] = useState("");
+  const [token, setToken] = useState("");
+  const [adressId, setAdressId] = useState("");
+
+  const router = useRouter();
 
     // Fonction pour prendre une nouvelle photo
     const takePhoto = async () => {
@@ -78,80 +82,90 @@ function FormTeonaPass() {
         }
     };
 
-    useEffect(() => {
-        const fetchUserData = async () => {
-            console.log("Fetching user data...");
-            let userId = null;
-            let token = null;
-            try {
-                if (Platform.OS === "web") {
-                    console.log("Using web localStorage...");
-                    userId = localStorage.getItem("userId");
-                    token = localStorage.getItem("authToken");
-                } else {
-                    console.log("Using SecureStore...");
-                    userId = await SecureStore.getItemAsync("userId");
-                    token = await SecureStore.getItemAsync("authToken");
-                }
+  useEffect(() => {
+    const fetchUserData = async () => {
+      try {
+        let userId = null;
+        let token = null;
 
-                if (!userId || !token) {
-                    console.error("User ID or token not found.");
-                    Alert.alert("Error", "Authentication information is missing.");
-                    return;
-                }
+        if (Platform.OS === "web") {
+          userId = localStorage.getItem("userId");
+          token = localStorage.getItem("authToken");
+        } else {
+          userId = await SecureStore.getItemAsync("userId");
+          token = await SecureStore.getItemAsync("authToken");
+        }
 
-                console.log("User ID:", userId);
-                console.log("Token:", token);
-                setUserId(userId);
-                setToken(token);
-            } catch (error) {
-                console.error("Error fetching user data:", error);
-                Alert.alert("Error", "Failed to fetch user data.");
-            }
-        };
+        if (token) {
+          setToken(token);
+          console.log("Token found:", token);
+        } else {
+          console.warn("Token not found");
+        }
+
+        if (userId) {
+          setUserId(userId);
+          console.log("User ID found:", userId);
+        } else {
+          console.warn("User ID not found");
+        }
+      } catch (error) {
+        console.error("Error fetching user data:", error);
+      }
+    };
 
         fetchUserData();
     }, []);
 
-    const handleSubmit = async () => {
-        console.log("Submitting form...");
-        try {
-            const formData = {
-                firstName,
-                lastName,
-                streetName,
-                streetNameOptional,
-                postCode,
-                city,
-                phoneNumber,
-                country,
-                image,
-                ...(userId && { userId }),
-            };
-
-            console.log("Form data:", formData);
-
-            const response = await fetch("http://localhost:8082/api/add/adress", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                    ...(token && { Authorization: `Bearer ${token}` }),
-                },
-                body: JSON.stringify(formData),
-            });
-
-            if (response.ok) {
-                console.log("Form submitted successfully.");
-                Alert.alert("Success", "Form submitted successfully.");
-            } else {
-                console.error("Failed to submit the form. Status:", response.status);
-                Alert.alert("Error", "Failed to submit the form.");
-            }
-        } catch (error) {
-            console.error("Error submitting form:", error);
-            Alert.alert("Error", "An unexpected error occurred.");
+  const handleSubmit = async () => {
+    try {
+      const formData = {
+        firstName,
+        lastName,
+        streetName,
+        streetNameOptional,
+        postCode,
+        city,
+        phoneNumber,
+        country,
+        image,
+        userId,
+      };
+      const response = await axios.post(
+        "http://localhost:8082/api/add/saveAddress",
+        formData,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            ...(token && { Authorization: `Bearer ${token}` }),
+          },
         }
-    };
+      );
+
+      if (response.status === 200 || (response.data && response.data.id)) {
+        const { id } = response.data;
+        console.log("the id of the adress:", response.data.id);
+        setAdressId(id);
+        if (Platform.OS === "web") {
+          localStorage.setItem("addressId", id);
+          console.log("Address ID saved to localStorage:", id);
+        } else {
+          await SecureStore.setItemAsync("addressId", id);
+          console.log("Address ID saved to SecureStore:", id);
+        }
+
+        Alert.alert("Success", "Form submitted successfully.");
+
+        router.push("/wallet/TopupFares");
+      } else {
+        Alert.alert("Error", "Failed to submit the form.");
+      }
+    } catch (error) {
+      console.error("Error submitting form:", error);
+      Alert.alert("Error", "An unexpected error occurred.");
+    }
+  };
 
     return (
         <View style={styles.container}>
@@ -160,16 +174,18 @@ function FormTeonaPass() {
                     Fill this out and you will have it {"\n"} delivered to your door.
                 </Text>
 
-                <View style={styles.cardImageContainer}>
-                    {/* Affiche l'image choisie ou un logo par défaut */}
-                    {image ? (
-                        <Image source={{ uri: image }} style={styles.profilePic} />
-                    ) : (
-                        <Image
-                            source={require("../../../assets/images/user-logo.png")}
-                            style={[styles.logoUser, { tintColor: "#606060" }]}
-                        />
-                    )}
+        <View style={styles.cardImageContainer}>
+          {/* Affiche l'image choisie ou un logo par défaut */}
+          {image ? (
+            <Image source={{ uri: image }} style={styles.profilePic} />
+          ) : (
+            <Image
+              source={require("../../../assets/images/user-logo.png")}
+              tintColor="#606060"
+              resizeMode="contain"
+              // style={[styles.logoUser]}
+            />
+          )}
 
                     {/* Bouton pour ajouter une image */}
                     <TouchableOpacity
