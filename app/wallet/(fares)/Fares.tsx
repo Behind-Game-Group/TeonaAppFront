@@ -52,7 +52,7 @@ const Fares = () => {
       <SafeAreaView style={styles.faresContent}>
         <Text style={styles.faresTitleP}>
           Don'Have a card ? Purshase it{' '}
-          <Link href={'/wallet/(topUpCard)/TopUp'}>here</Link>
+          <Link style={styles.toCardL} href={'/wallet/(topUpCard)/TopUp'}>here</Link>
         </Text>
         <Text style={styles.faresTitleTop}>Topup your teona pass</Text>
         <View style={styles.faresContainerCard}>
@@ -64,34 +64,34 @@ const Fares = () => {
             <Text>For occasional trips</Text>
           </View>
           <View
-            style={[styles.faresContainerCardTop, { backgroundColor: 'red' }]}
+            style={styles.faresContainerCardTop}
           >
             <Text style={styles.faresTextCard}>TopUp Card</Text>
             {showTextCard ? (
               <>
                 <Text style={styles.dynamicTextCard}>
                   Anyone can use it! For occasional trips 5,00€ card fee
-                  (optional){' '}
-                </Text>
+
+                </Text> <Text style={styles.faresTextMem}>
+                (optional)  {' '}
+              </Text>
                 <View
-                  style={[
-                    styles.containerCheckbox,
-                    { backgroundColor: 'yellow' },
-                  ]}
+                  style={
+                    styles.containerCheckbox}
                 >
                   <Pressable
                     // value={isChecked}
                     onPress={() => setIsChecked(!isChecked)}
                     style={[
                       styles.checkCard,
-                      isChecked && styles.checked,
-                      { backgroundColor: 'blue' },
+                      isChecked && styles.checked
+
                     ]}
                   >
                     {isChecked && <Text style={styles.checkmark}> ✓</Text>}
                   </Pressable>
                   <View
-                    style={[styles.checkboxCont, { backgroundColor: 'green' }]}
+                    style={styles.checkboxCont}
                   >
                     <Text style={styles.checkboxTxt}>
                       I want my card sent home to me
@@ -120,11 +120,15 @@ const Fares = () => {
                 showTextPass && styles.faresAvaContainerColumn,
               ]}
             >
+
               {showTextPass ? (
                 <>
                   <Text style={styles.dynamicTextPass}>
                     Personal use only For regular communiting Unlimited trips
                     7,50€ card fee
+                  </Text>
+                  <Text style={styles.faresTextMem}>
+                    (optional)
                   </Text>
                   <TopUpButton
                     color={'#FFA500'}
@@ -189,6 +193,10 @@ const styles = StyleSheet.create({
     margin: 0,
     padding: 0,
   },
+  toCardL:{
+    color:'blue',
+    textDecorationLine: 'underline',
+  },
   checkboxCont: {
     flex: 1,
     flexDirection: 'column',
@@ -199,7 +207,7 @@ const styles = StyleSheet.create({
   },
   checkboxTxt: {
     fontSize: 10,
-    fontWeight: 'bold',
+
     textAlign: 'center',
     flexDirection: 'row',
     margin: 0,
@@ -215,11 +223,13 @@ const styles = StyleSheet.create({
     color: 'black',
   },
   dynamicTextCard: {
-    fontSize: 15,
-    // whiteSpace: 'normal',
-    fontWeight: 'bold',
+    fontSize: 21,
+    lineHeight: 27,
     textAlign: 'center',
-    flexDirection: 'row',
+    textBreakStrategy: 'simple',
+   lineBreakStrategyIOS:'standard',
+    maxWidth: '90%',
+
     margin: 0,
     padding: 0,
     color: 'black',
@@ -232,11 +242,11 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     // justifyContent: 'center',
     // alignItems: 'center',
-    backgroundColor: 'rgba(255, 255, 255, 0.1)',
+    backgroundColor: '#FFA500',
     // marginBottom: 10,
   },
   checkmark: {
-    color: '#606060',
+    color: '#FFFFFF',
     fontSize: 10,
   },
   containerCheckbox: {
@@ -246,17 +256,21 @@ const styles = StyleSheet.create({
     padding: 5,
   },
   dynamicTextPass: {
-    fontSize: 20,
-    fontWeight: 'bold',
+    fontSize: 21,
+    lineHeight: 27,
     textAlign: 'center',
-    flexDirection: 'row',
-
+    textBreakStrategy: 'simple',
+    lineBreakStrategyIOS:'standard',
+    maxWidth: '90%',
+        margin: 0,
+    padding: 0,
     color: 'black',
   },
   faresTextAva: {
     fontSize: 20,
     fontWeight: 'bold',
     textAlign: 'center',
+    alignItems: 'center',
     padding: 0,
     margin: 0,
   },
@@ -361,7 +375,8 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     // justifyContent: 'center',
     // alignItems: 'center',
-    backgroundColor: 'rgba(255, 255, 255, 0.1)',
+    //backgroundColor: 'rgba(255, 255, 255, 0.1)',
+    backgroundColor:'#FFA500',
     // marginBottom: 10,
   },
   faresPassImag: {
