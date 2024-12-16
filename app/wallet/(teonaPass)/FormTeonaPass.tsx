@@ -1,89 +1,89 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState } from 'react';
 import {
-    View,
-    Text,
-    TextInput,
-    Alert,
-    Image,
-    TouchableOpacity,
-    Modal,
-    StyleSheet,
-    Platform,
-} from "react-native";
-import * as ImagePicker from "expo-image-picker";
-import ButtonWallet from "@/components/ButtonWallet";
-import * as SecureStore from "expo-secure-store";
+  View,
+  Text,
+  TextInput,
+  Alert,
+  Image,
+  TouchableOpacity,
+  Modal,
+  StyleSheet,
+  Platform,
+} from 'react-native';
+import * as ImagePicker from 'expo-image-picker';
+import ButtonWallet from '@/components/ButtonWallet';
+import * as SecureStore from 'expo-secure-store';
 //import jwtDecode from "jwt-decode";
-import { useRouter } from "expo-router";
-import axios from "axios";
+import { useRouter } from 'expo-router';
+import axios from 'axios';
 
 function FormTeonaPass() {
-  const [firstName, setFirstName] = useState<string>("");
-  const [lastName, setLastName] = useState<string>("");
-  const [streetName, setStreetName] = useState<string>("");
-  const [streetNameOptional, setStreetNameOptional] = useState<string>("");
-  const [postCode, setPostCode] = useState("");
-  const [city, setCity] = useState<string>("");
-  const [phoneNumber, setPhoneNumber] = useState("");
-  const [country, setCountry] = useState<string>("");
+  const [firstName, setFirstName] = useState<string>('');
+  const [lastName, setLastName] = useState<string>('');
+  const [streetName, setStreetName] = useState<string>('');
+  const [streetNameOptional, setStreetNameOptional] = useState<string>('');
+  const [postCode, setPostCode] = useState('');
+  const [city, setCity] = useState<string>('');
+  const [phoneNumber, setPhoneNumber] = useState('');
+  const [country, setCountry] = useState<string>('');
   const [image, setImage] = useState<string | null>(null);
   const [modalVisible, setModalVisible] = useState(false);
   const [email, setEmail] = useState<string | null>(null);
   const [alertModalVisible, setAlertModalVisible] = useState(false);
   const [message, setMessage] = useState('');
-  const [userId, setUserId] = useState("");
-  const [token, setToken] = useState("");
-  const [adressId, setAdressId] = useState("");
+  const [userId, setUserId] = useState('');
+  const [token, setToken] = useState('');
+  const [adressId, setAdressId] = useState('');
 
   const router = useRouter();
 
-    // Fonction pour prendre une nouvelle photo
-    const takePhoto = async () => {
-        console.log("Requesting camera permissions...");
-        const { status } = await ImagePicker.requestCameraPermissionsAsync();
-        if (status !== "granted") {
-            console.log("Camera permission denied.");
-            setMessage('Camera permission is required to take a photo.');
-            setAlertModalVisible(true);
-            return;
-        }
+  // Fonction pour prendre une nouvelle photo
+  const takePhoto = async () => {
+    console.log('Requesting camera permissions...');
+    const { status } = await ImagePicker.requestCameraPermissionsAsync();
+    if (status !== 'granted') {
+      console.log('Camera permission denied.');
+      setMessage('Camera permission is required to take a photo.');
+      setAlertModalVisible(true);
+      return;
+    }
 
-        console.log("Launching camera...");
-        const result = await ImagePicker.launchCameraAsync({
-            allowsEditing: true,
-            aspect: [4, 3],
-            quality: 1,
-        });
+    console.log('Launching camera...');
+    const result = await ImagePicker.launchCameraAsync({
+      allowsEditing: true,
+      aspect: [4, 3],
+      quality: 1,
+    });
 
-        if (!result.canceled) {
-            console.log("Photo taken:", result.assets[0].uri);
-            setImage(result.assets[0].uri);
-            setModalVisible(false);
-        }
-    };
+    if (!result.canceled) {
+      console.log('Photo taken:', result.assets[0].uri);
+      setImage(result.assets[0].uri);
+      setModalVisible(false);
+    }
+  };
 
-    // Choisir une image à partir de la bibliothèque multimédia
-    const pickImage = async () => {
-        console.log("Requesting media library permissions...");
-        const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
+  // Choisir une image à partir de la bibliothèque multimédia
+  const pickImage = async () => {
+    console.log('Requesting media library permissions...');
+    const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
 
-        if (status !== 'granted') {
-            console.log("Media library permission denied.");
-            setMessage('We need your permission to access the gallery');
-            setAlertModalVisible(true);
-            return;
-        }
+    if (status !== 'granted') {
+      console.log('Media library permission denied.');
+      setMessage('We need your permission to access the gallery');
+      setAlertModalVisible(true);
+      return;
+    }
 
-        console.log("Opening media library...");
-        const result = await ImagePicker.launchImageLibraryAsync({
-            quality: 1,
-        });
+    console.log('Opening media library...');
+    const result = await ImagePicker.launchImageLibraryAsync({
+      quality: 1,
+    });
 
-        if (!result.canceled) {
-            console.log("Image selected:", result.assets[0].uri);
-            setImage(result.assets[0].uri);
-        }
-    };
+    if (!result.canceled) {
+      console.log('Image selected:', result.assets[0].uri);
+      setImage(result.assets[0].uri);
+    }
+  };
 
   useEffect(() => {
     const fetchUserData = async () => {
@@ -91,29 +91,29 @@ function FormTeonaPass() {
         let userId = null;
         let token = null;
 
-        if (Platform.OS === "web") {
-          userId = localStorage.getItem("userId");
-          token = localStorage.getItem("authToken");
+        if (Platform.OS === 'web') {
+          userId = localStorage.getItem('userId');
+          token = localStorage.getItem('authToken');
         } else {
-          userId = await SecureStore.getItemAsync("userId");
-          token = await SecureStore.getItemAsync("authToken");
+          userId = await SecureStore.getItemAsync('userId');
+          token = await SecureStore.getItemAsync('authToken');
         }
 
         if (token) {
           setToken(token);
-          console.log("Token found:", token);
+          console.log('Token found:', token);
         } else {
-          console.warn("Token not found");
+          console.warn('Token not found');
         }
 
         if (userId) {
           setUserId(userId);
-          console.log("User ID found:", userId);
+          console.log('User ID found:', userId);
         } else {
-          console.warn("User ID not found");
+          console.warn('User ID not found');
         }
       } catch (error) {
-        console.error("Error fetching user data:", error);
+        console.error('Error fetching user data:', error);
       }
     };
 
@@ -135,38 +135,38 @@ function FormTeonaPass() {
         userId,
       };
       const response = await axios.post(
-        "http://localhost:8082/api/add/saveAddress",
+        'http://localhost:8082/api/add/saveAddress',
         formData,
         {
-          method: "POST",
+          method: 'POST',
           headers: {
-            "Content-Type": "application/json",
+            'Content-Type': 'application/json',
             ...(token && { Authorization: `Bearer ${token}` }),
           },
-        }
+        },
       );
 
       if (response.status === 200 || (response.data && response.data.id)) {
         const { id } = response.data;
-        console.log("the id of the adress:", response.data.id);
+        console.log('the id of the adress:', response.data.id);
         setAdressId(id);
-        if (Platform.OS === "web") {
-          localStorage.setItem("addressId", id);
-          console.log("Address ID saved to localStorage:", id);
+        if (Platform.OS === 'web') {
+          localStorage.setItem('addressId', id);
+          console.log('Address ID saved to localStorage:', id);
         } else {
-          await SecureStore.setItemAsync("addressId", id);
-          console.log("Address ID saved to SecureStore:", id);
+          await SecureStore.setItemAsync('addressId', id);
+          console.log('Address ID saved to SecureStore:', id);
         }
 
-        Alert.alert("Success", "Form submitted successfully.");
+        Alert.alert('Success', 'Form submitted successfully.');
 
-        router.push("/wallet/TopupFares");
+        router.push('/wallet/TopupFares');
       } else {
-        Alert.alert("Error", "Failed to submit the form.");
+        Alert.alert('Error', 'Failed to submit the form.');
       }
     } catch (error) {
-      console.error("Error submitting form:", error);
-      Alert.alert("Error", "An unexpected error occurred.");
+      console.error('Error submitting form:', error);
+      Alert.alert('Error', 'An unexpected error occurred.');
     }
   };
 
@@ -562,4 +562,3 @@ const styles = StyleSheet.create({
 });
 
 export default FormTeonaPass;
-

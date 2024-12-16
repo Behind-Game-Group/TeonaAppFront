@@ -52,7 +52,9 @@ const Fares = () => {
       <SafeAreaView style={styles.faresContent}>
         <Text style={styles.faresTitleP}>
           Don'Have a card ? Purshase it{' '}
-          <Link style={styles.toCardL} href={'/wallet/(topUpCard)/TopUp'}>here</Link>
+          <Link style={styles.toCardL} href={'/wallet/(topUpCard)/TopUp'}>
+            here
+          </Link>
         </Text>
         <Text style={styles.faresTitleTop}>Topup your teona pass</Text>
         <View style={styles.faresContainerCard}>
@@ -63,36 +65,23 @@ const Fares = () => {
             />
             <Text>For occasional trips</Text>
           </View>
-          <View
-            style={styles.faresContainerCardTop}
-          >
+          <View style={styles.faresContainerCardTop}>
             <Text style={styles.faresTextCard}>TopUp Card</Text>
             {showTextCard ? (
               <>
                 <Text style={styles.dynamicTextCard}>
                   Anyone can use it! For occasional trips 5,00€ card fee
-
-                </Text> <Text style={styles.faresTextMem}>
-                (optional)  {' '}
-              </Text>
-                <View
-                  style={
-                    styles.containerCheckbox}
-                >
+                </Text>{' '}
+                <Text style={styles.faresTextMem}>(optional) </Text>
+                <View style={styles.containerCheckbox}>
                   <Pressable
                     // value={isChecked}
                     onPress={() => setIsChecked(!isChecked)}
-                    style={[
-                      styles.checkCard,
-                      isChecked && styles.checked
-
-                    ]}
+                    style={[styles.checkCard, isChecked && styles.checked]}
                   >
                     {isChecked && <Text style={styles.checkmark}> ✓</Text>}
                   </Pressable>
-                  <View
-                    style={styles.checkboxCont}
-                  >
+                  <View style={styles.checkboxCont}>
                     <Text style={styles.checkboxTxt}>
                       I want my card sent home to me
                     </Text>
@@ -120,16 +109,13 @@ const Fares = () => {
                 showTextPass && styles.faresAvaContainerColumn,
               ]}
             >
-
               {showTextPass ? (
                 <>
                   <Text style={styles.dynamicTextPass}>
                     Personal use only For regular communiting Unlimited trips
                     7,50€ card fee
                   </Text>
-                  <Text style={styles.faresTextMem}>
-                    (optional)
-                  </Text>
+                  <Text style={styles.faresTextMem}>(optional)</Text>
                   <TopUpButton
                     color={'#FFA500'}
                     title={'Purchase'}
@@ -193,8 +179,8 @@ const styles = StyleSheet.create({
     margin: 0,
     padding: 0,
   },
-  toCardL:{
-    color:'blue',
+  toCardL: {
+    color: 'blue',
     textDecorationLine: 'underline',
   },
   checkboxCont: {
@@ -227,7 +213,7 @@ const styles = StyleSheet.create({
     lineHeight: 27,
     textAlign: 'center',
     textBreakStrategy: 'simple',
-   lineBreakStrategyIOS:'standard',
+    lineBreakStrategyIOS: 'standard',
     maxWidth: '90%',
 
     margin: 0,
@@ -260,9 +246,9 @@ const styles = StyleSheet.create({
     lineHeight: 27,
     textAlign: 'center',
     textBreakStrategy: 'simple',
-    lineBreakStrategyIOS:'standard',
+    lineBreakStrategyIOS: 'standard',
     maxWidth: '90%',
-        margin: 0,
+    margin: 0,
     padding: 0,
     color: 'black',
   },
@@ -376,7 +362,7 @@ const styles = StyleSheet.create({
     // justifyContent: 'center',
     // alignItems: 'center',
     //backgroundColor: 'rgba(255, 255, 255, 0.1)',
-    backgroundColor:'#FFA500',
+    backgroundColor: '#FFA500',
     // marginBottom: 10,
   },
   faresPassImag: {
