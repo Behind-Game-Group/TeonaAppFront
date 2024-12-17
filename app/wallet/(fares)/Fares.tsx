@@ -6,20 +6,12 @@ import {
   useWindowDimensions,
   StyleSheet,
   Pressable,
+  Dimensions,
 } from 'react-native';
 import React, { useState } from 'react';
 
 import TopUpButton from '@/components/TopUpButton';
 import { Link } from 'expo-router';
-
-// interface FaresProps {}
-
-export const getWindowDimensions = () => {
-  return {
-    width: useWindowDimensions,
-    height: useWindowDimensions,
-  };
-};
 
 const Fares = () => {
   const [showTextPass, setShowTextPass] = useState<boolean>(false);
@@ -152,7 +144,8 @@ const Fares = () => {
     </SafeAreaView>
   );
 };
-const dimensions = getWindowDimensions();
+const width = Dimensions.get('window').width;
+const height = Dimensions.get('window').height;
 const styles = StyleSheet.create({
   faresContainer: {
     flex: 1,
@@ -304,14 +297,14 @@ const styles = StyleSheet.create({
     padding: 0,
     margin: 0,
     flex: 1,
-    height: dimensions.height.arguments * 0.455,
+    height: height * 0.455,
   },
   faresContainerCardTop: {
     alignItems: 'center',
     justifyContent: 'center',
     padding: 0,
     flex: 1,
-    height: dimensions.height.arguments * 0.455,
+    height: height * 0.455,
   },
   faresAvaContainer: {
     backgroundColor: '#FFFFFF',
@@ -343,7 +336,7 @@ const styles = StyleSheet.create({
     padding: 0,
     flexDirection: 'column',
     flex: 1,
-    height: dimensions.height.arguments * 0.455,
+    height: height * 0.455,
   },
 
   faresContainerCard: {
@@ -368,8 +361,8 @@ const styles = StyleSheet.create({
   faresPassImag: {
     alignItems: 'center',
     justifyContent: 'flex-start',
-    width: dimensions.width.arguments * 0.3,
-    height: dimensions.height.arguments * 0.3,
+    width: width* 0.3,
+    height: height * 0.3,
     resizeMode: 'contain',
     margin: 0,
     padding: 0,
@@ -377,16 +370,16 @@ const styles = StyleSheet.create({
   faresCardImag: {
     alignItems: 'center',
     justifyContent: 'center',
-    width: dimensions.width.arguments * 0.3,
-    height: dimensions.height.arguments * 0.3,
+    width: width* 0.3,
+    height: height * 0.3,
     resizeMode: 'contain',
     margin: 0,
     padding: 0,
   },
 
   faresAvaImag: {
-    width: dimensions.width.arguments * 0.3,
-    height: dimensions.height.arguments * 0.2,
+    width: width* 0.3,
+    height: height * 0.2,
     margin: 0,
     padding: 0,
     resizeMode: 'contain',
