@@ -15,6 +15,7 @@ import axios from 'axios';
 import { TeonaCardModel } from '@/components/TeonaCardModel';
 import TeonaCard from '@/components/TeonaCard';
 import MenuTop from '@/components/MenuTop';
+import { useWallet } from '../userInfoContext/WallletInfo';
 
 interface TopupFaresProps {
   totalPrice: number;
@@ -50,7 +51,7 @@ const cardData: TeonaCardModel[] = [
 const { width, height } = useWindowDimensions();
 const TopupFares: React.FC<TopupFaresProps> = ({ setCurrentBalance }) => {
   const [selectedCards, setSelectedCards] = useState<TeonaCardModel[]>([]);
-
+  const wallet = useWallet();
   const handleTopUp = async () => {
     const totalPrice = selectedCards.reduce(
       (sum, card) => sum + parseFloat(card.price),
@@ -58,9 +59,11 @@ const TopupFares: React.FC<TopupFaresProps> = ({ setCurrentBalance }) => {
     );
 
     try {
-      const response = await axios.post('XXX', {
-        totalPrice,
-        selectedCards,
+      const response = await axios.post('localhost:8082/api/add/savePass', {
+        cardPrice: totalPrice,
+        cardTitle: selectedCards,
+        adressId: wallet.Wallet?.idA,
+        image: wallet.Wallet?.image,
       });
       if (response.status === 200) {
         Alert.alert(

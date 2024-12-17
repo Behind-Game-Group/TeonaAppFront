@@ -8,11 +8,14 @@ import {
   TouchableOpacity,
 } from 'react-native';
 import { useRouter } from 'expo-router';
+import { useWallet } from '../userInfoContext/WallletInfo';
 
 function TopUp() {
   const router = useRouter();
+  const wallet = useWallet();
 
   const [selectedPrice, setSelectedPrice] = useState('');
+  console.log(wallet.Wallet.firstName);
 
   const handleTopUp = (cardType: string, price: string) => {
     // Ajout automatique de deux zéros si le prix est un entier

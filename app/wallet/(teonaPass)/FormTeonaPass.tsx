@@ -12,6 +12,10 @@ import {
 import * as ImagePicker from 'expo-image-picker';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import ButtonWallet from '@/components/ButtonWallet';
+import axios from 'axios';
+import Wallet from '../wallet';
+import { useWallet } from '../userInfoContext/WallletInfo';
+import { router } from 'expo-router';
 
 function FormTeonaPass() {
   const [firstName, setFirstName] = useState<string>('');
@@ -24,6 +28,7 @@ function FormTeonaPass() {
   const [country, setCountry] = useState<string>('');
   const [image, setImage] = useState<string | null>(null);
   const [modalVisible, setModalVisible] = useState(false);
+  const wallet = useWallet();
 
   // Demander la permission d'accéder à la bibliothèque multimédia
   const requestPermissions = async () => {
@@ -74,6 +79,43 @@ function FormTeonaPass() {
     if (!result.canceled) {
       // Si l'utilisateur a choisi une image, on la met dans l'état
       setImage(result.assets[0].uri);
+      if (image != null) wallet.updateWallet({ image: result.assets[0].uri });
+      else wallet.updateWallet({ image: 'none' });
+    }
+  };
+
+  const saveAdress = async () => {
+    try {
+      const response = await axios.post('localhost:8082/api/add/saveAdress', {
+        firstName,
+        lastName,
+        streetName,
+        city,
+        country,
+        phoneNumber,
+        postCode,
+      });
+      if (response.status === 200) {
+        console.log(response.data);
+
+        wallet.updateWallet({ idA: response.data.id });
+        router.push('/wallet/(teonaPass)/TopupFares');
+        Alert.alert(
+          'Success',
+          'The selected cards have been successfully added to the cart.',
+        );
+      } else {
+        Alert.alert(
+          'Error',
+          'An error occurred while adding the cards to the cart.',
+        );
+      }
+    } catch (error) {
+      console.error('Error during data transmission:', error);
+      Alert.alert(
+        'Error',
+        'We cannot contact the server. Please try again later.',
+      );
     }
   };
 
@@ -206,12 +248,14 @@ function FormTeonaPass() {
             />
           </View>
           <Text style={styles.details}>
-            Your card will arrive to your door within the next 7 working days).
+            Your card will arrive to your door within the next 7 working days.
           </Text>
         </View>
         <ButtonWallet
           text='Continue'
-          onPress={() => console.log('Purchased')}
+          onPress={() => {
+            saveAdress;
+          }}
         />
       </View>
     </View>
