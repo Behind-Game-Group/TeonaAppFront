@@ -16,6 +16,7 @@ import { TeonaCardModel } from "@/components/TeonaCardModel";
 import TeonaCard from "@/components/TeonaCard";
 import { Platform } from "react-native";
 import * as SecureStore from "expo-secure-store";
+import { useRouter } from "expo-router";
 
 interface TopupFaresProps {
   totalPrice: number;
@@ -31,6 +32,7 @@ const TopupFares: React.FC<TopupFaresProps> = ({
   const [adressId, setAdressId] = useState("");
   const [loading, setLoading] = useState<boolean>(false);
 
+  const router = useRouter();
   useEffect(() => {
     const fetchUserData = async () => {
       try {
@@ -118,6 +120,7 @@ const TopupFares: React.FC<TopupFaresProps> = ({
             `La carte ${selectedCard.title} a bien été ajoutée au panier.`
           )
         : Alert.alert("Error", "Une erreur empêche l'ajout de votre carte.");
+      router.push("/wallet/(payment)/PaymentDisplay");
     } catch (error) {
       console.error("Erreur durant la transmission des données:", error);
       Alert.alert("Erreur", "Nous ne pouvons pas contacter le serveur.");
