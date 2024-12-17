@@ -39,7 +39,7 @@ export const UserProvider: React.FC<UserProviderProps> = ({ children }) => {
   const [user, setUser] = useState<User>({});
 
   const updateUser = (newUserData: Partial<User>) => {
-    setUser((prevUser) => ({ ...prevUser, ...newUserData })); // Met à jour les données utilisateur
+    setUser((prevUser) => ({ ...prevUser, ...newUserData }));
   };
 
   return (
@@ -48,3 +48,4 @@ export const UserProvider: React.FC<UserProviderProps> = ({ children }) => {
     </UserContext.Provider>
   );
 };
+export default UserProvider;

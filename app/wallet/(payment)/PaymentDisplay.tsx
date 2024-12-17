@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
-import { View, Text, StyleSheet, Platform } from 'react-native';
-import PaymentOptions from '@/components/paymentOption/PaymentOptions';
+import React, { useState } from "react";
+import { View, Text, StyleSheet, Platform } from "react-native";
+import PaymentOptions from "@/components/paymentOption/PaymentOptions";
 
 interface CardPaymentPageProps {
   route: {
@@ -13,7 +13,8 @@ interface CardPaymentPageProps {
 }
 
 const CardPaymentPage: React.FC<CardPaymentPageProps> = ({ route }) => {
-  const { cardType, price, currentBalance } = route.params;
+  // const { cardType, price, currentBalance } = route.params;
+  const { cardType = "", price = 0, currentBalance = 0 } = route?.params || {};
   const [isFirstCard, setIsFirstCard] = useState<boolean>(true);
 
   // Calcul des frais de carte si c'est la première carte
@@ -45,14 +46,18 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 20,
-    backgroundColor: '#fff',
+
+    backgroundColor: "#fff",
+
   },
   cardInfo: {
     marginBottom: 20,
   },
   cardTitle: {
     fontSize: 22,
+
     fontWeight: 'bold',
+
   },
   cardText: {
     fontSize: 16,
@@ -60,7 +65,9 @@ const styles = StyleSheet.create({
   },
   separator: {
     height: 1,
-    backgroundColor: '#ccc',
+
+    backgroundColor: "#ccc",
+
     marginVertical: 20,
   },
 });

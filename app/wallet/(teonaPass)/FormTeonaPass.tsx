@@ -8,13 +8,16 @@ import {
   Image,
   TouchableOpacity,
   Modal,
-} from 'react-native';
-import * as ImagePicker from 'expo-image-picker';
-import Ionicons from '@expo/vector-icons/Ionicons';
-import ButtonTeonaPass from '@/components/ButtonTeonaPass';
-import * as SecureStore from 'expo-secure-store';
-//import jwtDecode from "jwt-decode";
-import { Platform } from 'react-native';
+
+} from "react-native";
+import * as ImagePicker from "expo-image-picker";
+import Ionicons from "@expo/vector-icons/Ionicons";
+import ButtonTeonaPass from "@/components/ButtonTeonaPass";
+import * as SecureStore from "expo-secure-store";
+import { Platform } from "react-native";
+import { useRouter } from "expo-router";
+import axios from "axios";
+
 
 function FormTeonaPass() {
   const [firstName, setFirstName] = useState<string>('');
@@ -28,8 +31,13 @@ function FormTeonaPass() {
   const [image, setImage] = useState<string | null>(null);
   const [modalVisible, setModalVisible] = useState(false);
   const [email, setEmail] = useState<string | null>(null);
-  const [userId, setUserId] = useState('');
-  const [token, setToken] = useState('');
+
+  const [userId, setUserId] = useState("");
+  const [token, setToken] = useState("");
+  const [adressId, setAdressId] = useState("");
+
+  const router = useRouter();
+
 
   const requestPermissions = async () => {
     const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
@@ -80,39 +88,38 @@ function FormTeonaPass() {
 
   useEffect(() => {
     const fetchUserData = async () => {
-      let userId = null;
-      let token = null;
       try {
-        if (Platform.OS === 'web') {
-          userId = localStorage.getItem('userId');
-          token = localStorage.getItem('authToken');
+
+        let userId = null;
+        let token = null;
+
+        if (Platform.OS === "web") {
+          userId = localStorage.getItem("userId");
+          token = localStorage.getItem("authToken");
+
         } else {
           userId = await SecureStore.getItemAsync('userId');
           token = await SecureStore.getItemAsync('authToken');
         }
 
-        if (!userId) {
-          console.error('No token found');
-          Alert.alert('Error', 'No authentication token found.');
-          return;
-        }
         if (token) {
           setToken(token);
-          console.log('token:', token);
+          console.log("Token found:", token);
         } else {
-          console.error('token not found ');
-          Alert.alert('Error', 'Invalid token structure.');
+          console.warn("Token not found");
+
         }
+
         if (userId) {
           setUserId(userId);
-          console.log('User ID:', userId);
+
+          console.log("User ID found:", userId);
         } else {
-          console.error('User ID not found');
-          Alert.alert('Error', 'Invalid token structure.');
+          console.warn("User ID not found");
         }
       } catch (error) {
-        console.error('Error decoding token:', error);
-        Alert.alert('Error', 'Failed to decode token.');
+        console.error("Error fetching user data:", error);
+
       }
     };
 
@@ -131,18 +138,37 @@ function FormTeonaPass() {
         phoneNumber,
         country,
         image,
-        ...(userId && { userId }),
+        userId,
       };
-      const response = await fetch('http://localhost:8082/api/add/adress', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          ...(token && { Authorization: `Bearer ${token}` }),
-        },
-        body: JSON.stringify(formData),
-      });
-      if (response.ok) {
-        Alert.alert('Success', 'Form submitted successfully.');
+
+      const response = await axios.post(
+        "http://localhost:8082/api/add/saveAddress",
+        formData,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            ...(token && { Authorization: `Bearer ${token}` }),
+          },
+        }
+      );
+
+      if (response.status === 200 || (response.data && response.data.id)) {
+        const { id } = response.data;
+        console.log("the id of the adress:", response.data.id);
+        setAdressId(id);
+        if (Platform.OS === "web") {
+          localStorage.setItem("addressId", id);
+          console.log("Address ID saved to localStorage:", id);
+        } else {
+          await SecureStore.setItemAsync("addressId", id);
+          console.log("Address ID saved to SecureStore:", id);
+        }
+
+        Alert.alert("Success", "Form submitted successfully.");
+
+        router.push("/wallet/TopupFares");
+
       } else {
         Alert.alert('Error', 'Failed to submit the form.');
       }
@@ -169,12 +195,15 @@ function FormTeonaPass() {
             <Image source={{ uri: image }} style={styles.profilePic} />
           ) : (
             <Image
-              source={require('../../../assets/images/user-logo.png')}
-              style={[styles.logoUser, { tintColor: '#606060' }]}
+
+              source={require("../../../assets/images/user-logo.png")}
+              tintColor="#606060"
+              resizeMode="contain"
+              // style={[styles.logoUser]}
+
             />
           )}
 
-          {/* Bouton pour ajouter une image */}
           <TouchableOpacity
             style={styles.addImageButton}
             onPress={() => setModalVisible(true)}
@@ -182,7 +211,6 @@ function FormTeonaPass() {
             <Text style={styles.addImageButtonText}>+</Text>
           </TouchableOpacity>
 
-          {/* Modal pour les options */}
           <Modal
             transparent={true}
             animationType='slide'
@@ -280,7 +308,7 @@ function FormTeonaPass() {
             />
           </View>
           <Text style={styles.details}>
-            Your card will arrive to your door within the next 7 working days).
+            Your card will arrive to your door within the next 7 working days.
           </Text>
         </View>
         <ButtonTeonaPass text='Continue' onPress={handleSubmit} />
@@ -464,13 +492,17 @@ const styles = StyleSheet.create({
   logo: {
     width: 60,
     height: 60,
-    resizeMode: 'contain',
-    tintColor: '#606060',
+
+    // resizeMode: "contain",
+    // tintColor: "#606060",
+
   },
   logoBus: {
     width: 65,
     height: 65,
-    resizeMode: 'contain',
+
+    // resizeMode: "contain",
+
   },
   //Modal
   modalContainer: {
