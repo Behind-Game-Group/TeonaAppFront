@@ -10,7 +10,7 @@ import {
 import { StatusBar } from 'expo-status-bar';
 import { ExternalPathString, RelativePathString, useRouter } from 'expo-router';
 
-// Définir les type des données
+// Définir les types des données
 interface IconData {
   id: number;
   image: any;
@@ -21,22 +21,16 @@ const Home: React.FC = () => {
   const { width, height } = useWindowDimensions();
   const router = useRouter();
 
-  // Tableau des données pour chaque Service
   const iconsData: IconData[] = [
     {
       id: 1,
       image: require('@/assets/images/SkyService.png'),
-      route: '/sky/sky' as RelativePathString,
+      route: '/bus/bus' as RelativePathString,
     },
     {
       id: 2,
       image: require('@/assets/images/BusService.png'),
-      route: '/bus' as RelativePathString,
-    },
-    {
-      id: 3,
-      image: require('@/assets/images/CruiserService.png'),
-      route: '/cruiser/cruiser' as RelativePathString,
+      route: '/bus/bus' as RelativePathString,
     },
   ];
 
@@ -44,7 +38,7 @@ const Home: React.FC = () => {
     <View style={styles.container}>
       <StatusBar style='light' />
       <ImageBackground
-        source={require('@/assets/images/bgTeonaService.png')}
+        source={require('@/assets/images/bgTeonaService.png')} // Image à changer une fois qu'on aura l'image de fond
         style={[styles.backgroundImage, { width, height }]}
         resizeMode='cover'
       >

@@ -1,42 +1,40 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="fr">
-<head>
+  <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Teona Map</title>
     <link
-            rel="stylesheet"
-            href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+      rel="stylesheet"
+      href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
     />
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-</head>
-<body style="margin: 0; padding: 0; height: 100%; display: flex;">
-<div id="map" style="flex: 1; height: 100%;"></div>
+  </head>
+  <body style="margin: 0; padding: 0; height: 100%; display: flex">
+    <div id="map" style="flex: 1; height: 100%"></div>
 
-<script>
-    const map = L.map('map').setView([0, 0], 13);
+    <script>
+      const map = L.map('map').setView([0, 0], 13);
 
-    // Ajout des tuiles OpenStreetMap
-    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      // Ajout des tuiles OpenStreetMap
+      L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
         maxZoom: 19,
-    }).addTo(map);
+      }).addTo(map);
 
-
-    navigator.geolocation.getCurrentPosition(
+      navigator.geolocation.getCurrentPosition(
         (position) => {
-            const { latitude, longitude } = position.coords;
-            map.setView([latitude, longitude], 13);
+          const { latitude, longitude } = position.coords;
+          map.setView([latitude, longitude], 13);
 
-
-            L.marker([latitude, longitude])
-                .addTo(map)
-                .bindPopup('Vous êtes ici.')
-                .openPopup();
+          L.marker([latitude, longitude])
+            .addTo(map)
+            .bindPopup('Vous êtes ici.')
+            .openPopup();
         },
         (error) => {
-            console.error('Erreur de géolocalisation :', error);
-        }
-    );
-</script>
-</body>
+          console.error('Erreur de géolocalisation :', error);
+        },
+      );
+    </script>
+  </body>
 </html>

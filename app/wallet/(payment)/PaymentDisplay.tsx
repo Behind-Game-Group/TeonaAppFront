@@ -46,14 +46,18 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 20,
+
     backgroundColor: "#fff",
+
   },
   cardInfo: {
     marginBottom: 20,
   },
   cardTitle: {
     fontSize: 22,
-    fontWeight: "bold",
+
+    fontWeight: 'bold',
+
   },
   cardText: {
     fontSize: 16,
@@ -61,7 +65,9 @@ const styles = StyleSheet.create({
   },
   separator: {
     height: 1,
+
     backgroundColor: "#ccc",
+
     marginVertical: 20,
   },
 });

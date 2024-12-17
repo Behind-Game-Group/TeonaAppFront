@@ -23,7 +23,7 @@ const Header = () => {
   return (
     <View style={styles.header}>
       <TouchableOpacity onPress={() => router.back()} style={styles.backButton}>
-        <AntDesign name="arrowleft" size={24} color="white" />
+        <AntDesign name='arrowleft' size={24} color='white' />
       </TouchableOpacity>
       <Text style={styles.title}>{getTitle()}</Text>
     </View>

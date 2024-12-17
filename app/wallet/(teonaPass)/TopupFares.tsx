@@ -1,5 +1,7 @@
+
 import React, { useEffect, useState } from "react";
 import { SafeAreaProvider } from "react-native-safe-area-context";
+
 import {
   SafeAreaView,
   View,
@@ -8,6 +10,7 @@ import {
   StyleSheet,
   Alert,
   ScrollView,
+
 } from "react-native";
 
 import TopUpButton from "@/components/TopUpButton";
@@ -18,10 +21,12 @@ import { Platform } from "react-native";
 import * as SecureStore from "expo-secure-store";
 import { useRouter } from "expo-router";
 
+
 interface TopupFaresProps {
   totalPrice: number;
   setCurrentBalance: () => void;
 }
+
 
 const TopupFares: React.FC<TopupFaresProps> = ({
   totalPrice,
@@ -124,10 +129,12 @@ const TopupFares: React.FC<TopupFaresProps> = ({
     } catch (error) {
       console.error("Erreur durant la transmission des données:", error);
       Alert.alert("Erreur", "Nous ne pouvons pas contacter le serveur.");
+
     } finally {
       setLoading(false);
     }
   };
+
 
   return (
     <ScrollView style={styles.faresContainer}>
@@ -172,5 +179,6 @@ const styles = StyleSheet.create({
   },
   faresButtonContainer: { flexDirection: "row", flex: 1, padding: 10 },
 });
+
 
 export default TopupFares;

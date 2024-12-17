@@ -144,24 +144,24 @@ const PaymentOptions: React.FC<PaymentOptionsProps> = ({ price, cardType }) => {
   return (
     <View style={styles.paymentOptionsContainer}>
       {/* Paiement par carte bancaire */}
-      <Button title="Carte bancaire" onPress={handleCreditCardPayment} />
+      <Button title='Carte bancaire' onPress={handleCreditCardPayment} />
 
       {/* PayPal */}
-      <Button title="PayPal" onPress={() => showAlert('PayPal')} />
+      <Button title='PayPal' onPress={() => showAlert('PayPal')} />
 
       {/* Apple Pay */}
       {Platform.OS === 'ios' && (
-        <Button title="Apple Pay" onPress={() => showAlert('Apple Pay')} />
+        <Button title='Apple Pay' onPress={() => showAlert('Apple Pay')} />
       )}
 
       {/* Google Pay */}
       {Platform.OS === 'android' && (
-        <Button title="Google Pay" onPress={() => showAlert('Google Pay')} />
+        <Button title='Google Pay' onPress={() => showAlert('Google Pay')} />
       )}
 
       {/* Samsung Pay */}
       {Platform.OS === 'android' && (
-        <Button title="Samsung Pay" onPress={handleSamsungPay} />
+        <Button title='Samsung Pay' onPress={handleSamsungPay} />
       )}
     </View>
   );

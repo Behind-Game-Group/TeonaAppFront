@@ -1,4 +1,6 @@
+
 import React, { useEffect } from "react";
+
 import {
   View,
   Text,
@@ -7,6 +9,7 @@ import {
   useWindowDimensions,
   Platform,
   Alert,
+
 } from "react-native";
 import CustomButton from "@/components/ButtonInscriptionLogin";
 import { useRouter } from "expo-router";
@@ -15,6 +18,7 @@ import * as Notifications from "expo-notifications";
 export default function NotifAllow() {
   const router = useRouter();
   const { width, height } = useWindowDimensions();
+
 
   const askNotificationPermission = async () => {
     if (Platform.OS !== "web") {
@@ -33,6 +37,7 @@ export default function NotifAllow() {
     }
   };
 
+
   useEffect(() => {
     askNotificationPermission();
   }, []);
@@ -40,21 +45,27 @@ export default function NotifAllow() {
   return (
     <View style={styles.container}>
       <ImageBackground
+
         source={require("@/assets/images/teohuballow.jpg")}
         style={[styles.backgroundImage, { width, height }]}
         resizeMode="cover"
+
       >
         {/* Contenu centré avant le conteneur blanc */}
         <View style={styles.topContent}>
           <Text
+
             style={[styles.title, { fontSize: height * 0.025, color: "white" }]}
+
           >
             Turn on your notifications to stay up to date about your journey.
           </Text>
           <Text
             style={[
               styles.description,
+
               { fontSize: height * 0.018, color: "white" },
+
             ]}
           >
             We'll automatically send you information about your journey in real
@@ -84,6 +95,7 @@ export default function NotifAllow() {
             {/* Boutons */}
             <View style={styles.buttonContainer}>
               <CustomButton
+
                 text={"Yes, keep me updated"}
                 color="white"
                 onPress={() => router.push("/hub/(register)/BeginInscription")}
@@ -92,6 +104,7 @@ export default function NotifAllow() {
                 text={"Maybe later"}
                 color="blue"
                 onPress={() => router.push("/hub/(register)/BeginInscription")}
+
               />
             </View>
           </View>
@@ -109,12 +122,15 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   topContent: {
+
     justifyContent: "center",
     alignItems: "center",
+
     marginTop: 30,
     marginBottom: 15,
   },
   content: {
+
     width: "80%",
     padding: 12,
     backgroundColor: "rgba(255, 255, 255, 0.8)",
@@ -122,10 +138,12 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     shadowColor: "#000",
+
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.25,
     shadowRadius: 4,
     elevation: 5,
+
     alignSelf: "center",
   },
   overlayContainer: {
@@ -148,5 +166,6 @@ const styles = StyleSheet.create({
     flexDirection: "column",
     justifyContent: "center",
     alignItems: "center",
+
   },
 });
