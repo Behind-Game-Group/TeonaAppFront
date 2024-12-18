@@ -10,8 +10,8 @@ import {
   TouchableOpacity,
   Image,
 } from 'react-native';
-import axios from 'axios';
 import { useRouter } from 'expo-router';
+import { useWallet } from '../userInfoContext/WallletInfo';
 
 // import Subtitles from 'react-native-subtitles';
 // import { OrderBlueCard } from '/assets/images/OrderBlueCard.png';
@@ -24,12 +24,14 @@ interface Errors {
   Optional: string;
   postalCode: string;
   city: string;
+  phoneNumber: string;
   countryCode: string;
   country: string;
 }
 
 const PurchaseForm: React.FC = () => {
   const router = useRouter();
+  const walletInfo = useWallet();
   //!\   N'omet pas de typer tes constantes /!\
   const [firstName, setFirstName] = useState<string>('');
   const [lastName, setLastName] = useState<string>('');
@@ -39,6 +41,7 @@ const PurchaseForm: React.FC = () => {
   const [countryCode, setCountryCode] = useState<string>('');
   const [country, setCountry] = useState<string>('');
   const [city, setCity] = useState<string>('');
+  const [phoneNumber, setPhoneNumber] = useState<string>('');
   const [postalCode, setPostalCode] = useState<string>('');
   const [loading, setLoading] = useState<boolean>(false);
 
@@ -50,6 +53,7 @@ const PurchaseForm: React.FC = () => {
     Optional: '',
     postalCode: '',
     city: '',
+    phoneNumber: '',
     countryCode: '',
     country: '',
   });
@@ -62,7 +66,7 @@ const PurchaseForm: React.FC = () => {
       streetName: streetName ? '' : 'Number and street name are required',
       Optional: Optional ? '' : ' is optional',
       postalCode: postalCode ? '' : 'Postal code is required',
-
+      phoneNumber: phoneNumber ? '' : 'phone number is required',
       city: city ? '' : 'City is required',
       countryCode: countryCode ? '' : 'Country code is required',
       country: country ? '' : 'Country is required',
@@ -81,48 +85,21 @@ const PurchaseForm: React.FC = () => {
       return;
     }
 
-    setLoading(true);
-/**
- * {
-  "firstName":"james",
-  "lastName":"camerone",
-  "streetName":"16 rue du country",
-  "streetNameOptional": "",
-  "postCode":"75000",
-  "city":"Paris",
-  "phoneNumber":"+336708970",
-  "country":"France",
-  "image":"img"
-}
- */
-    try {
-      const response = axios.post('http://localhost:8082/api/add/card', {
-          "firstName":"name",
-               "lastName":"nom",
-               "streetName":"address",
-               "city":"cyton",
-               "country":"villed",
-               "phoneNumber":"156102",
-               "postCode":564,
-               "TopUp":10
-               }
-      );
-//console.log(response);
-
-      // Cas succès
-      Alert.alert('Success', 'Address submitted successfully!');
-      router.push('/'); // Redirige après le succès
-    } catch (error: unknown) {
-      console.error(error);
-
-      let errorMessage = 'An error occurred. Please try again.';
-      if (axios.isAxiosError(error) && error.response) {
-        errorMessage = error.response.data?.message || errorMessage;
-      }
-      Alert.alert('Error', errorMessage);
-    } finally {
-      setLoading(false);
-    }
+    setLoading(false);
+    // Cas succès
+    walletInfo.updateWallet({
+      firstName,
+      lastName,
+      streetName,
+      Optional,
+      postalCode,
+      city,
+      phoneNumber,
+      countryCode,
+      country,
+    });
+    Alert.alert('Success', 'Address submitted successfully!');
+    router.push('/wallet/TopUp'); // Redirige après le succès
   };
 
   return (
@@ -269,6 +246,20 @@ const PurchaseForm: React.FC = () => {
             onChangeText={setCity}
           />
         </View>
+        <Text style={{ marginLeft: 10 }}>phoneNumber*</Text>
+
+        <TextInput
+          style={[
+            styles.input,
+            errors.phoneNumber && styles.errorInput,
+            {
+              flex: 1,
+              width: 97,
+            },
+          ]}
+          value={phoneNumber}
+          onChangeText={setPhoneNumber}
+        />
       </View>
 
       {errors.postalCode ? (

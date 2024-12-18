@@ -8,10 +8,11 @@ import {
   TouchableOpacity,
 } from 'react-native';
 import { useRouter } from 'expo-router';
-
+import axios from 'axios';
+import { useWallet } from '../userInfoContext/WallletInfo';
 function TopUp() {
   const router = useRouter();
-
+  const walletInfo = useWallet().Wallet;
   const [selectedPrice, setSelectedPrice] = useState('');
 
   const handleTopUp = (cardType: string, price: string) => {
@@ -19,13 +20,43 @@ function TopUp() {
     if (!price.includes('.')) {
       price = `${price}.00`;
     }
-    router.push({
-      pathname: '/wallet/PaymentDisplay',
-      params: { cardType, price },
-    });
+    console.log(walletInfo.firstName + 'kr?');
+
+    sendData(cardType, price);
   };
 
   const prices = ['5.00', '10.00', '15.00', '20.00', '25.00'];
+  const sendData = async (cardType: string, price: string) => {
+    try {
+      const response = await axios.post('http://localhost:8082/api/add/card', {
+        firstName: walletInfo.firstName,
+        lastName: walletInfo.lastName,
+        streetName: walletInfo.streetName,
+        city: walletInfo.city,
+        streetNameOptional: walletInfo.Optional,
+        country: walletInfo.country,
+        postCode: walletInfo.postalCode,
+        phoneNumber: walletInfo.phoneNumber,
+        TopUp: price,
+      });
+      if (response.status == 200) {
+        // Cas succès
+        console.log(response.data);
+        router.push({
+          pathname: '/wallet/PaymentDisplay',
+          params: { cardType, price },
+        });
+      }
+    } catch (error: unknown) {
+      console.error(error);
+
+      let errorMessage = 'An error occurred. Please try again.';
+      if (axios.isAxiosError(error) && error.response) {
+        errorMessage = error.response.data?.message || errorMessage;
+        console.log(errorMessage);
+      }
+    }
+  };
 
   return (
     <View style={styles.container}>
