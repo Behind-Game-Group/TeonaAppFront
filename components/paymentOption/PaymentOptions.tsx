@@ -1,7 +1,7 @@
 import React from 'react';
 import { View, Button, Platform, StyleSheet, Alert } from 'react-native';
 // import { useStripe } from '@stripe/stripe-react-native'; // Pour React Native
-// import { loadStripe } from '@stripe/stripe-js'; // Pour le Web
+import { loadStripe } from '@stripe/stripe-js'; // Pour le Web
 
 interface PaymentOptionsProps {
   price: number; // Montant du paiement
@@ -9,7 +9,7 @@ interface PaymentOptionsProps {
 }
 
 // Charger Stripe.js pour le Web
-// const stripePromise = Platform.OS === 'web' ? loadStripe('your-public-key') : null;
+const stripePromise = Platform.OS === 'web' ? loadStripe('') : null;
 
 const PaymentOptions: React.FC<PaymentOptionsProps> = ({ price, cardType }) => {
   // const stripeReactNative = useStripe(); // Utilisé pour React Native
@@ -45,11 +45,11 @@ const PaymentOptions: React.FC<PaymentOptionsProps> = ({ price, cardType }) => {
 
   // Paiement par carte bancaire avec Stripe.js
   const handleCreditCardPaymentWeb = async () => {
-    // const stripe = await stripePromise;
-    // if (!stripe) {
-    //   Alert.alert('Erreur', 'Stripe.js non chargé');
-    //   return;
-    // }
+    const stripe = await stripePromise;
+    if (!stripe) {
+      Alert.alert('Erreur', 'Stripe.js non chargé');
+      return;
+    }
 
     try {
       const response = await fetch('/create-payment-intent', {
@@ -59,18 +59,31 @@ const PaymentOptions: React.FC<PaymentOptionsProps> = ({ price, cardType }) => {
         },
         body: JSON.stringify({ amount: price * 100 }),
       });
+      // Vérifier la réponse
+      if (!response.ok) {
+        Alert.alert('Erreur', 'Impossible de créer le PaymentIntent.');
+        return;
+      }
 
       const { clientSecret } = await response.json();
-      // const { error } = await stripe.confirmCardPayment(clientSecret);
 
-      // if (error) {
-      //   Alert.alert('Erreur de paiement', error.message || 'Échec');
-      // } else {
-      //   Alert.alert('Paiement réussi', `Vous avez payé ${price} €`);
-      // }
+      // Confirmer le paiement avec Stripe.js
+      const { error } = await stripe.confirmCardPayment(clientSecret);
+
+      if (error) {
+        Alert.alert(
+          'Erreur de paiement',
+          error.message || 'Une erreur est survenue lors du paiement.',
+        );
+      } else {
+        Alert.alert(
+          'Paiement réussi',
+          `Vous avez payé ${price} € avec succès.`,
+        );
+      }
     } catch (err) {
-      console.error('Erreur Stripe.js', err);
-      Alert.alert('Erreur', 'Impossible de lancer le paiement');
+      console.error('Erreur lors du paiement', err);
+      Alert.alert('Erreur', 'Impossible de traiter le paiement.');
     }
   };
 

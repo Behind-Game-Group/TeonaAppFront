@@ -7,58 +7,132 @@ import {
   Image,
   Dimensions,
 } from 'react-native';
-import { useRouter, RelativePathString, ExternalPathString } from 'expo-router';
+import {
+  useRouter,
+  RelativePathString,
+  ExternalPathString,
+  usePathname,
+} from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
+import { NavigationOptions } from 'expo-router/build/global-state/routing';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
-type MenuTopProps = {
-  text: string;
-  onPress?: RelativePathString | ExternalPathString;
-};
+// type MenuTopProps = {
+//   text: string;
+//   onPress: () => void;
+// };
 
-const MenuTop: React.FC<MenuTopProps> = ({ text, onPress }) => {
+type RoutePath =
+  | '/'
+  | '/wallet/TopUp'
+  | '/wallet/PaymentDisplay'
+  | '/wallet/FormTeonaPass';
+
+type PathOption = { path: string; title: string; back: RoutePath };
+
+const windowDimensions = Dimensions.get('window');
+const screenDimensions = Dimensions.get('screen');
+
+const MenuTop: React.FC = (
+  {
+    // text,
+    // onPress
+  },
+) => {
   const router = useRouter();
   const [showMenu, setShowMenu] = useState<boolean>(false);
   const [isDesktop, setIsDesktop] = useState<boolean>(false);
-  useEffect(() => {
-    const handleResize = () => {
-      setIsDesktop(Dimensions.get('window').width >= 1024);
-    };
-    handleResize(); // Initialiser
-    Dimensions.addEventListener('change', handleResize); // Ajouter un écouteur
+  // useEffect(() => {
+  //       const handleResize = () => {
+  //           setIsDesktop(Dimensions.get('window').width >= 1024);
+  //       };
+  //       handleResize(); // Initialiser
+  //       Dimensions.addEventListener('change', handleResize ); // Ajouter un écouteur
 
-    return () => {
-      Dimensions.removeEventListener('change', handleResize); // Nettoyer
-    };
-  }, []);
+  //       return () => {
+  //           Dimensions.removeEventListener('change', handleResize);  // Nettoyer
+  //       };
+  //   }, []);
+
+  /**
+   * Test à partir de la doc : "https://reactnative.dev/docs/0.74/dimensions"
+   */
+  /**
+   * Tableau des différents chemin "path" possible
+   * ainsi que le "title" des pages qui y sont liées
+   * et "back" pour la route du retour en arrière
+   */
+  const pathOptions: PathOption[] = [
+    { path: '/wallet/TopUp', title: 'TopUp Fares', back: '/' },
+    { path: '/wallet/PaymentDisplay', title: 'Payment', back: '/wallet/TopUp' },
+    { path: '/wallet/FormTeonaPass', title: 'Our Cards', back: '/' },
+    { path: '/wallet/PurchaseForm', title: 'Our Cards', back: '/' },
+    { path: '/wallet/successTransction', title: ' ', back: '/' },
+    { path: '/wallet/congrat', title: 'congrats !', back: '/' },
+  ];
+  const [dimensions, setDimensions] = useState({
+    window: windowDimensions,
+    screen: screenDimensions,
+  });
+  useEffect(() => {
+    const subscription = Dimensions.addEventListener(
+      'change',
+      ({ window, screen }) => {
+        setDimensions({ window, screen });
+      },
+    );
+    return () => subscription?.remove();
+  });
+  useEffect(() => {
+    setIsDesktop(dimensions.window.width >= 1024 ? true : false);
+    // console.log(isDesktop);
+  }, [dimensions]);
+
+  const pathname = usePathname();
+
+  // console.log('pathname : ', pathname);
 
   return (
     <>
       <StatusBar style={'light'} backgroundColor='#599AD0' />
-      <View style={[styles.header]}>
+      <View
+        style={[
+          styles.header,
+          pathname.match('successTransction') ? styles.darck : '',
+        ]}
+      >
         <TouchableOpacity
-          style={[styles.viewEnd]}
+          style={styles.viewEnd}
           onPress={() => {
-            // Validation du chemin
-            if (onPress) {
+            const currentOption = pathOptions.find(
+              (option) => option.path === pathname,
+            );
+            if (currentOption?.back) {
               try {
-                router.push(onPress); // Naviguer vers une route valide
+                router.push(currentOption.back);
               } catch (error) {
-                console.log(`Navigation error: ${error}`);
+                console.error(`Navigation error: ${error}`);
               }
             } else {
-              router.back(); // Retour si onPress est vide
+              router.back();
             }
           }}
         >
           <Image
             source={require('@/assets/images/chevron-bottom-normal.png')}
             style={styles.image}
-          />{' '}
-          {/* Bouton retour */}
+          />
         </TouchableOpacity>
         <View style={[styles.viewCenter]}>
-          <Text style={styles.title}>{text}</Text> {/* Titre */}
-        </View>
+          <Text style={styles.title}>
+            {
+              /*Rechercher l'objet correspondant au path dans pathOptions et afficher la valeur du title lié en tant que titre*/
+              pathOptions.find((option) => option.path === pathname)?.title ||
+                'Page Not Found'
+            }
+          </Text>
+        </View>{' '}
+        {/* Titre */}
         {/* Menu Burger ou Navbar */}
         {isDesktop ? (
           <View style={styles.navbar}>
@@ -75,6 +149,7 @@ const MenuTop: React.FC<MenuTopProps> = ({ text, onPress }) => {
           </TouchableOpacity>
         )}
       </View>
+
       {/* Drawer pour le menu burger sur mobile */}
       {showMenu && !isDesktop && (
         <View style={styles.drawer}>
@@ -91,15 +166,16 @@ const MenuTop: React.FC<MenuTopProps> = ({ text, onPress }) => {
       )}
 
       {/* Contenu principal */}
-      <View style={styles.content}>
-        <Text>Contenu principal de l'application.</Text>
-      </View>
+      {/* <View style={styles.content}>
+      <Text>Contenu principal de l'application.</Text>
+    </View> */}
     </>
   );
 };
 
 // Styles
 const styles = StyleSheet.create({
+  darck: { backgroundColor: '#606060' },
   header: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -117,7 +193,7 @@ const styles = StyleSheet.create({
   },
   viewCenter: {
     height: '100%',
-    backgroundColor: 'green',
+    // backgroundColor: 'green',
     justifyContent: 'center',
   },
   viewStart: {
@@ -125,9 +201,10 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-start',
     height: '60%',
     width: 40,
+    // backgroundColor: 'red',
   },
   back: {
-    color: '#fff',
+    color: '#FFF',
     fontSize: 18,
   },
   title: {
@@ -164,6 +241,7 @@ const styles = StyleSheet.create({
   },
   drawer: {
     position: 'absolute',
+    zIndex: 2,
     top: 60,
     right: 0,
     backgroundColor: '#FFFFFF',
@@ -179,10 +257,6 @@ const styles = StyleSheet.create({
     fontSize: 18,
     marginVertical: 8,
     color: '#333',
-  },
-  content: {
-    flex: 1,
-    padding: 16,
   },
 });
 
