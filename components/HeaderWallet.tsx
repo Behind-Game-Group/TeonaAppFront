@@ -2,30 +2,32 @@ import React from 'react';
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import { useRouter, useSegments } from 'expo-router';
 import { AntDesign } from '@expo/vector-icons';
+import MenuTop from '@/components/MenuTop';
 
 const Header = () => {
   const router = useRouter();
   const segments = useSegments();
 
   // Détermine le titre en fonction du segment actuel
-  const getTitle = () => {
-    const page = segments[segments.length - 1];
-    switch (page) {
-      case 'home':
-        return 'Home';
-      case 'login':
-        return 'Login';
-      default:
-        return 'Page';
-    }
-  };
+  // const getTitle = () => {
+  //   const page = segments[segments.length - 1];
+  //   switch (page) {
+  //     case 'home':
+  //       return 'Home';
+  //     case 'login':
+  //       return 'Login';
+  //     default:
+  //       return 'Page';
+  //   }
+  // };
 
   return (
     <View style={styles.header}>
-      <TouchableOpacity onPress={() => router.back()} style={styles.backButton}>
-        <AntDesign name='arrowleft' size={24} color='white' />
-      </TouchableOpacity>
-      <Text style={styles.title}>{getTitle()}</Text>
+      {/*<TouchableOpacity onPress={() => router.back()} style={styles.backButton}>*/}
+      {/*  <AntDesign name='arrowleft' size={24} color='white' />*/}
+      {/*</TouchableOpacity>*/}
+      {/*<Text style={styles.title}>{getTitle()}</Text>*/}
+      <MenuTop />
     </View>
   );
 };
