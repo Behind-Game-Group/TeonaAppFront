@@ -25,7 +25,8 @@ export default function HomeScreen() {
         <Link href={'/hub/auth'}>Auth Screen</Link>
         <Link href={'/hub/(login)/Login'}>Login</Link>
         <Link href={'/hub/BeginInscription'}>Begin Inscription</Link>
-        <Link href={'/wallet/wallet'}>Wallet</Link>
+        <Link href={'/wallet/(teonaPass)/FormTeonaPass'}>Wallet</Link>
+        <Link href={'/wallet/(payment)/PaymentDisplayPass'}>pass</Link>
         <Link href={'/bus/bus'}>Bus</Link>
         <Link href={'/wallet/(fares)/Fares'}>test</Link>
         <Link href={'/sky/sky'}>Sky</Link>
