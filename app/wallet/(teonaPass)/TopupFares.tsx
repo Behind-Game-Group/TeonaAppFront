@@ -36,7 +36,7 @@ const TopupFares: React.FC<TopupFaresProps> = ({
   const [userId, setUserId] = useState("");
   const [adressId, setAdressId] = useState("");
   const [loading, setLoading] = useState<boolean>(false);
-
+const [passDetails,setPassDetails]= useState("");
   const router = useRouter();
   useEffect(() => {
     const fetchUserData = async () => {
@@ -119,13 +119,41 @@ const TopupFares: React.FC<TopupFaresProps> = ({
           },
         }
       );
-      response.status === 200
-        ? Alert.alert(
-            "Success",
-            `La carte ${selectedCard.title} a bien été ajoutée au panier.`
-          )
-        : Alert.alert("Error", "Une erreur empêche l'ajout de votre carte.");
-      router.push("/wallet/(payment)/PaymentDisplay");
+      
+    if( response.status === 200&& response.data && response.data.cardPrice !== undefined){
+      console.log("Full API Response:", response);
+      console.log("Response Data:", response.data);
+      Alert.alert("Success", response.data.message);
+      const data =  response.data;
+      setPassDetails(data);
+      const price = response.data.cardPrice;
+      console.log("Price from API Response:", price);
+
+      if (isNaN(price)) {
+        console.error("Invalid price value:", price);
+        Alert.alert("Error", "Invalid price returned from the API.");
+        return;
+    }
+      const queryParams = new URLSearchParams({
+        cardType: "TopUp",
+        price: price.toString(),
+    });
+      console.log("Navigating to:", `/wallet/(payment)/PaymentDisplay?${queryParams.toString()}`);
+
+      router.push({
+        pathname: "/wallet/(payment)/PaymentDisplay",
+        params: {
+            cardType: "TopUp",
+            price: price.toString(),  
+        },
+    });
+    } else {
+      console.error("Error in API response:", response);
+      Alert.alert("Error", "Une erreur empêche l'ajout de votre carte.");
+  }
+      
+      
+   
     } catch (error) {
       console.error("Erreur durant la transmission des données:", error);
       Alert.alert("Erreur", "Nous ne pouvons pas contacter le serveur.");
