@@ -10,37 +10,82 @@ import {
 import { useRouter } from 'expo-router';
 import axios from 'axios';
 import { useWallet } from '../userInfoContext/WallletInfo';
+import * as SecureStore from 'expo-secure-store';
+import { Platform } from 'react-native';
 function TopUp() {
   const router = useRouter();
   const walletInfo = useWallet().Wallet;
   const [selectedPrice, setSelectedPrice] = useState('');
-
+  const [token, setToken] = useState('');
   const handleTopUp = (cardType: string, price: string) => {
     // Ajout automatique de deux zéros si le prix est un entier
     if (!price.includes('.')) {
       price = `${price}.00`;
     }
     console.log(walletInfo.firstName + 'kr?');
-
+    isAuthen();
     sendData(cardType, price);
+  };
+  const isAuthen = async () => {
+    let userId = null;
+    let getToken = null;
+    if (Platform.OS === 'web') {
+      userId = localStorage.getItem('userId');
+      getToken = localStorage.getItem('authToken');
+    } else {
+      userId = await SecureStore.getItemAsync('userId');
+      getToken = await SecureStore.getItemAsync('authToken');
+    }
+    if (getToken) {
+      setToken(getToken.normalize());
+      console.log('Token found:', token);
+    } else {
+      console.warn('Token not found');
+    }
   };
 
   const prices = ['5.00', '10.00', '15.00', '20.00', '25.00'];
   const sendData = async (cardType: string, price: string) => {
     try {
-      const response = await axios.post('http://localhost:8082/api/add/card', {
-        firstName: walletInfo.firstName,
-        lastName: walletInfo.lastName,
-        streetName: walletInfo.streetName,
-        city: walletInfo.city,
-        streetNameOptional: walletInfo.Optional,
-        country: walletInfo.country,
-        postCode: walletInfo.postalCode,
-        phoneNumber: walletInfo.phoneNumber,
-        TopUp: price,
-      });
-      if (response.status == 200) {
-        // Cas succès
+      const fromData = {
+        auth: null,
+        data: {
+          firstName: walletInfo.firstName,
+          lastName: walletInfo.lastName,
+          streetName: walletInfo.streetName,
+          city: walletInfo.city,
+          streetNameOptional: walletInfo.Optional,
+          country: walletInfo.country,
+          postCode: walletInfo.postalCode,
+          phoneNumber: walletInfo.phoneNumber,
+          TopUp: price,
+        },
+        head: {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        },
+        headToken: {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${token}`,
+          },
+        },
+        isAuth() {
+          if (token == '' || token == null) {
+            return this.head;
+          } else return this.headToken;
+        },
+      };
+      const response = await axios.post(
+        'http://localhost:8082/api/add/card',
+        fromData.data,
+        fromData.isAuth(),
+      );
+
+      if (response.status === 200 && response.data) {
         console.log(response.data);
         router.push({
           pathname: '/wallet/PaymentDisplay',

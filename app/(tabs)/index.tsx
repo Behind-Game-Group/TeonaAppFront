@@ -24,10 +24,10 @@ export default function HomeScreen() {
       <ThemedView style={styles.stepContainer}>
         <Link href={'/hub/login'}>Login</Link>
         <Link href={'/hub/register'}>Register</Link>
-        <Link href={'/wallet/(topUpCard)/PurchaseForm'}>Wallet</Link>
-        <Link href={'/wallet/TopUp'}>Topup</Link>
+        <Link href={'/wallet/(topUpCard)/PurchaseForm'}>Card</Link>
+        <Link href={'/wallet/TopUp'}>Test</Link>
         <Link href={'/bus/bus'}>Bus</Link>
-        <Link href={'/wallet/(teonaPass)/TopupFares'}>test</Link>
+        <Link href={'/wallet/(teonaPass)/FormTeonaPass'}>Pass</Link>
         <Link href={'/sky/sky'}>Sky</Link>
       </ThemedView>
     </ParallaxScrollView>
