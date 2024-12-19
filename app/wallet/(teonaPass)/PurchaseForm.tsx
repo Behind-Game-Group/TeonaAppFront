@@ -102,7 +102,7 @@ const PurchaseForm: React.FC = () => {
 
       // Cas succès
       Alert.alert('Success', 'Address submitted successfully!');
-      router.push('/'); // Redirige après le succès
+      router.push('/'); 
     } catch (error: unknown) {
       console.error(error);
 

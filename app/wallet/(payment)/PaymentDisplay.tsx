@@ -18,17 +18,17 @@ const CardPaymentPage: React.FC = () => {
   const [isFirstCard, setIsFirstCard] = useState<boolean>(true);
 
   const toggleCheckbox = () => setIsChecked(!isChecked);
-  const params = useLocalSearchParams();
 
-  const cardType =
-    params.cardType && typeof params.cardType === 'string'
-      ? params.cardType
-      : '';
-  const price =
-    params.price && !isNaN(Number(params.price)) ? Number(params.price) : 0;
 
-  // Vérification des données
-  if (!cardType || price <= 0) {
+
+
+  const cardType = typeof params.cardType === 'string' ? params.cardType : '';
+  const price = !isNaN(Number(params.price)) ? Number(params.price) : 0;
+  
+  const [isFirstCard, setIsFirstCard] = useState<boolean>(true);
+
+  
+  if (!cardType ) {
     return (
       <View style={styles.container}>
         <Text style={styles.errorText}>Erreur : données manquantes.</Text>
@@ -36,8 +36,10 @@ const CardPaymentPage: React.FC = () => {
     );
   }
 
-  const cardFee = isFirstCard ? (cardType === 'TopUp' ? 5 : 7.5) : 0;
-  const currentBalance = price + cardFee; // Total calculé
+
+  const cardFee = isFirstCard ? (cardType === 'TopUp' ? 7.50 : 5) : 0;
+  const currentBalance = price + cardFee; 
+
 
   const handleCB = (price: number) => {
     router.push({
@@ -65,7 +67,7 @@ const CardPaymentPage: React.FC = () => {
           {isFirstCard && (
             <Text style={styles.text}>Card Fee: {cardFee.toFixed(2)} €</Text>
           )}
-          <Text style={styles.text}>TopUp: {price.toFixed(2)} €</Text>
+          <Text style={styles.text}>TopUp: {price} €</Text>
           <View style={styles.line}></View>
           <Text style={styles.text}>Total: {currentBalance.toFixed(2)} €</Text>
         </View>

@@ -25,7 +25,48 @@ interface TopupFaresProps {
     setCurrentBalance: () => void;
 }
 
-const cardData: TeonaCardModel[] = [
+
+
+const TopupFares: React.FC<TopupFaresProps> = ({
+  totalPrice,
+  setCurrentBalance,
+}) => {
+  const [token, setToken] = useState("");
+  const [userId, setUserId] = useState("");
+  const [adressId, setAdressId] = useState("");
+  const [loading, setLoading] = useState<boolean>(false);
+const [passDetails,setPassDetails]= useState("");
+  const router = useRouter();
+  useEffect(() => {
+    const fetchUserData = async () => {
+      try {
+        let userId = null;
+        let token = null;
+        let adressId = null;
+
+        if (Platform.OS === "web") {
+          userId = localStorage.getItem("userId");
+          adressId = localStorage.getItem("addressId");
+          token = localStorage.getItem("authToken");
+        } else {
+          userId = await SecureStore.getItemAsync("userId");
+          adressId = await SecureStore.getItemAsync("addressId");
+          token = await SecureStore.getItemAsync("authToken");
+        }
+
+        if (token) setToken(token);
+        if (userId) setUserId(userId);
+        if (adressId) setAdressId(adressId);
+      } catch (error) {
+        console.error("Error fetching user data:", error);
+      }
+    };
+
+    fetchUserData();
+  }, []);
+
+  const cardData: TeonaCardModel[] = [
+
     {
         id: "1",
         image: require("@/assets/images/teonapassyearly.png"),
@@ -132,53 +173,77 @@ const TopupFares: React.FC<TopupFaresProps> = ({ totalPrice, setCurrentBalance }
             setModalVisible(true);
             setLoading(false);
         }
-    };
 
-    return (
-      <ScrollView style={styles.faresContainer}>
-          <SafeAreaView>
-              <Text style={styles.headerText}>Let's TopUp your card!</Text>
-              {cardData.map((card) => (
-                <TeonaCard
-                  key={card.id}
-                  card={card}
-                  onTopUp={() => setSelectedCard(card)}
-                />
-              ))}
-              <View style={styles.selectedCardContainer}>
-                  <Text style={styles.selectedCardText}>Carte Sélectionnée:</Text>
-                  {selectedCard && (
-                    <TeonaCard card={selectedCard} onTopUp={() => {}} />
-                  )}
-              </View>
-              <View style={styles.faresTotalCard}>
-                  <Text style={styles.faresTotalPrice}>{`${totalPrice} €`}</Text>
-                  <TopUpButton
-                    title={loading ? "Loading..." : "TopUp"}
-                    onPress={handleTopUp}
-                  />
-              </View>
-          </SafeAreaView>
-          <Modal
-            animationType="slide"
-            transparent={true}
-            visible={modalVisible}
-            onRequestClose={() => setModalVisible(false)}
-          >
-              <View style={styles.modalContainer}>
-                  <View style={styles.modalView}>
-                      <Text style={styles.modalText}>{modalMessage}</Text>
-                      <TouchableOpacity
-                        style={styles.closeButton}
-                        onPress={() => setModalVisible(false)}
-                      >
-                          <Text style={styles.closeButtonText}>Fermer</Text>
-                      </TouchableOpacity>
-                  </View>
-              </View>
-          </Modal>
-      </ScrollView>
-    );
+      );
+      
+    if( response.status === 200&& response.data && response.data.cardPrice !== undefined){
+      console.log("Full API Response:", response);
+      console.log("Response Data:", response.data);
+      Alert.alert("Success", response.data.message);
+      const data =  response.data;
+      setPassDetails(data);
+      const price = response.data.cardPrice;
+      console.log("Price from API Response:", price);
+
+      if (isNaN(price)) {
+        console.error("Invalid price value:", price);
+        Alert.alert("Error", "Invalid price returned from the API.");
+        return;
+    }
+      const queryParams = new URLSearchParams({
+        cardType: "TopUp",
+        price: price.toString(),
+    });
+      console.log("Navigating to:", `/wallet/(payment)/PaymentDisplay?${queryParams.toString()}`);
+
+      router.push({
+        pathname: "/wallet/(payment)/PaymentDisplay",
+        params: {
+            cardType: "TopUp",
+            price: price.toString(),  
+        },
+    });
+    } else {
+      console.error("Error in API response:", response);
+      Alert.alert("Error", "Une erreur empêche l'ajout de votre carte.");
+  }
+      
+      
+   
+    } catch (error) {
+      console.error("Erreur durant la transmission des données:", error);
+      Alert.alert("Erreur", "Nous ne pouvons pas contacter le serveur.");
+
+    } finally {
+      setLoading(false);
+    }
+  };
+
+
+  return (
+    <ScrollView style={styles.faresContainer}>
+      <SafeAreaView>
+        <Text style={styles.headerText}>Let's TopUp your card!</Text>
+        {cardData.map((card) => (
+          <TeonaCard
+            key={card.id}
+            card={card}
+            onTopUp={() => handleTopUp(card)}
+          />
+        ))}
+        <View style={styles.faresTotalCard}>
+          <Text style={styles.faresTotalPrice}>{`${totalPrice} €`}</Text>
+          <View style={styles.faresButtonContainer}>
+            <TopUpButton
+              title={loading ? "Loading..." : "TopUp"}
+              onPress={setCurrentBalance}
+            />
+          </View>
+        </View>
+      </SafeAreaView>
+    </ScrollView>
+  );
+
 };
 
 const styles = StyleSheet.create({
