@@ -121,8 +121,7 @@ const [passDetails,setPassDetails]= useState("");
       );
       
     if( response.status === 200&& response.data && response.data.cardPrice !== undefined){
-      console.log("Full API Response:", response);
-      console.log("Response Data:", response.data);
+     
       Alert.alert("Success", response.data.message);
       const data =  response.data;
       setPassDetails(data);
