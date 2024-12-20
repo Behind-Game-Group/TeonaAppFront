@@ -9,6 +9,7 @@ import * as SplashScreen from 'expo-splash-screen';
 import { StatusBar } from 'expo-status-bar';
 import { useEffect } from 'react';
 import 'react-native-reanimated';
+import { StripeProvider } from '@stripe/stripe-react-native';
 
 import { useColorScheme } from '@/hooks/useColorScheme';
 import UserProvider from './hub/(register)/userInfoContext/UserInfo';
@@ -33,14 +34,18 @@ export default function RootLayout() {
   }
 
   return (
-    <UserProvider>
-      <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
-        <Stack screenOptions={{ headerShown: false }}>
-          <Stack.Screen name='(tabs)' options={{ headerShown: false }} />
-          <Stack.Screen name='+not-found' />
-        </Stack>
-        {/* <StatusBar style="auto" /> */}
-      </ThemeProvider>
-    </UserProvider>
+    <StripeProvider publishableKey='pk_test_51QSEyz086BcD82hOp9pgmAXCy9TMzhg7CM7ODfoJnnE8k5U7QyY25EZc1mn31LwZZEtQDbjkPXMcTXDdeF5LDXi400f879f9HS'>
+      <UserProvider>
+        <ThemeProvider
+          value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}
+        >
+          <Stack screenOptions={{ headerShown: false }}>
+            <Stack.Screen name='(tabs)' options={{ headerShown: false }} />
+            <Stack.Screen name='+not-found' />
+          </Stack>
+          {/* <StatusBar style="auto" /> */}
+        </ThemeProvider>
+      </UserProvider>
+    </StripeProvider>
   );
 }
