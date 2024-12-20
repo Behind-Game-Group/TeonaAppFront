@@ -159,7 +159,7 @@ function FormTeonaPass() {
         setAdressId(id);
         if (Platform.OS === "web") {
           localStorage.setItem("addressId", id);
-          console.log("Address ID saved to localStorage:", id);
+          // console.log("Address ID saved to localStorage:", id);
         } else {
           await SecureStore.setItemAsync("addressId", id);
           console.log("Address ID saved to SecureStore:", id);
