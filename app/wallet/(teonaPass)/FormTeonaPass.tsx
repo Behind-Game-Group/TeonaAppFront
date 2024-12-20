@@ -8,11 +8,16 @@ import {
   Image,
   TouchableOpacity,
   Modal,
-} from 'react-native';
-import * as ImagePicker from 'expo-image-picker';
-import ButtonWallet from '@/components/ButtonWallet';
-import * as SecureStore from 'expo-secure-store';
-import { Platform } from 'react-native';
+
+} from "react-native";
+import * as ImagePicker from "expo-image-picker";
+import Ionicons from "@expo/vector-icons/Ionicons";
+import ButtonTeonaPass from "@/components/ButtonTeonaPass";
+import * as SecureStore from "expo-secure-store";
+import { Platform } from "react-native";
+import { useRouter } from "expo-router";
+import axios from "axios";
+
 
 function FormTeonaPass() {
   const [firstName, setFirstName] = useState<string>('');
@@ -25,17 +30,34 @@ function FormTeonaPass() {
   const [country, setCountry] = useState<string>('');
   const [image, setImage] = useState<string | null>(null);
   const [modalVisible, setModalVisible] = useState(false);
-  const [alertModalVisible, setAlertModalVisible] = useState(false);
-  const [message, setMessage] = useState('');
-  const [userId, setUserId] = useState('');
-  const [token, setToken] = useState('');
+  const [email, setEmail] = useState<string | null>(null);
 
-  // Fonction pour prendre une nouvelle photo
+  const [userId, setUserId] = useState("");
+  const [token, setToken] = useState("");
+  const [adressId, setAdressId] = useState("");
+
+  const router = useRouter();
+
+
+  const requestPermissions = async () => {
+    const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
+    if (status !== 'granted') {
+      Alert.alert(
+        'Permission refusée',
+        'Nous avons besoin de votre permission pour accéder à la galerie.',
+      );
+      return false;
+    }
+    return true;
+  };
+
   const takePhoto = async () => {
     const { status } = await ImagePicker.requestCameraPermissionsAsync();
     if (status !== 'granted') {
-      setMessage('Camera permission is required to take a photo.');
-      setAlertModalVisible(true);
+      Alert.alert(
+        'Permission refusée',
+        'Nous avons besoin de votre permission pour accéder à l’appareil photo.',
+      );
       return;
     }
 
@@ -51,15 +73,9 @@ function FormTeonaPass() {
     }
   };
 
-  // Choisir une image à partir de la bibliothèque multimédia
   const pickImage = async () => {
-    const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
-
-    if (status !== 'granted') {
-      setMessage('We need your permission to access the gallery');
-      setAlertModalVisible(true);
-      return;
-    }
+    const hasPermission = await requestPermissions();
+    if (!hasPermission) return;
 
     const result = await ImagePicker.launchImageLibraryAsync({
       quality: 1,
@@ -72,49 +88,38 @@ function FormTeonaPass() {
 
   useEffect(() => {
     const fetchUserData = async () => {
-      let userId = null;
-      let token = null;
       try {
-        if (Platform.OS === 'web') {
-          if (
-            localStorage.getItem('authToken') ||
-            localStorage.getItem('userId') ||
-            localStorage.getItem('userId') ||
-            localStorage.getItem('authToken')
-          ) {
-            userId = localStorage.getItem('userId');
-            token = localStorage.getItem('authToken');
 
-            userId = localStorage.getItem('userId');
-            token = localStorage.getItem('authToken');
-          }
+        let userId = null;
+        let token = null;
+
+        if (Platform.OS === "web") {
+          userId = localStorage.getItem("userId");
+          token = localStorage.getItem("authToken");
+
         } else {
           userId = await SecureStore.getItemAsync('userId');
           token = await SecureStore.getItemAsync('authToken');
         }
 
-        if (!userId) {
-          console.error('No token found');
-          Alert.alert('Error', 'No authentication token found.');
-          return;
-        }
         if (token) {
           setToken(token);
-          console.log('token:', token);
+          console.log("Token found:", token);
         } else {
-          console.error('token not found ');
-          Alert.alert('Error', 'Invalid token structure.');
+          console.warn("Token not found");
+
         }
+
         if (userId) {
           setUserId(userId);
-          console.log('User ID:', userId);
+
+          console.log("User ID found:", userId);
         } else {
-          console.error('User ID not found');
-          Alert.alert('Error', 'Invalid token structure.');
+          console.warn("User ID not found");
         }
       } catch (error) {
-        console.error('Error decoding token:', error);
-        Alert.alert('Error', 'Failed to decode token.');
+        console.error("Error fetching user data:", error);
+
       }
     };
 
@@ -133,18 +138,37 @@ function FormTeonaPass() {
         phoneNumber,
         country,
         image,
-        ...(userId && { userId }),
+        userId,
       };
-      const response = await fetch('http://localhost:8082/api/add/adress', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          ...(token && { Authorization: `Bearer ${token}` }),
-        },
-        body: JSON.stringify(formData),
-      });
-      if (response.ok) {
-        Alert.alert('Success', 'Form submitted successfully.');
+
+      const response = await axios.post(
+        "http://localhost:8082/api/add/saveAddress",
+        formData,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            ...(token && { Authorization: `Bearer ${token}` }),
+          },
+        }
+      );
+
+      if (response.status === 200 || (response.data && response.data.id)) {
+        const { id } = response.data;
+        console.log("the id of the adress:", response.data.id);
+        setAdressId(id);
+        if (Platform.OS === "web") {
+          localStorage.setItem("addressId", id);
+          // console.log("Address ID saved to localStorage:", id);
+        } else {
+          await SecureStore.setItemAsync("addressId", id);
+          console.log("Address ID saved to SecureStore:", id);
+        }
+
+        Alert.alert("Success", "Form submitted successfully.");
+
+        router.push("/wallet/TopupFares");
+
       } else {
         Alert.alert('Error', 'Failed to submit the form.');
       }
@@ -157,7 +181,11 @@ function FormTeonaPass() {
   return (
     <View style={styles.container}>
       <View style={styles.content}>
-        <Text style={styles.title}>
+        <View style={styles.header}>
+          <Text style={styles.title}>Purchase Teona Pass</Text>
+        </View>
+
+        <Text style={styles.secondTitle}>
           Fill this out and you will have it {'\n'} delivered to your door.
         </Text>
 
@@ -167,12 +195,15 @@ function FormTeonaPass() {
             <Image source={{ uri: image }} style={styles.profilePic} />
           ) : (
             <Image
-              source={require('../../../assets/images/user-logo.png')}
-              style={[styles.logoUser, { tintColor: '#606060' }]}
+
+              source={require("../../../assets/images/user-logo.png")}
+              tintColor="#606060"
+              resizeMode="contain"
+              // style={[styles.logoUser]}
+
             />
           )}
 
-          {/* Bouton pour ajouter une image */}
           <TouchableOpacity
             style={styles.addImageButton}
             onPress={() => setModalVisible(true)}
@@ -180,7 +211,6 @@ function FormTeonaPass() {
             <Text style={styles.addImageButtonText}>+</Text>
           </TouchableOpacity>
 
-          {/* Modal pour les options */}
           <Modal
             transparent={true}
             animationType='slide'
@@ -201,25 +231,6 @@ function FormTeonaPass() {
                   onPress={() => setModalVisible(false)}
                 >
                   <Text style={styles.modalButtonText}>Cancel</Text>
-                </TouchableOpacity>
-              </View>
-            </View>
-          </Modal>
-
-          <Modal
-            transparent={true}
-            animationType='fade'
-            visible={alertModalVisible}
-            onRequestClose={() => setAlertModalVisible(false)}
-          >
-            <View style={styles.modalContainerA}>
-              <View style={styles.modalContentA}>
-                <Text style={styles.modalTextA}>{message}</Text>
-                <TouchableOpacity
-                  style={styles.modalButtonA}
-                  onPress={() => setAlertModalVisible(false)}
-                >
-                  <Text style={styles.modalButtonTextA}>Authorize</Text>
                 </TouchableOpacity>
               </View>
             </View>
@@ -300,9 +311,7 @@ function FormTeonaPass() {
             Your card will arrive to your door within the next 7 working days.
           </Text>
         </View>
-        <View style={styles.buttonContainer}>
-          <ButtonWallet text='Continue' onPress={handleSubmit} />
-        </View>
+        <ButtonTeonaPass text='Continue' onPress={handleSubmit} />
       </View>
     </View>
   );
@@ -318,7 +327,20 @@ const styles = StyleSheet.create({
     width: '100%',
     height: '100%',
   },
+  header: {
+    width: '100%',
+    height: 100,
+    backgroundColor: '#599AD0',
+  },
   title: {
+    fontSize: 20,
+    fontWeight: 'bold',
+    color: '#FFFFFF',
+    textAlign: 'center',
+    fontFamily: 'Roboto',
+    marginBottom: 20,
+  },
+  secondTitle: {
     fontSize: 17,
     color: '#606060',
     textAlign: 'center',
@@ -455,9 +477,32 @@ const styles = StyleSheet.create({
     color: '#606060',
     fontSize: 12,
   },
-  buttonContainer: {
-    alignItems: 'center',
-    marginTop: 10,
+  footer: {
+    position: 'absolute',
+    bottom: 0,
+    left: 0,
+    height: 70,
+    width: '100%',
+    backgroundColor: '#DF8D22',
+  },
+  rowImages: {
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+  },
+  logo: {
+    width: 60,
+    height: 60,
+
+    // resizeMode: "contain",
+    // tintColor: "#606060",
+
+  },
+  logoBus: {
+    width: 65,
+    height: 65,
+
+    // resizeMode: "contain",
+
   },
   //Modal
   modalContainer: {
@@ -510,38 +555,6 @@ const styles = StyleSheet.create({
     color: '#599AD0',
     fontSize: 16,
     textAlign: 'center',
-  },
-  // Modal alerte
-  modalContainerA: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: 'rgba(0, 0, 0, 0.5)',
-  },
-  modalContentA: {
-    backgroundColor: 'white',
-    padding: 20,
-    borderRadius: 10,
-    width: 250,
-  },
-  modalTextA: {
-    fontSize: 16,
-    marginBottom: 20,
-    color: '#606060',
-    textAlign: 'center',
-    fontWeight: 'bold',
-  },
-  modalButtonA: {
-    backgroundColor: '#606060',
-    paddingVertical: 10,
-    paddingHorizontal: 20,
-    borderRadius: 10,
-    marginTop: 10,
-    alignItems: 'center',
-  },
-  modalButtonTextA: {
-    color: 'white',
-    fontWeight: 'bold',
   },
 });
 
