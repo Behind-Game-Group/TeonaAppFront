@@ -8,19 +8,17 @@ import {
   TextInput,
   Pressable,
 } from 'react-native';
-import { useLocalSearchParams, useRouter } from 'expo-router';
+import { useLocalSearchParams } from 'expo-router';
 import ButtonWallet from '@/components/ButtonWallet';
 
 const CardPaymentPage: React.FC = () => {
-  const router = useRouter();
   const [email, setEmail] = useState('');
   const [isChecked, setIsChecked] = useState(false);
-  const [isFirstCard, setIsFirstCard] = useState<boolean>(true);
 
   const toggleCheckbox = () => setIsChecked(!isChecked);
-
-
-
+  
+  const params = useLocalSearchParams();
+  console.log("Params:", params);
 
   const cardType = typeof params.cardType === 'string' ? params.cardType : '';
   const price = !isNaN(Number(params.price)) ? Number(params.price) : 0;
@@ -39,14 +37,6 @@ const CardPaymentPage: React.FC = () => {
 
   const cardFee = isFirstCard ? (cardType === 'TopUp' ? 7.50 : 5) : 0;
   const currentBalance = price + cardFee; 
-
-
-  const handleCB = (price: number) => {
-    router.push({
-      pathname: '/wallet/PaymentInformations',
-      params: { price },
-    });
-  };
 
   return (
     <View style={styles.container}>
@@ -80,7 +70,7 @@ const CardPaymentPage: React.FC = () => {
       </TouchableOpacity>
 
       <TouchableOpacity style={styles.button}>
-        <Text style={styles.buttonText}>Debit/credit card</Text>
+        <Text style={styles.buttonText}>Debit/credit card </Text>
       </TouchableOpacity>
 
       <TouchableOpacity style={styles.button}>
@@ -110,7 +100,7 @@ const CardPaymentPage: React.FC = () => {
         </Text>
       </View>
 
-      <ButtonWallet text='Continue' onPress={() => handleCB(price)} />
+      <ButtonWallet text='Continue' onPress={() => console.log('Purchased')} />
 
       {/*<PaymentOptions price={currentBalance} cardType={cardType}/>*/}
     </View>
