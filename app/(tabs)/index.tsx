@@ -1,10 +1,10 @@
-import {Image, StyleSheet} from 'react-native';
+import { Image, StyleSheet } from 'react-native';
 
-import {HelloWave} from '@/components/HelloWave';
+import { HelloWave } from '@/components/HelloWave';
 import ParallaxScrollView from '@/components/ParallaxScrollView';
-import {ThemedText} from '@/components/ThemedText';
-import {ThemedView} from '@/components/ThemedView';
-import {Link} from 'expo-router';
+import { ThemedText } from '@/components/ThemedText';
+import { ThemedView } from '@/components/ThemedView';
+import { Link } from 'expo-router';
 
 export default function HomeScreen() {
     return (
@@ -26,7 +26,8 @@ export default function HomeScreen() {
                 <Link href={'/hub/BeginInscription'}>Begin Inscription</Link>
                 <Link href={'/wallet/FormTeonaPass'}>Wallet Form TeonaPass</Link>
                 <Link href={'/wallet/(teonaPass)/PurchaseForm'}>Wallet Form Card</Link>
-                <Link href={'/wallet/TopupFares'}>Topup</Link>
+              <Link href={'/wallet/(payment)/PaymentDisplayPass'}>pass</Link>
+              <Link href={'/wallet/TopupFares'}>Topup</Link>
                 <Link href={'/bus/bus'}>Bus</Link>
                 <Link href={'/wallet/(teonaPass)/TopupFares'}>test</Link>
                 <Link href={'/sky/sky'}>Sky</Link>
@@ -40,22 +41,22 @@ export default function HomeScreen() {
 }
 
 const styles = StyleSheet.create({
-    titleContainer: {
-        flexDirection: 'row',
-        alignItems: 'center',
-        gap: 8,
-    },
-    stepContainer: {
-        gap: 8,
-        marginBottom: 8,
-        // Color white
-        backgroundColor: '#fff',
-    },
-    reactLogo: {
-        height: 178,
-        width: 290,
-        bottom: 0,
-        left: 0,
-        position: 'absolute',
-    },
+  titleContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 8,
+  },
+  stepContainer: {
+    gap: 8,
+    marginBottom: 8,
+    // Color white
+    backgroundColor: '#fff',
+  },
+  reactLogo: {
+    height: 178,
+    width: 290,
+    bottom: 0,
+    left: 0,
+    position: 'absolute',
+  },
 });

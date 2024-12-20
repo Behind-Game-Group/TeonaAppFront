@@ -1,44 +1,66 @@
 import React from 'react';
-import { StyleSheet, Text, TouchableOpacity,  } from 'react-native';
+import {
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  GestureResponderEvent,
+} from 'react-native';
 
 interface OrangeButtonProps {
-    title: string; // Texte du bouton
-    onPress: () => void; // Fonction à exécuter lors du clic
-    style?: object; // Style supplémentaire optionnel
-    light?: boolean;
+  title: string; // Texte du bouton
+  onPress: (event: GestureResponderEvent) => void; // Fonction à exécuter lors du clic
+  style?: object; // Style supplémentaire optionnel
+  color?: '#FFA500' | '#FFFFFF';
+  backgroundColor?: '#FFA500' | '#FFFFFF';
 }
 
 const OrangeButton: React.FC<OrangeButtonProps> = ({
-                                                       title,
-                                                       onPress,
-                                                       style,
-                                                       light,
-                                                   }) => {
-    console.log(onPress);
-    return (
-      <TouchableOpacity style={[styles.button, style]} onPress={onPress}>
-          <Text style={[styles.buttonText, light && styles.light]}>{title}</Text>
-      </TouchableOpacity>
-    );
+  title,
+  onPress,
+  style,
+  color = '#FFA500',
+  backgroundColor = '#FFFFFF',
+}) => {
+  const buttonStyles = [
+    styles.button,
+    color === '#FFA500' ? styles.orangeButton : styles.whiteButton,
+  ];
+  const textStyles = [
+    styles.text,
+    color === '#FFA500' ? styles.orangeText : styles.whiteText,
+  ];
+  return (
+    <TouchableOpacity style={buttonStyles} onPress={onPress}>
+      <Text style={textStyles}>{title}</Text>
+    </TouchableOpacity>
+  );
 };
-const styles = StyleSheet.create({
-    button: {
-        borderColor: '#FFA500',
-        borderWidth: 3,
-        borderRadius: 9,
-        paddingVertical: 12,
-        paddingHorizontal: 24,
-        alignItems: 'center',
-        justifyContent: 'center',
-    },
-    buttonText: {
-        color: '#FFA500',
-        fontSize: 16,
-        fontWeight: 'bold',
-    },
-    light: {
-        color: '#FFFFFF',
-    },
-});
-
 export default OrangeButton;
+const styles = StyleSheet.create({
+  button: {
+    marginTop: 20,
+    padding: 15,
+    borderRadius: 5,
+    alignItems: 'center',
+    width: '70%',
+    borderWidth: 2,
+  },
+  orangeButton: {
+    backgroundColor: '#FFA500',
+    borderColor: '#FFA500',
+  },
+  whiteButton: {
+    backgroundColor: '#FFFFFF',
+    borderColor: '#FFA500',
+  },
+  text: {
+    fontSize: 15,
+    fontWeight: 'bold',
+  },
+  orangeText: {
+    color: '#FFFFFF',
+  },
+  whiteText: {
+    color: '#FFA500',
+  },
+});

@@ -48,16 +48,14 @@ const ForgotPassword: React.FC = () => {
 
       // Success
       setSuccessMessage(
-
-        response.data.message || `A reset link has been sent to ${email}.`
+        response.data.message || `A reset link has been sent to ${email}.`,
       );
-      setEmail("");
-      router.push("/hub/(login)/ResetPassword");
+      setEmail('');
+      router.push('/hub/(login)/ResetPassword');
     } catch (error: any) {
       // Error
       const errorMessage =
-        error.response?.data?.message || "An error occurred. Please try again.";
-
+        error.response?.data?.message || 'An error occurred. Please try again.';
       setErrorMessage(errorMessage);
     } finally {
       setLoading(false);
@@ -112,14 +110,11 @@ const styles = StyleSheet.create({
     padding: 16,
     backgroundColor: 'rgba(255, 255, 255, 0.85)',
     borderRadius: 10,
-
-    alignItems: "center",
-    boxShadow: "0px 2px 8px rgba(0, 0, 0, 0.2)",
-    // shadowColor: "#000",
-
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.25,
-    shadowRadius: 4,
+    alignItems: 'center',
+    boxShadowColor: '#000',
+    boxShadowOffset: { width: 0, height: 2 },
+    boxShadowOpacity: 0.25,
+    boxShadowRadius: 4,
     elevation: 5,
   },
   title: {
