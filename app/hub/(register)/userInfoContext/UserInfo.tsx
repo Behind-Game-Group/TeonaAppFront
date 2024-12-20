@@ -39,7 +39,7 @@ export const UserProvider: React.FC<UserProviderProps> = ({ children }) => {
   const [user, setUser] = useState<User>({});
 
   const updateUser = (newUserData: Partial<User>) => {
-    setUser((prevUser) => ({ ...prevUser, ...newUserData }));
+    setUser((prevUser) => ({ ...prevUser, ...newUserData })); // Met à jour les données utilisateur
   };
 
   return (

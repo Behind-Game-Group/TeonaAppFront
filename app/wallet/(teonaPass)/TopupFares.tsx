@@ -139,7 +139,7 @@ const [passDetails,setPassDetails]= useState("");
       console.log("Navigating to:", `/wallet/(payment)/PaymentDisplay?${queryParams.toString()}`);
 
       router.push({
-        pathname: "/wallet/(payment)/PaymentDisplay",
+        pathname: "/wallet/(payment)/PaymentDisplayPass",
         params: {
             cardType: "TopUp",
             price: price.toString(),  
