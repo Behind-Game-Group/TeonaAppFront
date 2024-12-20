@@ -2,7 +2,7 @@ import React from 'react';
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import { useRouter, useSegments } from 'expo-router';
 import { AntDesign } from '@expo/vector-icons';
-import MenuTop from './MenuTop';
+import MenuTop from '@/components/MenuTop';
 
 const Header = () => {
   const router = useRouter();
@@ -22,15 +22,13 @@ const Header = () => {
   // };
 
   return (
-    <>
-      {/* <View style={styles.header}>
-        <TouchableOpacity onPress={() => router.back()} style={styles.backButton}>
-          <AntDesign name="arrowleft" size={24} color="white" />
-        </TouchableOpacity>
-        <Text style={styles.title}>{getTitle()}</Text>
-      </View> */}
+    <View style={styles.header}>
+      {/*<TouchableOpacity onPress={() => router.back()} style={styles.backButton}>*/}
+      {/*  <AntDesign name='arrowleft' size={24} color='white' />*/}
+      {/*</TouchableOpacity>*/}
+      {/*<Text style={styles.title}>{getTitle()}</Text>*/}
       <MenuTop />
-    </>
+    </View>
   );
 };
 
@@ -43,8 +41,6 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
     borderBottomWidth: 1,
     borderBottomColor: '#ccc',
-    position: 'absolute',
-    zIndex: 1,
   },
   backButton: {
     position: 'absolute',

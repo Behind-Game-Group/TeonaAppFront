@@ -35,7 +35,7 @@ interface UserProviderProps {
   children: ReactNode;
 }
 
-const UserProvider: React.FC<UserProviderProps> = ({ children }) => {
+export const UserProvider: React.FC<UserProviderProps> = ({ children }) => {
   const [user, setUser] = useState<User>({});
 
   const updateUser = (newUserData: Partial<User>) => {
@@ -48,5 +48,4 @@ const UserProvider: React.FC<UserProviderProps> = ({ children }) => {
     </UserContext.Provider>
   );
 };
-
 export default UserProvider;

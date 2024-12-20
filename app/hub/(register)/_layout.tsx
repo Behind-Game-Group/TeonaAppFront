@@ -1,7 +1,7 @@
 import React from 'react';
 import { View, StyleSheet, Image, useWindowDimensions } from 'react-native';
 import { Stack, usePathname } from 'expo-router';
-import UserProvider from './userInfoContext/UserInfo';
+import { UserProvider } from '@/app/hub/(register)/userInfoContext/UserInfo';
 
 export default function RegisterLayout() {
   const pathname = usePathname(); // Obtenez le chemin actuel
@@ -14,23 +14,25 @@ export default function RegisterLayout() {
   const hideFooter = excludedPages.includes(pathname);
 
   return (
-    <View style={styles.container}>
-      {/* Contenu principal */}
-      <View style={styles.content}>
-        <Stack screenOptions={{ headerShown: false }} />
-      </View>
-
-      {/* Footer avec le logo Teona */}
-      {!hideFooter && ( // Condition pour afficher le footer uniquement si ce n'est pas une page exclut
-        <View style={styles.footer}>
-          <Image
-            source={require('@/assets/images/teonaLogo.png')}
-            style={[styles.logo, { width: width * 0.4 }]} // Appliquer la largeur dynamique
-            resizeMode='contain'
-          />
+    <UserProvider>
+      <View style={styles.container}>
+        {/* Contenu principal */}
+        <View style={styles.content}>
+          <Stack screenOptions={{ headerShown: false }} />
         </View>
-      )}
-    </View>
+
+        {/* Footer avec le logo Teona */}
+        {!hideFooter && ( // Condition pour afficher le footer uniquement si ce n'est pas une page exclut
+          <View style={styles.footer}>
+            <Image
+              source={require('@/assets/images/teonaLogo.png')}
+              style={[styles.logo, { width: width * 0.4 }]} // Appliquer la largeur dynamique
+              resizeMode='contain'
+            />
+          </View>
+        )}
+      </View>
+    </UserProvider>
   );
 }
 
