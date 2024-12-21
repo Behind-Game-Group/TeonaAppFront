@@ -6,13 +6,13 @@
  * You can remove the `reset-project` script from package.json and safely delete this file after running it.
  */
 
-const fs = require('fs');
-const path = require('path');
+const fs = require("fs");
+const path = require("path");
 
 const root = process.cwd();
-const oldDirs = ['app', 'components', 'hooks', 'constants', 'scripts'];
-const newDir = 'app-example';
-const newAppDir = 'app';
+const oldDirs = ["app", "components", "hooks", "constants", "scripts"];
+const newDir = "app-example";
+const newAppDir = "app";
 const newDirPath = path.join(root, newDir);
 
 const indexContent = `import { Text, View } from "react-native";
