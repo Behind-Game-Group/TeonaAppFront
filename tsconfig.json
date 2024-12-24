@@ -5,6 +5,7 @@
     "esModuleInterop": true,
     "allowSyntheticDefaultImports": true,
     "types": ["react", "react-native"],
+    "typeRoots": ["node_modules/@types", "typings"],
     "paths": {
       "@/*": ["./*"]
     }

@@ -205,8 +205,8 @@ const styles = StyleSheet.create({
     fontSize: 21,
     lineHeight: 27,
     textAlign: 'center',
-    textBreakStrategy: 'simple',
-    lineBreakStrategyIOS: 'standard',
+    // textBreakStrategy: 'simple',
+    // lineBreakStrategyIOS: 'standard',
     maxWidth: '90%',
 
     margin: 0,
@@ -238,8 +238,8 @@ const styles = StyleSheet.create({
     fontSize: 21,
     lineHeight: 27,
     textAlign: 'center',
-    textBreakStrategy: 'simple',
-    lineBreakStrategyIOS: 'standard',
+    // textBreakStrategy: 'simple',
+    // lineBreakStrategyIOS: 'standard',
     maxWidth: '90%',
     margin: 0,
     padding: 0,
@@ -361,7 +361,7 @@ const styles = StyleSheet.create({
   faresPassImag: {
     alignItems: 'center',
     justifyContent: 'flex-start',
-    width: width* 0.3,
+    width: width * 0.3,
     height: height * 0.3,
     resizeMode: 'contain',
     margin: 0,
@@ -370,7 +370,7 @@ const styles = StyleSheet.create({
   faresCardImag: {
     alignItems: 'center',
     justifyContent: 'center',
-    width: width* 0.3,
+    width: width * 0.3,
     height: height * 0.3,
     resizeMode: 'contain',
     margin: 0,
@@ -378,7 +378,7 @@ const styles = StyleSheet.create({
   },
 
   faresAvaImag: {
-    width: width* 0.3,
+    width: width * 0.3,
     height: height * 0.2,
     margin: 0,
     padding: 0,

@@ -1,3 +1,7 @@
+import { Platform } from 'react-native';
+import { StripeProvider } from '@stripe/stripe-react-native';
+import { useColorScheme } from '@/hooks/useColorScheme';
+import UserProvider from './hub/(register)/userInfoContext/UserInfo';
 import {
   DarkTheme,
   DefaultTheme,
@@ -9,12 +13,8 @@ import * as SplashScreen from 'expo-splash-screen';
 import { StatusBar } from 'expo-status-bar';
 import { useEffect } from 'react';
 import 'react-native-reanimated';
-import { StripeProvider } from '@stripe/stripe-react-native';
+import Constants from 'expo-constants';
 
-import { useColorScheme } from '@/hooks/useColorScheme';
-import UserProvider from './hub/(register)/userInfoContext/UserInfo';
-
-// Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync();
 
 export default function RootLayout() {
@@ -32,20 +32,50 @@ export default function RootLayout() {
   if (!loaded) {
     return null;
   }
-
+  const STRIPE_PUBLIC_KEY = Constants.expoConfig?.extra?.stripePublicKey;
   return (
-    <StripeProvider publishableKey='pk_test_51QSEyz086BcD82hOp9pgmAXCy9TMzhg7CM7ODfoJnnE8k5U7QyY25EZc1mn31LwZZEtQDbjkPXMcTXDdeF5LDXi400f879f9HS'>
-      <UserProvider>
-        <ThemeProvider
-          value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}
-        >
+    // Only render StripeProvider if the platform is not web
+    <UserProvider>
+      <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
+        <StripeProvider publishableKey={STRIPE_PUBLIC_KEY}>
           <Stack screenOptions={{ headerShown: false }}>
             <Stack.Screen name='(tabs)' options={{ headerShown: false }} />
             <Stack.Screen name='+not-found' />
           </Stack>
           {/* <StatusBar style="auto" /> */}
-        </ThemeProvider>
-      </UserProvider>
-    </StripeProvider>
+        </StripeProvider>
+      </ThemeProvider>
+    </UserProvider>
+    // <UserProvider>
+    //   <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
+    //     {/* Platform-specific rendering */}
+    //     {Platform.OS !== 'web' ? (
+    //       // iOS/Android platform
+    //       <StripeProvider publishableKey={STRIPE_PUBLIC_KEY}>
+    //         <Stack screenOptions={{ headerShown: false }}>
+    //           <Stack.Screen name='(tabs)' options={{ headerShown: false }} />
+    //           <Stack.Screen name='+not-found' />
+    //         </Stack>
+    //       </StripeProvider>
+    //     ) : (
+    //       // Web platform
+    //       <>
+    //         {/* Web-specific rendering */}
+    //         <View style={{ padding: 20, alignItems: 'center' }}>
+    //           <Text style={{ fontSize: 24, fontWeight: 'bold' }}>
+    //             Welcome to our app on the Web!
+    //           </Text>
+    //           <Text style={{ marginTop: 10 }}>
+    //             Stripe functionality will not be available on the web here.
+    //           </Text>
+    //         </View>
+    //         <Stack screenOptions={{ headerShown: false }}>
+    //           <Stack.Screen name='(tabs)' options={{ headerShown: false }} />
+    //           <Stack.Screen name='+not-found' />
+    //         </Stack>
+    //       </>
+    //     )}
+    //   </ThemeProvider>
+    // </UserProvider>
   );
 }

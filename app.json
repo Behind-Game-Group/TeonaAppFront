@@ -8,6 +8,7 @@
     "scheme": "myapp",
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
+    "platforms": ["ios", "android", "web"],
     "ios": {
       "infoPlist": {
         "NSLocationWhenInUseUsageDescription": "Nous avons besoin de votre localisation pour afficher votre position actuelle."
@@ -49,6 +50,7 @@
       "typedRoutes": true
     },
     "extra": {
+      "stripePublicKey": "pk_test_51QSEyz086BcD82hOp9pgmAXCy9TMzhg7CM7ODfoJnnE8k5U7QyY25EZc1mn31LwZZEtQDbjkPXMcTXDdeF5LDXi400f879f9HS",
       "router": {
         "origin": false
       },
