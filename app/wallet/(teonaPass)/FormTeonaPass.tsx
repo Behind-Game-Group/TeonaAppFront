@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   View,
   Text,
@@ -11,11 +11,11 @@ import {
 } from 'react-native';
 import * as ImagePicker from 'expo-image-picker';
 import Ionicons from '@expo/vector-icons/Ionicons';
-import ButtonWallet from '@/components/ButtonWallet';
+import ButtonTeonaPass from '@/components/ButtonTeonaPass';
+import * as SecureStore from 'expo-secure-store';
+import { Platform } from 'react-native';
+import { useRouter } from 'expo-router';
 import axios from 'axios';
-import Wallet from '../wallet';
-import { useWallet } from '../userInfoContext/WallletInfo';
-import { router } from 'expo-router';
 
 function FormTeonaPass() {
   const [firstName, setFirstName] = useState<string>('');
@@ -28,9 +28,14 @@ function FormTeonaPass() {
   const [country, setCountry] = useState<string>('');
   const [image, setImage] = useState<string | null>(null);
   const [modalVisible, setModalVisible] = useState(false);
-  const wallet = useWallet();
+  const [email, setEmail] = useState<string | null>(null);
 
-  // Demander la permission d'accéder à la bibliothèque multimédia
+  const [userId, setUserId] = useState('');
+  const [token, setToken] = useState('');
+  const [adressId, setAdressId] = useState('');
+
+  const router = useRouter();
+
   const requestPermissions = async () => {
     const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
     if (status !== 'granted') {
@@ -43,7 +48,6 @@ function FormTeonaPass() {
     return true;
   };
 
-  // Fonction pour prendre une nouvelle photo
   const takePhoto = async () => {
     const { status } = await ImagePicker.requestCameraPermissionsAsync();
     if (status !== 'granted') {
@@ -66,66 +70,112 @@ function FormTeonaPass() {
     }
   };
 
-  // Choisir une image à partir de la bibliothèque multimédia
   const pickImage = async () => {
     const hasPermission = await requestPermissions();
     if (!hasPermission) return;
 
-    // Ouvrir la galerie pour sélectionner une image
     const result = await ImagePicker.launchImageLibraryAsync({
-      quality: 1, // Qualité maximale de l'image
+      quality: 1,
     });
 
     if (!result.canceled) {
-      // Si l'utilisateur a choisi une image, on la met dans l'état
       setImage(result.assets[0].uri);
-      if (image != null) wallet.updateWallet({ image: result.assets[0].uri });
-      else wallet.updateWallet({ image: 'none' });
     }
   };
 
-  const saveAdress = async () => {
+  useEffect(() => {
+    const fetchUserData = async () => {
+      try {
+        let userId = null;
+        let token = null;
+
+        if (Platform.OS === 'web') {
+          userId = localStorage.getItem('userId');
+          token = localStorage.getItem('authToken');
+        } else {
+          userId = await SecureStore.getItemAsync('userId');
+          token = await SecureStore.getItemAsync('authToken');
+        }
+
+        if (token) {
+          setToken(token);
+          console.log('Token found:', token);
+        } else {
+          console.warn('Token not found');
+        }
+
+        if (userId) {
+          setUserId(userId);
+
+          console.log('User ID found:', userId);
+        } else {
+          console.warn('User ID not found');
+        }
+      } catch (error) {
+        console.error('Error fetching user data:', error);
+      }
+    };
+
+    fetchUserData();
+  }, []);
+
+  const handleSubmit = async () => {
     try {
-      const response = await axios.post('localhost:8082/api/add/saveAdress', {
+      const formData = {
         firstName,
         lastName,
         streetName,
-        city,
-        country,
-        phoneNumber,
+        streetNameOptional,
         postCode,
-      });
-      if (response.status === 200) {
-        console.log(response.data);
+        city,
+        phoneNumber,
+        country,
+        image,
+        userId,
+      };
 
-        wallet.updateWallet({ idA: response.data.id });
-        router.push('/wallet/(teonaPass)/TopupFares');
-        Alert.alert(
-          'Success',
-          'The selected cards have been successfully added to the cart.',
-        );
+      const response = await axios.post(
+        'http://localhost:8082/api/add/saveAddress',
+        formData,
+        {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            ...(token && { Authorization: `Bearer ${token}` }),
+          },
+        },
+      );
+
+      if (response.status === 200 || (response.data && response.data.id)) {
+        const { id } = response.data;
+        console.log('the id of the adress:', response.data.id);
+        setAdressId(id);
+        if (Platform.OS === 'web') {
+          localStorage.setItem('addressId', id);
+          // console.log("Address ID saved to localStorage:", id);
+        } else {
+          await SecureStore.setItemAsync('addressId', id);
+          console.log('Address ID saved to SecureStore:', id);
+        }
+
+        Alert.alert('Success', 'Form submitted successfully.');
+
+        router.push('/wallet/TopupFares');
       } else {
-        Alert.alert(
-          'Error',
-          'An error occurred while adding the cards to the cart.',
-        );
+        Alert.alert('Error', 'Failed to submit the form.');
       }
     } catch (error) {
-      console.error('Error during data transmission:', error);
-      Alert.alert(
-        'Error',
-        'We cannot contact the server. Please try again later.',
-      );
+      console.error('Error submitting form:', error);
+      Alert.alert('Error', 'An unexpected error occurred.');
     }
   };
 
   return (
     <View style={styles.container}>
       <View style={styles.content}>
-        {/* <View style={styles.header}>
-                    <Ionicons name="menu-outline" style={{marginLeft: 335, marginTop: 20}} size={40} color="white"/>
-                    <Text style={styles.title}>Purchase Teona Pass</Text>
-                </View> */}
+        <View style={styles.header}>
+          <Text style={styles.title}>Purchase Teona Pass</Text>
+        </View>
 
         <Text style={styles.secondTitle}>
           Fill this out and you will have it {'\n'} delivered to your door.
@@ -138,11 +188,12 @@ function FormTeonaPass() {
           ) : (
             <Image
               source={require('../../../assets/images/user-logo.png')}
-              style={[styles.logoUser, { tintColor: '#606060' }]}
+              tintColor='#606060'
+              resizeMode='contain'
+              // style={[styles.logoUser]}
             />
           )}
 
-          {/* Bouton pour ajouter une image */}
           <TouchableOpacity
             style={styles.addImageButton}
             onPress={() => setModalVisible(true)}
@@ -150,7 +201,6 @@ function FormTeonaPass() {
             <Text style={styles.addImageButtonText}>+</Text>
           </TouchableOpacity>
 
-          {/* Modal pour les options */}
           <Modal
             transparent={true}
             animationType='slide'
@@ -251,12 +301,7 @@ function FormTeonaPass() {
             Your card will arrive to your door within the next 7 working days.
           </Text>
         </View>
-        <ButtonWallet
-          text='Continue'
-          onPress={() => {
-            saveAdress;
-          }}
-        />
+        <ButtonTeonaPass text='Continue' onPress={handleSubmit} />
       </View>
     </View>
   );
@@ -437,13 +482,15 @@ const styles = StyleSheet.create({
   logo: {
     width: 60,
     height: 60,
-    resizeMode: 'contain',
-    tintColor: '#606060',
+
+    // resizeMode: "contain",
+    // tintColor: "#606060",
   },
   logoBus: {
     width: 65,
     height: 65,
-    resizeMode: 'contain',
+
+    // resizeMode: "contain",
   },
   //Modal
   modalContainer: {

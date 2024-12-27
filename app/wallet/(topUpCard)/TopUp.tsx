@@ -23,7 +23,7 @@ function TopUp() {
       price = `${price}.00`;
     }
     router.push({
-      pathname: '/wallet/PaymentDisplay',
+      pathname: '/wallet/PaymentDisplayCard',
       params: { cardType, price },
     });
   };

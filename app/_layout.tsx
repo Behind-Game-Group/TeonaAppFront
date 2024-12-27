@@ -38,6 +38,7 @@ export default function RootLayout() {
     <WalletProvider>
       {' '}
       <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
+        {/* <StripeProvider publishableKey={STRIPE_PUBLIC_KEY}> */}
         <Stack screenOptions={{ headerShown: false }}>
           <Stack.Screen name='(tabs)' options={{ headerShown: false }} />
           <Stack.Screen name='+not-found' />

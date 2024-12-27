@@ -8,7 +8,7 @@ import {
   TextInput,
   Pressable,
 } from 'react-native';
-import { useRouter,useLocalSearchParams } from 'expo-router';
+import { useRouter, useLocalSearchParams } from 'expo-router';
 import ButtonWallet from '@/components/ButtonWallet';
 import { useNavigation } from '@react-navigation/native';
 
@@ -17,18 +17,17 @@ const CardPaymentPage: React.FC = () => {
   const [isChecked, setIsChecked] = useState(false);
   const navigation = useNavigation();
   const toggleCheckbox = () => setIsChecked(!isChecked);
-  
+
   const params = useLocalSearchParams();
-  console.log("Params:", params);
+  console.log('Params:', params);
 
   const cardType = typeof params.cardType === 'string' ? params.cardType : '';
   const price = !isNaN(Number(params.price)) ? Number(params.price) : 0;
-  
+
   const [isFirstCard, setIsFirstCard] = useState<boolean>(true);
   const router = useRouter();
- 
-  
-  if (!cardType ) {
+
+  if (!cardType) {
     return (
       <View style={styles.container}>
         <Text style={styles.errorText}>Erreur : données manquantes.</Text>
@@ -36,9 +35,8 @@ const CardPaymentPage: React.FC = () => {
     );
   }
 
-
-  const cardFee = isFirstCard ? (cardType === 'TopUp' ? 7.50 : 5) : 0;
-  const currentBalance = price + cardFee; 
+  const cardFee = isFirstCard ? (cardType === 'TopUp' ? 7.5 : 5) : 0;
+  const currentBalance = price + cardFee;
 
   return (
     <View style={styles.container}>
@@ -72,14 +70,17 @@ const CardPaymentPage: React.FC = () => {
       </TouchableOpacity>
 
       <TouchableOpacity style={styles.button}>
-        <Text style={styles.buttonText}    onPress={() =>
-        router.push({
-          pathname: '/wallet/(payment)/PaymentInformations',
-          params: { price: price.toString() },
-        })
-      }>
-          
-          Debit/credit card </Text>
+        <Text
+          style={styles.buttonText}
+          onPress={() =>
+            router.push({
+              pathname: '/wallet/(payment)/PaymentInformations',
+              params: { price: price.toString() },
+            })
+          }
+        >
+          Debit/credit card{' '}
+        </Text>
       </TouchableOpacity>
 
       <TouchableOpacity style={styles.button}>
