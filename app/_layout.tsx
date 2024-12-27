@@ -37,13 +37,13 @@ export default function RootLayout() {
     // Only render StripeProvider if the platform is not web
     <UserProvider>
       <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
-        <StripeProvider publishableKey={STRIPE_PUBLIC_KEY}>
-          <Stack screenOptions={{ headerShown: false }}>
-            <Stack.Screen name='(tabs)' options={{ headerShown: false }} />
-            <Stack.Screen name='+not-found' />
-          </Stack>
-          {/* <StatusBar style="auto" /> */}
-        </StripeProvider>
+        {/* <StripeProvider publishableKey={STRIPE_PUBLIC_KEY}> */}
+        <Stack screenOptions={{ headerShown: false }}>
+          <Stack.Screen name='(tabs)' options={{ headerShown: false }} />
+          <Stack.Screen name='+not-found' />
+        </Stack>
+        {/* <StatusBar style="auto" /> */}
+        {/* </StripeProvider> */}
       </ThemeProvider>
     </UserProvider>
     // <UserProvider>
