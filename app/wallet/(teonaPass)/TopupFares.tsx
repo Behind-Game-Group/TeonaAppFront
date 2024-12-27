@@ -1,11 +1,10 @@
-import React, { useEffect, useState } from 'react';
-// import { SafeAreaProvider } from "react-native-safe-area-context";
+import React, { useState } from 'react';
 
 import {
   SafeAreaView,
   View,
   Text,
-  Dimensions,
+  useWindowDimensions,
   StyleSheet,
   Alert,
   ScrollView,
@@ -15,193 +14,162 @@ import TopUpButton from '@/components/TopUpButton';
 import axios from 'axios';
 import { TeonaCardModel } from '@/components/TeonaCardModel';
 import TeonaCard from '@/components/TeonaCard';
-import { Platform } from 'react-native';
-import * as SecureStore from 'expo-secure-store';
-import { useRouter } from 'expo-router';
+import MenuTop from '@/components/MenuTop';
+import { useWallet } from '../userInfoContext/WallletInfo';
 
 interface TopupFaresProps {
   totalPrice: number;
   setCurrentBalance: () => void;
 }
 
-const TopupFares: React.FC<TopupFaresProps> = ({
-  totalPrice,
-  setCurrentBalance,
-}) => {
-  const [token, setToken] = useState('');
-  const [userId, setUserId] = useState('');
-  const [adressId, setAdressId] = useState('');
-  const [loading, setLoading] = useState<boolean>(false);
-  const [passDetails, setPassDetails] = useState('');
-  const router = useRouter();
-  useEffect(() => {
-    const fetchUserData = async () => {
-      try {
-        let userId = null;
-        let token = null;
-        let adressId = null;
-
-        if (Platform.OS === 'web') {
-          userId = localStorage.getItem('userId');
-          adressId = localStorage.getItem('addressId');
-          token = localStorage.getItem('authToken');
-        } else {
-          userId = await SecureStore.getItemAsync('userId');
-          adressId = await SecureStore.getItemAsync('addressId');
-          token = await SecureStore.getItemAsync('authToken');
-        }
-
-        if (token) setToken(token);
-        if (userId) setUserId(userId);
-        if (adressId) setAdressId(adressId);
-      } catch (error) {
-        console.error('Error fetching user data:', error);
-      }
-    };
-
-    fetchUserData();
-  }, []);
-
-  const cardData: TeonaCardModel[] = [
-    {
-      id: '1',
-      image: require('@/assets/images/teonapassyearly.png'),
-      title: 'TeonaPass Yearly Pass',
-      price: '540',
-    },
-    {
-      id: '2',
-      image: require('@/assets/images/teonapass.png'),
-      title: 'TeonaPass Monthly Pass',
-      price: '45',
-    },
-    {
-      id: '3',
-      image: require('@/assets/images/teonapass.png'),
-      title: 'TeonaPass Weekly Pass',
-      price: '11.25',
-    },
-    {
-      id: '4',
-      image: require('@/assets/images/teonapass.png'),
-      title: 'TeonaPass Daily Pass',
-      price: '7.95',
-    },
-  ];
-
-  const handleTopUp = async (selectedCard: TeonaCardModel) => {
-    if (!userId) {
-      Alert.alert('Error', 'User ID not found. Please try again later.');
-      return;
-    }
-
-    setLoading(true);
-    const payload = {
-      cardTitle: selectedCard.title,
-      cardPrice: parseFloat(selectedCard.price),
-      isActive: 1,
-      userId,
-      adressId,
-    };
+const cardData: TeonaCardModel[] = [
+  {
+    id: '1',
+    image: require('@/assets/images/teonapassyearly.png'),
+    title: 'TeonaPass Yearly Pass',
+    price: '540',
+  },
+  {
+    id: '2',
+    image: require('@/assets/images/teonapass.png'),
+    title: 'TeonaPass Monthly Pass',
+    price: '45',
+  },
+  {
+    id: '3',
+    image: require('@/assets/images/teonapass.png'),
+    title: 'TeonaPass Weekly Pass',
+    price: '11.25',
+  },
+  {
+    id: '4',
+    image: require('@/assets/images/teonapass.png'),
+    title: 'TeonaPass Daily Pass ',
+    price: '7.95',
+  },
+];
+const { width, height } = useWindowDimensions();
+const TopupFares: React.FC<TopupFaresProps> = ({ setCurrentBalance }) => {
+  const [selectedCards, setSelectedCards] = useState<TeonaCardModel[]>([]);
+  const wallet = useWallet();
+  const handleTopUp = async () => {
+    const totalPrice = selectedCards.reduce(
+      (sum, card) => sum + parseFloat(card.price),
+      0,
+    );
 
     try {
-      const response = await axios.post(
-        'http://localhost:8082/api/add/savePass',
-        payload,
-        {
-          headers: {
-            'Content-Type': 'application/json',
-            ...(token && { Authorization: `Bearer ${token}` }),
-          },
-        },
-      );
-
-      if (
-        response.status === 200 &&
-        response.data &&
-        response.data.cardPrice !== undefined
-      ) {
-        Alert.alert('Success', response.data.message);
-        const data = response.data;
-        setPassDetails(data);
-        const price = response.data.cardPrice;
-        console.log('Price from API Response:', price);
-
-        if (isNaN(price)) {
-          console.error('Invalid price value:', price);
-          Alert.alert('Error', 'Invalid price returned from the API.');
-          return;
-        }
-        const queryParams = new URLSearchParams({
-          cardType: 'TopUp',
-          price: price.toString(),
-        });
-        console.log(
-          'Navigating to:',
-          `/wallet/(payment)/PaymentDisplay?${queryParams.toString()}`,
+      const response = await axios.post('localhost:8082/api/add/savePass', {
+        cardPrice: totalPrice,
+        cardTitle: selectedCards,
+        adressId: wallet.Wallet?.idA,
+        image: wallet.Wallet?.image,
+      });
+      if (response.status === 200) {
+        Alert.alert(
+          'Success',
+          'The selected cards have been successfully added to the cart.',
         );
-
-        router.push({
-          pathname: '/wallet/(payment)/PaymentDisplayPass',
-          params: {
-            cardType: 'TopUp',
-            price: price.toString(),
-          },
-        });
       } else {
-        console.error('Error in API response:', response);
-        Alert.alert('Error', "Une erreur empêche l'ajout de votre carte.");
+        Alert.alert(
+          'Error',
+          'An error occurred while adding the cards to the cart.',
+        );
       }
     } catch (error) {
-      console.error('Erreur durant la transmission des données:', error);
-      Alert.alert('Erreur', 'Nous ne pouvons pas contacter le serveur.');
-    } finally {
-      setLoading(false);
+      console.error('Error during data transmission:', error);
+      Alert.alert(
+        'Error',
+        'We cannot contact the server. Please try again later.',
+      );
     }
   };
 
+  const toggleCardSelection = (card: TeonaCardModel) => {
+    setSelectedCards((prevSelectedCards) => {
+      if (prevSelectedCards.includes(card)) {
+        return prevSelectedCards.filter(
+          (selectedCard) => selectedCard.id !== card.id,
+        );
+      } else {
+        return [...prevSelectedCards, card];
+      }
+    });
+  };
+
   return (
-    <ScrollView style={styles.faresContainer}>
+    <ScrollView style={[{}, styles.faresContainer]}>
       <SafeAreaView>
         <Text style={styles.headerText}>Let's TopUp your card!</Text>
-        {cardData.map((card) => (
-          <TeonaCard
-            key={card.id}
-            card={card}
-            onTopUp={() => handleTopUp(card)}
-          />
-        ))}
-        <View style={styles.faresTotalCard}>
-          <Text style={styles.faresTotalPrice}>{`${totalPrice} €`}</Text>
-          <View style={styles.faresButtonContainer}>
-            <TopUpButton
-              title={loading ? 'Loading...' : 'TopUp'}
-              onPress={setCurrentBalance}
-            />
+        <SafeAreaView style={styles.innerContainer}>
+          <View style={styles.faresContent}>
+            {cardData.map((card) => (
+              <TeonaCard
+                key={card.id}
+                card={card}
+                onTopUp={() => toggleCardSelection(card)}
+              />
+            ))}
+            <View style={styles.faresTotalCard}>
+              <Text style={styles.faresTotalPrice}>
+                {`${selectedCards.reduce((sum, card) => sum + parseFloat(card.price), 0)} €`}
+              </Text>
+              <View style={styles.faresButtonContainer}>
+                <TopUpButton title='TopUp' onPress={handleTopUp} />
+              </View>
+            </View>
           </View>
-        </View>
+        </SafeAreaView>
       </SafeAreaView>
     </ScrollView>
   );
 };
-
 const styles = StyleSheet.create({
-  faresContainer: { padding: 6 },
-  headerText: { fontSize: 24, fontWeight: 'bold', textAlign: 'center' },
+  faresContainer: {
+    // flex: 1,
+    backgroundColor: '#FFFFFF',
+    padding: 6,
+  },
+  headerText: {
+    fontSize: 24,
+    fontWeight: 'bold',
+    textAlign: 'center',
+  },
+  innerContainer: {
+    flex: 1,
+  },
+  faresCard: {
+    width: width,
+  },
+  faresContent: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    width: width,
+  },
   faresTotalCard: {
     flexDirection: 'row',
     justifyContent: 'space-evenly',
     alignItems: 'center',
-    width: '100%',
+    flex: 1,
+
+    backgroundColor: 'red',
+    width: width,
   },
   faresTotalPrice: {
     borderColor: 'black',
     borderWidth: 3,
-    padding: 3,
-    textAlign: 'center',
-    flex: 1,
+    borderRadius: 9,
+    paddingVertical: 12,
+    paddingHorizontal: 24,
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
   },
-  faresButtonContainer: { flexDirection: 'row', flex: 1, padding: 10 },
+  faresButtonContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'flex-end',
+  },
 });
-
 export default TopupFares;

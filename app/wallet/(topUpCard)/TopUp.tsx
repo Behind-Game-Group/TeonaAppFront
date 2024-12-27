@@ -8,29 +8,34 @@ import {
   TouchableOpacity,
 } from 'react-native';
 import { useRouter } from 'expo-router';
+import { useWallet } from '../userInfoContext/WallletInfo';
 
 function TopUp() {
   const router = useRouter();
+  const wallet = useWallet();
 
-  const [price, setPrice] = useState<string>('');
+  const [selectedPrice, setSelectedPrice] = useState('');
+  console.log(wallet.Wallet.firstName);
 
-  const handleTopUp = (cardType: string, priceInput: number) => {
-    let formattedPrice = priceInput.toFixed(2); // Conversion en format 0.00
-
+  const handleTopUp = (cardType: string, price: string) => {
+    // Ajout automatique de deux zéros si le prix est un entier
+    if (!price.includes('.')) {
+      price = `${price}.00`;
+    }
     router.push({
       pathname: '/wallet/PaymentDisplay',
-      params: { cardType, price: formattedPrice },
+      params: { cardType, price },
     });
   };
 
-  const prices: number[] = [5.0, 10.0, 15.0, 20.0, 25.0];
+  const prices = ['5.00', '10.00', '15.00', '20.00', '25.00'];
 
   return (
     <View style={styles.container}>
       <View style={styles.content}>
         <Text style={styles.title}>Let’s TopUp your card!</Text>
 
-        {prices.map((presetPrice, index) => (
+        {prices.map((price, index) => (
           <View key={index} style={styles.row}>
             <View style={styles.imageContainer}>
               <Image
@@ -39,10 +44,10 @@ function TopUp() {
                 resizeMode='cover'
               />
             </View>
-            <Text style={styles.price}>{presetPrice}€</Text>
+            <Text style={styles.price}>{price}€</Text>
             <TouchableOpacity
               style={styles.topUpButton}
-              onPress={() => handleTopUp('TopUp', presetPrice)}
+              onPress={() => handleTopUp('TopUp', price)}
             >
               <Text style={styles.topUpButtonText}>TopUp</Text>
             </TouchableOpacity>
@@ -62,22 +67,15 @@ function TopUp() {
             <Text style={styles.label}>TopUp with your {'\n'} own amount</Text>
             <TextInput
               style={styles.input}
-              value={price}
-              onChangeText={(text) => setPrice(text)}
+              value={selectedPrice}
+              onChangeText={(text) => setSelectedPrice(text)}
               keyboardType='numeric'
-              placeholder='Enter amount'
+              placeholder=''
             />
           </View>
           <TouchableOpacity
             style={styles.topUpButton}
-            onPress={() => {
-              const numericPrice = parseFloat(price);
-              if (!isNaN(numericPrice) && numericPrice > 0) {
-                handleTopUp('TopUp', numericPrice);
-              } else {
-                alert('Please enter a valid amount');
-              }
-            }}
+            onPress={() => handleTopUp('TopUp', selectedPrice)}
           >
             <Text style={styles.topUpButtonText}>TopUp</Text>
           </TouchableOpacity>
