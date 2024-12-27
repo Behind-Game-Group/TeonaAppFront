@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import { View, Text, StyleSheet, Image, Pressable } from 'react-native';
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import ButtonWallet from '@/components/ButtonWallet';
-import { StripeProvider } from '@stripe/stripe-react-native';
 
 const CardPaymentPage: React.FC = () => {
   const [isChecked, setIsChecked] = useState(false);

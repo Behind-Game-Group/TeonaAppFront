@@ -12,10 +12,8 @@ import {
 import axios from 'axios';
 import { useRouter } from 'expo-router';
 
-
 // import Subtitles from 'react-native-subtitles';
 // import { OrderBlueCard } from '/assets/images/OrderBlueCard.png';
-
 
 // Tu peux créer une interface ici pour typer ta constante d'erreur voir le mettre dans un fichier à part dans un dossier "types" ou "interfaces" à la racine de ton projet avec un export default et pouvoir l'importer ici
 interface Errors {
@@ -28,7 +26,6 @@ interface Errors {
   countryCode: string;
   country: string;
 }
-
 
 const PurchaseForm: React.FC = () => {
   const router = useRouter();
@@ -44,7 +41,6 @@ const PurchaseForm: React.FC = () => {
   const [postalCode, setPostalCode] = useState<string>('');
   const [loading, setLoading] = useState<boolean>(false);
 
-
   //!\ Utiliser l'interface Errors de la ligne ≃ 27 pour typer les valeurs des champs de cette constante /!\
   const [errors, setErrors] = useState<Errors>({
     firstName: '',
@@ -57,7 +53,6 @@ const PurchaseForm: React.FC = () => {
     country: '',
   });
 
-
   const validateFields = () => {
     const newErrors: typeof errors = {
       firstName: firstName ? '' : '',
@@ -67,7 +62,6 @@ const PurchaseForm: React.FC = () => {
       Optional: Optional ? '' : ' ',
       postalCode: postalCode ? '' : '',
 
-
       city: city ? '' : '',
       countryCode: countryCode ? '' : '',
       country: country ? '' : '',
@@ -75,7 +69,6 @@ const PurchaseForm: React.FC = () => {
     setErrors(newErrors);
     return !Object.values(newErrors).some((error) => error !== '');
   };
-
 
   const handleSubmit = () => {
     if (!validateFields()) {
@@ -86,9 +79,7 @@ const PurchaseForm: React.FC = () => {
       return;
     }
 
-
     setLoading(true);
-
 
     try {
       const response = axios.post('XXXXXXXXXXXXXXXXXXXXXXXX', {
@@ -99,13 +90,11 @@ const PurchaseForm: React.FC = () => {
         postalCode,
       });
 
-
       // Cas succès
       Alert.alert('Success', 'Address submitted successfully!');
-      router.push('/'); 
+      router.push('/');
     } catch (error: unknown) {
       console.error(error);
-
 
       let errorMessage = 'An error occurred. Please try again.';
       if (axios.isAxiosError(error) && error.response) {
@@ -116,7 +105,6 @@ const PurchaseForm: React.FC = () => {
       setLoading(false);
     }
   };
-
 
   return (
     <ScrollView contentContainerStyle={styles.container}>
@@ -161,14 +149,11 @@ const PurchaseForm: React.FC = () => {
         </View>
       </View>
 
-
       {errors.lastName ? (
         <Text style={styles.errorText}>{errors.lastName}</Text>
       ) : null}
 
-
       <Text style={{ marginLeft: 10 }}>Address*</Text>
-
 
       <TextInput
         style={[styles.input, errors.city && styles.errorInput]}
@@ -181,7 +166,6 @@ const PurchaseForm: React.FC = () => {
         placeholder='Address line2 (optional) '
         value={Optional}
       />
-
 
       {/* Nouvel exemple de comment structurer tes input sur une ligne en CSS avec un premier conteneur en flexDirection row qui permet d'afficher tous les éléments de ce conteneur sur une seule et même ligne ainsi qu'un justifyContent flex-start qui permet de positionner chaque éléments (au début) à gauche de l'écran. Conteneur qui contiendra deux autres conteneurs qui eux contiendront chaque text et chaque input en flexDirection column pour les afficher en column et gap 2 pour mettre un espace entre les deux éléments de ces deux conteneurs. */}
       <View
@@ -203,7 +187,6 @@ const PurchaseForm: React.FC = () => {
         >
           <Text style={{ marginLeft: 10 }}>Post code*</Text>
 
-
           <TextInput
             style={[
               styles.input,
@@ -219,7 +202,6 @@ const PurchaseForm: React.FC = () => {
           />
         </View>
 
-
         <View
           style={{
             flexDirection: 'column',
@@ -229,7 +211,6 @@ const PurchaseForm: React.FC = () => {
           }}
         >
           <Text style={{ marginLeft: 10 }}>City*</Text>
-
 
           <TextInput
             style={[
@@ -246,14 +227,11 @@ const PurchaseForm: React.FC = () => {
         </View>
       </View>
 
-
       {errors.postalCode ? (
         <Text style={styles.errorText}>{errors.postalCode}</Text>
       ) : null}
 
-
       {errors.city ? <Text style={styles.errorText}>{errors.city}</Text> : null}
-
 
       <View
         style={{
@@ -265,7 +243,6 @@ const PurchaseForm: React.FC = () => {
       >
         <View style={{ flexDirection: 'column', width: '100%' }}>
           <Text style={{ marginLeft: 10 }}>Country*</Text>
-
 
           <View style={{ flexDirection: 'row', alignItems: 'center', gap: 5 }}>
             <View
@@ -283,7 +260,6 @@ const PurchaseForm: React.FC = () => {
                 onChangeText={setCountryCode}
               />
             </View>
-
 
             <TextInput
               style={[
@@ -308,11 +284,9 @@ const PurchaseForm: React.FC = () => {
         </View>
       </View>
 
-
       <Text style={{ textAlign: 'left', marginTop: 20 }}>
         Your card will arrive at your door within 7 working days
       </Text>
-
 
       <TouchableOpacity
         style={[
@@ -331,7 +305,6 @@ const PurchaseForm: React.FC = () => {
     </ScrollView>
   );
 };
-
 
 const styles = StyleSheet.create({
   container: {
@@ -389,8 +362,4 @@ const styles = StyleSheet.create({
   },
 });
 
-
 export default PurchaseForm;
-
-
-
