@@ -3,7 +3,6 @@ import {
   View,
   Text,
   TextInput,
-  Alert,
   ImageBackground,
   StyleSheet,
   Modal,
@@ -21,17 +20,40 @@ const { width, height } = Dimensions.get('window');
 const LoginPage: React.FC = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [emailError, setEmailError] = useState('');
+  const [passwordError, setPasswordError] = useState('');
   const [modalVisible, setModalVisible] = useState(false);
   const [loading, setLoading] = useState(false);
-  const [isAutheticated, setIsAuthenticated] = useState(false);
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
 
   const router = useRouter();
 
+  const validateEmail = (email: string) => {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailRegex.test(email);
+  };
+
   const handleLogin = async () => {
-    if (!email || !password) {
-      Alert.alert('Error', 'Please fill in both fields.');
-      return;
+    let valid = true;
+
+    if (!email) {
+      setEmailError('Email is required.');
+      valid = false;
+    } else if (!validateEmail(email)) {
+      setEmailError('Please enter a valid email address.');
+      valid = false;
+    } else {
+      setEmailError('');
     }
+
+    if (!password) {
+      setPasswordError('Password is required.');
+      valid = false;
+    } else {
+      setPasswordError('');
+    }
+
+    if (!valid) return;
 
     setLoading(true);
 
@@ -43,11 +65,9 @@ const LoginPage: React.FC = () => {
           password,
         },
       );
-      console.log(response.data.jwt);
       const token = response.data.jwt;
       const userId = response.data.userId;
-      console.log('Token type:', typeof token);
-      console.log('Token:', token);
+
       if (Platform.OS === 'web') {
         localStorage.setItem('authToken', token);
         localStorage.setItem('userId', userId);
@@ -56,15 +76,12 @@ const LoginPage: React.FC = () => {
         await SecureStore.setItemAsync('userId', userId);
       }
 
-      console.log('Token stored:');
       setIsAuthenticated(true);
       setModalVisible(true);
     } catch (error: any) {
-      console.error(error);
-
       const errorMessage =
         error.response?.data?.message || 'An error occurred. Please try again.';
-      Alert.alert('Error', errorMessage);
+      setPasswordError(errorMessage);
     } finally {
       setLoading(false);
     }
@@ -91,10 +108,11 @@ const LoginPage: React.FC = () => {
             placeholderTextColor='#888'
             keyboardType='email-address'
             value={email}
-            onChangeText={setEmail}
+            onChangeText={(text) => setEmail(text)}
             autoCapitalize='none'
             autoCorrect={false}
           />
+          {emailError ? <Text style={styles.errorText}>{emailError}</Text> : null}
 
           <TextInput
             style={styles.input}
@@ -102,8 +120,11 @@ const LoginPage: React.FC = () => {
             placeholderTextColor='#888'
             secureTextEntry
             value={password}
-            onChangeText={setPassword}
+            onChangeText={(text) => setPassword(text)}
           />
+          {passwordError ? (
+            <Text style={styles.errorText}>{passwordError}</Text>
+          ) : null}
 
           <View style={styles.forgotPasswordContainer}>
             <Link
@@ -122,7 +143,7 @@ const LoginPage: React.FC = () => {
         </View>
 
         {/* Modal */}
-        {isAutheticated && (
+        {isAuthenticated && (
           <Modal
             animationType='slide'
             transparent
@@ -184,6 +205,11 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     backgroundColor: '#fff',
     fontSize: 16,
+  },
+  errorText: {
+    color: 'red',
+    fontSize: 14,
+    alignSelf: 'flex-start',
   },
   forgotPasswordContainer: {
     alignSelf: 'flex-end',
