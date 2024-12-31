@@ -1,20 +1,31 @@
 import React, { useState } from 'react';
-import {
-  View,
-  Text,
-  StyleSheet,
-  Image,
-  TouchableOpacity,
-  TextInput,
-  Pressable,
-} from 'react-native';
+import { View, Text, StyleSheet, Image, TouchableOpacity, TextInput, Pressable } from 'react-native';
+import { useRoute, RouteProp } from '@react-navigation/native';
 import ButtonWallet from '@/components/ButtonWallet';
+import { useRouter } from 'expo-router';
+
+// Type pour les paramètres de la route
+type RootStackParamList = {
+  Wallet: { price: number };
+};
 
 const CardPaymentPage: React.FC = () => {
+  const router = useRouter();
   const [email, setEmail] = useState('');
   const [isChecked, setIsChecked] = useState(false);
 
+  // Récupération des paramètres via useRoute
+  const route = useRoute<RouteProp<RootStackParamList, 'Wallet'>>();
+  const { price = 0 } = route.params || {};
+
+  // Conversion de price en number (en cas de type string ou autre)
+  const numericPrice = Number(price);
+
   const toggleCheckbox = () => setIsChecked(!isChecked);
+
+  const goToPaymentCard = () => {
+    router.push('/wallet/(payment)/PaymentInformations');
+  }
 
   return (
     <View style={styles.container}>
@@ -23,29 +34,25 @@ const CardPaymentPage: React.FC = () => {
       <View style={styles.row}>
         <View>
           <View style={styles.imageContainer}>
-            <Image
-              source={require('../../../assets/images/pass.png')}
-              style={styles.image}
-              resizeMode='cover'
-            />
+            <Image source={require('../../../assets/images/TopUpCard.png')} style={styles.image} resizeMode="cover" />
           </View>
         </View>
 
         <View>
-          <Text style={styles.text}>Card Fee: 7.50€</Text>
-          <Text style={styles.text}>TopUp: 20€</Text>
+          <Text style={styles.text}>Card Fee : 5.00 €</Text>
+          <Text style={styles.text}>TopUp : {numericPrice.toFixed(2)}€</Text>
           <View style={styles.line}></View>
-          <Text style={styles.text}>Balance: 27.50€</Text>
+          <Text style={styles.text}>Balance : {(numericPrice + 5.00).toFixed(2)}€</Text>
         </View>
       </View>
 
       <Text style={styles.textType}>Choose payment type</Text>
 
       <TouchableOpacity style={styles.button}>
-        <Text style={styles.buttonText}>Pay with </Text>
+        <Text style={styles.buttonText}>Pay with Apple Pay</Text>
       </TouchableOpacity>
 
-      <TouchableOpacity style={styles.button}>
+      <TouchableOpacity style={styles.button} onPress={goToPaymentCard}>
         <Text style={styles.buttonText}>Debit/credit card</Text>
       </TouchableOpacity>
 
@@ -54,29 +61,23 @@ const CardPaymentPage: React.FC = () => {
       </TouchableOpacity>
 
       <Text style={styles.textEmail}>
-        Enter your email address to receive an invoice {'\n'}
-        for your purchase
+        Enter your email address to receive an invoice {'\n'} for your purchase
       </Text>
       <TextInput
         style={styles.input}
         value={email}
         onChangeText={(text) => setEmail(text)}
-        placeholder='Email address'
+        placeholder="Email address"
       />
 
       <View style={styles.containerCheckbox}>
-        <Pressable
-          style={[styles.checkbox, isChecked && styles.checked]}
-          onPress={toggleCheckbox}
-        >
+        <Pressable style={[styles.checkbox, isChecked && styles.checked]} onPress={toggleCheckbox}>
           {isChecked && <Text style={styles.checkmark}>✓</Text>}
         </Pressable>
-        <Text style={styles.textCheckbox}>
-          I accept the terms of sale and the terms of use
-        </Text>
+        <Text style={styles.textCheckbox}>I accept the terms of sale and the terms of use</Text>
       </View>
 
-      <ButtonWallet text='Continue' onPress={() => {}} />
+      <ButtonWallet text="Continue" onPress={() => {}} />
     </View>
   );
 };

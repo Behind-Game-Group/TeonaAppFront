@@ -17,14 +17,14 @@ function TopUp() {
   const [selectedPrice, setSelectedPrice] = useState('');
   console.log(wallet.Wallet.firstName);
 
-  const handleTopUp = (cardType: string, price: string) => {
+  const handleTopUp = (price: string) => {
     // Ajout automatique de deux zéros si le prix est un entier
     if (!price.includes('.')) {
       price = `${price}.00`;
     }
     router.push({
       pathname: '/wallet/PaymentDisplayCard',
-      params: { cardType, price },
+      params: { price },
     });
   };
 
@@ -47,7 +47,7 @@ function TopUp() {
             <Text style={styles.price}>{price}€</Text>
             <TouchableOpacity
               style={styles.topUpButton}
-              onPress={() => handleTopUp('TopUp', price)}
+              onPress={() => handleTopUp(price)}
             >
               <Text style={styles.topUpButtonText}>TopUp</Text>
             </TouchableOpacity>
@@ -75,7 +75,7 @@ function TopUp() {
           </View>
           <TouchableOpacity
             style={styles.topUpButton}
-            onPress={() => handleTopUp('TopUp', selectedPrice)}
+            onPress={() => handleTopUp(selectedPrice)}
           >
             <Text style={styles.topUpButtonText}>TopUp</Text>
           </TouchableOpacity>
@@ -92,9 +92,11 @@ const styles = StyleSheet.create({
   },
   header: {
     width: '100%',
-    height: 100,
+    height: 120,
     backgroundColor: '#599AD0',
     justifyContent: 'center',
+    alignItems: 'center',
+    paddingVertical: 20,
   },
   content: {
     flex: 1,

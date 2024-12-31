@@ -3,17 +3,16 @@ import {
   Text,
   Image,
   SafeAreaView,
-  useWindowDimensions,
   StyleSheet,
   Pressable,
   Dimensions,
 } from 'react-native';
 import React, { useState } from 'react';
-
+import { Link, useRouter } from 'expo-router';
 import TopUpButton from '@/components/TopUpButton';
-import { Link } from 'expo-router';
 
 const Fares = () => {
+  const router = useRouter();
   const [showTextPass, setShowTextPass] = useState<boolean>(false);
   const [showTextCard, setShowTextCard] = useState<boolean>(false);
   const [isChecked, setIsChecked] = useState<boolean>(false);
@@ -28,6 +27,7 @@ const Fares = () => {
     if (showTextCard) {
       // Change redirection logic here if showTextCard is active
       console.log('Checkbox is', isChecked ? 'checked' : 'unchecked');
+      router.push('/wallet/(topUpCard)/TopUp');
     } else {
       cardSelect();
     }
@@ -35,6 +35,7 @@ const Fares = () => {
   const handleTeonaPassPress = () => {
     if (showTextPass) {
       console.log('Checkbox is', isChecked ? 'checked' : 'unchecked');
+      router.push('/wallet/(teonaPass)/FormTeonaPass');
     } else {
       passSelect();
     }
