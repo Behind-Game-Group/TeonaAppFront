@@ -24,7 +24,7 @@ const CardPaymentPage: React.FC = () => {
                 <View>
                     <View style={styles.imageContainer}>
                         <Image
-                            source={require('../../../assets/images/pass.png')}
+                            source={require('../../../assets/images/teonapass.png')}
                             style={styles.image}
                             resizeMode='cover'
                         />
