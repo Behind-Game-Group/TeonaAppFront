@@ -37,7 +37,6 @@ export default function congrat() {
             title='Read Pass'
             style={styles.btnPass}
             onPress={button}
-            light={true}
           ></OrangeButton>
           <Text
             style={{ textAlign: 'center', padding: 10, marginBlockStart: 10 }}
