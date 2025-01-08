@@ -52,7 +52,7 @@ const ForgotPassword: React.FC = () => {
         response.data.message || `A reset link has been sent to ${email}.`,
       );
       setEmail('');
-      router.push('/hub/(login)/ResetPassword');
+      router.push('/hub/(login)/Login');
     } catch (error: any) {
       // Error
       const errorMessage =

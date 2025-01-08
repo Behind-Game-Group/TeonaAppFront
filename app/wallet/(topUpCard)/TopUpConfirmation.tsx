@@ -7,7 +7,6 @@ function TopUpConfirmation() {
   // Récupérez les paramètres de la route
   const { cardType, price } = useLocalSearchParams();
 
-  // Vérifiez si on reçoit les données
   if (!cardType || !price) {
     return (
       <View style={styles.container}>
@@ -16,7 +15,7 @@ function TopUpConfirmation() {
     );
   }
 
-  console.log('params', { cardType, price });
+  // console.log('params', { cardType, price });
 
   return (
     <View style={styles.container}>

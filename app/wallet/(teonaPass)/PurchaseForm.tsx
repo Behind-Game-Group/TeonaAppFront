@@ -11,6 +11,7 @@ import {
 } from 'react-native';
 import axios from 'axios';
 import { useRouter } from 'expo-router';
+import { useWallet } from '../userInfoContext/WallletInfo';
 
 // import Subtitles from 'react-native-subtitles';
 // import { OrderBlueCard } from '/assets/images/OrderBlueCard.png';
@@ -29,15 +30,17 @@ interface Errors {
 
 const PurchaseForm: React.FC = () => {
   const router = useRouter();
+  const wallet = useWallet();
   //!\   N'omet pas de typer tes constantes /!\
   const [firstName, setFirstName] = useState<string>('');
   const [lastName, setLastName] = useState<string>('');
   const [address, setAddress] = useState<string>('');
   const [streetName, setStreetName] = useState<string>('');
-  const [Optional] = useState<string>('');
+  const [Optional, setOptional] = useState<string>('');
   const [countryCode, setCountryCode] = useState<string>('');
   const [country, setCountry] = useState<string>('');
   const [city, setCity] = useState<string>('');
+  const [phoneNumber, setPhoneNumber] = useState<string>('');
   const [postalCode, setPostalCode] = useState<string>('');
   const [loading, setLoading] = useState<boolean>(false);
 
@@ -49,27 +52,29 @@ const PurchaseForm: React.FC = () => {
     Optional: '',
     postalCode: '',
     city: '',
+    phoneNumber: '',
     countryCode: '',
     country: '',
   });
 
   const validateFields = () => {
     const newErrors: typeof errors = {
-      firstName: firstName ? '' : '',
-      lastName: lastName ? '' : '',
+      firstName: firstName ? '' : 'Firsname is required',
+      lastName: lastName ? '' : 'Lastname is required',
       //address: address ? '' : 'Address is required.',
-      streetName: streetName ? '' : '',
-      Optional: Optional ? '' : ' ',
-      postalCode: postalCode ? '' : '',
-
-      city: city ? '' : '',
-      countryCode: countryCode ? '' : '',
-      country: country ? '' : '',
+      streetName: streetName ? '' : 'Number and street name are required',
+      Optional: Optional ? '' : ' is optional',
+      postalCode: postalCode ? '' : 'Postal code is required',
+      phoneNumber: phoneNumber ? '' : 'phone number is required',
+      city: city ? '' : 'City is required',
+      countryCode: countryCode ? '' : 'Country code is required',
+      country: country ? '' : 'Country is required',
     };
     setErrors(newErrors);
     return !Object.values(newErrors).some((error) => error !== '');
   };
 
+  // a supprimer de 82 à 89
   const handleSubmit = () => {
     if (!validateFields()) {
       Alert.alert(
@@ -80,19 +85,44 @@ const PurchaseForm: React.FC = () => {
     }
 
     setLoading(true);
+    /**
+ * {
+  "firstName":"james",
+  "lastName":"camerone",
+  "streetName":"16 rue du country",
+  "streetNameOptional": "",
+  "postCode":"75000",
+  "city":"Paris",
+  "phoneNumber":"+336708970",
+  "country":"France",
+  "image":"img"
+}
+ */
 
     try {
-      const response = axios.post('XXXXXXXXXXXXXXXXXXXXXXXX', {
+      const response = axios.post('http://localhost:8082/api/add/card', {
         firstName,
         lastName,
-        address,
+        streetName,
         city,
-        postalCode,
+        country,
+        phoneNumber,
+        postCode: postalCode,
+        // TopUp: 10,
       });
-
+      console.log(response);
+      wallet.updateWallet({
+        firstName,
+        lastName,
+        streetName,
+        city,
+        country,
+        postalCode,
+        phoneNumber,
+      });
       // Cas succès
       Alert.alert('Success', 'Address submitted successfully!');
-      router.push('/');
+      router.push('/wallet/(topUpCard)/TopUp');
     } catch (error: unknown) {
       console.error(error);
 
@@ -132,40 +162,65 @@ const PurchaseForm: React.FC = () => {
         }}
       >
         <View style={{ width: '49%', flexDirection: 'column', gap: 2 }}>
+          {/* Étiquette du champ */}
           <Text style={{ marginLeft: 10 }}>First name*</Text>
+
+          {/* Champ d'entrée */}
           <TextInput
             style={[styles.input, errors.firstName && styles.errorInput]}
             value={firstName}
             onChangeText={setFirstName}
           />
+
+          {/* Afficher le message d'erreur au-dessous de l'input */}
+          {errors.firstName ? (
+            <Text style={styles.errorText}>{errors.firstName}</Text>
+          ) : null}
         </View>
+
         <View style={{ width: '49%', flexDirection: 'column', gap: 2 }}>
+          {/* Étiquette du champ */}
           <Text style={{ marginLeft: 10 }}>Last name*</Text>
+
+          {/* Champ d'entrée */}
           <TextInput
             style={[styles.input, errors.lastName && styles.errorInput]}
             value={lastName}
             onChangeText={setLastName}
           />
+
+          {/* Afficher le message d'erreur au-dessous de l'input */}
+          {errors.lastName ? (
+            <Text style={styles.errorText}>{errors.lastName}</Text>
+          ) : null}
         </View>
       </View>
 
-      {errors.lastName ? (
-        <Text style={styles.errorText}>{errors.lastName}</Text>
-      ) : null}
+      <View style={{ width: '100%', flexDirection: 'column', gap: 2 }}>
+        {/* Étiquette du champ */}
+        <Text style={{ marginLeft: 10 }}>Address*</Text>
 
-      <Text style={{ marginLeft: 10 }}>Address*</Text>
+        {/* Champ d'entrée principal */}
+        <TextInput
+          style={[styles.input, errors.streetName && styles.errorInput]}
+          placeholder='N° and street name'
+          value={streetName}
+          onChangeText={setStreetName}
+        />
 
-      <TextInput
-        style={[styles.input, errors.city && styles.errorInput]}
-        placeholder='N° and street name '
-        value={streetName}
-        onChangeText={setStreetName}
-      />
-      <TextInput
-        style={[styles.input, errors.city && styles.errorInput]}
-        placeholder='Address line2 (optional) '
-        value={Optional}
-      />
+        {/* Afficher le message d'erreur pour le champ principal */}
+        {errors.streetName ? (
+          <Text style={styles.errorText}>{errors.streetName}</Text>
+        ) : null}
+
+        {/* Champ d'entrée optionnel */}
+        <TextInput
+          style={[styles.input]}
+          placeholder='Address line2 (optional)'
+          value={Optional}
+          onChangeText={(text) => setOptional(text)} // Met à jour l'état "Optional"
+        />
+      </View>
 
       {/* Nouvel exemple de comment structurer tes input sur une ligne en CSS avec un premier conteneur en flexDirection row qui permet d'afficher tous les éléments de ce conteneur sur une seule et même ligne ainsi qu'un justifyContent flex-start qui permet de positionner chaque éléments (au début) à gauche de l'écran. Conteneur qui contiendra deux autres conteneurs qui eux contiendront chaque text et chaque input en flexDirection column pour les afficher en column et gap 2 pour mettre un espace entre les deux éléments de ces deux conteneurs. */}
       <View
@@ -225,6 +280,21 @@ const PurchaseForm: React.FC = () => {
             onChangeText={setCity}
           />
         </View>
+
+        <Text style={{ marginLeft: -10 }}>phoneNumber*</Text>
+
+        <TextInput
+          style={[
+            styles.input,
+            errors.phoneNumber && styles.errorInput,
+            {
+              flex: 1,
+              width: 97,
+            },
+          ]}
+          value={phoneNumber}
+          onChangeText={setPhoneNumber}
+        />
       </View>
 
       {errors.postalCode ? (
@@ -246,8 +316,13 @@ const PurchaseForm: React.FC = () => {
 
           <View style={{ flexDirection: 'row', alignItems: 'center', gap: 5 }}>
             <View
-              style={{ flexDirection: 'row', alignItems: 'center', gap: 5 }}
+              style={{
+                flexDirection: 'column',
+                alignItems: 'flex-start',
+                gap: 5,
+              }}
             >
+              {/* Champ d'entrée */}
               <TextInput
                 style={[
                   styles.input,
@@ -257,7 +332,7 @@ const PurchaseForm: React.FC = () => {
                 placeholder='+995'
                 keyboardType='numeric'
                 value={countryCode}
-                onChangeText={setCountryCode}
+                onChangeText={(text) => setCountryCode(text)}
               />
             </View>
 
@@ -271,16 +346,7 @@ const PurchaseForm: React.FC = () => {
               onChangeText={setCountry}
             />
           </View>
-          {errors.countryCode || errors.country ? (
-            <View>
-              {errors.countryCode ? (
-                <Text style={styles.errorText}>{errors.countryCode}</Text>
-              ) : null}
-              {errors.country ? (
-                <Text style={styles.errorText}>{errors.country}</Text>
-              ) : null}
-            </View>
-          ) : null}
+          {errors.countryCode || errors.country ? <View></View> : null}
         </View>
       </View>
 

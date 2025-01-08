@@ -9,6 +9,7 @@ import {
 } from 'react-native';
 import { useRouter } from 'expo-router';
 import { useWallet } from '../userInfoContext/WallletInfo';
+import axios from 'axios';
 
 function TopUp() {
   const router = useRouter();
@@ -22,13 +23,46 @@ function TopUp() {
     if (!price.includes('.')) {
       price = `${price}.00`;
     }
-    router.push({
-      pathname: '/wallet/PaymentDisplayCard',
-      params: { cardType, price },
-    });
+    saveAdress(price);
+    // router.push({
+    //   pathname: '/wallet/PaymentDisplayCard',
+    //   params: { cardType, price },
+    // });
   };
 
   const prices = ['5.00', '10.00', '15.00', '20.00', '25.00'];
+
+  const saveAdress = async (price: String) => {
+    const fromTopUp = () => {
+      switch (price) {
+        case '5.00':
+          return { topUp5: true, cardId: 1 };
+        case '10.00':
+          return { topUp10: true, cardId: 1 };
+        case '15.00':
+          return { topUp15: true, cardId: 152 };
+        case '20.00':
+          return { topUp20: true, cardId: 4 };
+
+        default:
+          return { topUpPerso: Number.parseInt(price.trim()), cardId: 1 };
+      }
+    };
+
+    try {
+      let defaut = fromTopUp();
+      const response = await axios.post(
+        'http://localhost:8082/api/add/card/topUp',
+
+        { defaut },
+      );
+      if (response.status === 200) {
+        console.log(response.data);
+      }
+    } catch (error) {
+      console.error('Error during data transmission:', error);
+    }
+  };
 
   return (
     <View style={styles.container}>
