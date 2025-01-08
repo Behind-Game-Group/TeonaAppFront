@@ -18,7 +18,10 @@ const CardPaymentPage: React.FC = () => {
 
   const handlePayment = async () => {
     if (!isChecked) {
-      Alert.alert('Terms and Conditions', 'You must accept the terms and conditions before continuing.');
+      Alert.alert(
+        'Terms and Conditions',
+        'You must accept the terms and conditions before continuing.',
+      );
       return;
     }
 
@@ -28,7 +31,7 @@ const CardPaymentPage: React.FC = () => {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ amount: price * 100 }), // Montant en centimes
+        body: JSON.stringify({ amount: price * 100 }),
       });
 
       if (!response.ok) {
@@ -45,7 +48,10 @@ const CardPaymentPage: React.FC = () => {
       }
     } catch (error) {
       console.error(error);
-      Alert.alert('Payment Error', 'An error occurred while processing your payment.');
+      Alert.alert(
+        'Payment Error',
+        'An error occurred while processing your payment.',
+      );
     }
   };
 
@@ -53,7 +59,7 @@ const CardPaymentPage: React.FC = () => {
     <View style={styles.container}>
       <View style={styles.content}>
         <Text style={styles.textBalance}>Balance due:</Text>
-        <Text style={styles.textPrice}>{price.toFixed(2)} €</Text>
+        <Text style={styles.textPrice}>{params.total} €</Text>
       </View>
 
       <View>
@@ -61,7 +67,7 @@ const CardPaymentPage: React.FC = () => {
           <Image
             source={require('../../../assets/images/cb.png')}
             style={styles.image}
-            resizeMode="cover"
+            resizeMode='cover'
           />
         </View>
       </View>
@@ -108,7 +114,7 @@ const CardPaymentPage: React.FC = () => {
         </Text>
       </View>
 
-      <ButtonWallet text="Continue" onPress={handlePayment} />
+      <ButtonWallet text='Continue' onPress={handlePayment} />
     </View>
   );
 };
