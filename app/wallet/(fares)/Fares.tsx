@@ -131,7 +131,7 @@ const Fares = () => {
           <View style={styles.faresCardContainer}>
             <Image
               style={styles.faresCardImag}
-              source={require('@/assets/images/duopassteona.jpg')}
+              source={require('@/assets/images/duopassteona.png')}
             />
             <Text style={styles.faresTextMem}>
               For Teona Passenger members only

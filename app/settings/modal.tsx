@@ -18,74 +18,94 @@ import { IoAlert, IoStarSharp, IoWalk } from 'react-icons/io5';
 import { BsFillQuestionCircleFill } from 'react-icons/bs';
 import { MdOutlinePayment } from 'react-icons/md';
 import { FaPhoneVolume } from 'react-icons/fa';
+import { IoIosSettings } from 'react-icons/io';
+import { Int32 } from 'react-native/Libraries/Types/CodegenTypes';
 export default function Modal() {
-  function force(params: React.JSX.Element) {
-    return params;
+  const router = useRouter();
+  function force(params: React.JSX.Element | number) {
+    if (typeof params != 'number') return params;
+    else
+      return (
+        <Image
+          style={styles.icon}
+          width={1}
+          resizeMode='contain'
+          source={are[params]}
+        ></Image>
+      );
   }
-  const cki = () => {
-    console.log('zzzz');
-  };
+  const are = [
+    require('@/assets/images/Help_icon.png'),
+    require('@/assets/images/user-logo.png'),
+    require('@/assets/images/pexels-denner-trindade-1570398-17821556.jpg'),
+  ];
+
   const tabLink = [
     {
+      icon: 0,
       title: 'MyMiles Card',
-      link: '/',
-      icon: (
-        <Image
-          style={styles.icon}
-          width={1}
-          resizeMode='contain'
-          source={require('@/assets/images/Help_icon.png')}
-        ></Image>
-      ),
+      link: () => {
+        router.push('/settings/milesFouthen');
+      },
     },
     {
-      title: 'Payement methods',
-      link: '/',
       icon: <MdOutlinePayment></MdOutlinePayment>,
+      title: 'Payement methods',
+      link: () => {
+        router.push('/settings/milesFouthen');
+      },
     },
     {
-      title: 'contact us',
-      link: '/',
       icon: <BsFillQuestionCircleFill></BsFillQuestionCircleFill>,
+      title: 'contact us',
+      link: () => {
+        router.push('/settings/milesFouthen');
+      },
     },
-    { title: 'Rate the app', link: '/', icon: <IoStarSharp></IoStarSharp> },
-    { title: 'Legal info', link: '/', icon: <IoAlert></IoAlert> },
     {
+      icon: <IoStarSharp></IoStarSharp>,
+      title: 'Rate the app',
+      link: () => {
+        router.push('/settings/milesFouthen');
+      },
+    },
+    {
+      icon: <IoAlert></IoAlert>,
+      title: 'Legal info',
+      link: () => {
+        router.push('/settings/milesFouthen');
+      },
+    },
+    {
+      icon: 1,
       title: 'travel compagnon',
-      link: '/',
-      icon: (
-        <Image
-          style={styles.icon}
-          width={1}
-          resizeMode='contain'
-          source={require('@/assets/images/user-logo.png')}
-        ></Image>
-      ),
+      link: () => {
+        router.push('/settings/milesFouthen');
+      },
     },
     {
-      title: 'Emergency contacts',
-      link: '/',
       icon: <FaPhoneVolume></FaPhoneVolume>,
+      title: 'Emergency contacts',
+      link: () => {
+        router.push('/settings/milesFouthen');
+      },
     },
     {
+      icon: <IoIosSettings></IoIosSettings>,
       title: 'settings ',
-      link: '/',
-      icon: (
-        <Image
-          style={styles.icon}
-          resizeMode='contain'
-          source={require('@/assets/images/setting_icon.png')}
-        ></Image>
-      ),
+      link: () => {
+        router.push('/settings/milesFouthen');
+      },
     },
   ];
   let res = [<></>];
   tabLink.forEach((element) => {
+    //todo do a component
     res.push(
-      <TouchableOpacity onPress={cki} style={[styles.oni]}>
+      <TouchableOpacity onPress={element.link} style={[styles.oni]}>
         <View style={styles.iconBlock}>
           {force(element.icon)}
-          <Text>{element.title} </Text>
+          <Text style={styles.text}>{element.title} </Text>
         </View>
       </TouchableOpacity>,
     );
@@ -100,9 +120,16 @@ export default function Modal() {
           width: '100%',
           height: '100%',
         }}
-        source={require('@/assets/images/pexels-denner-trindade-1570398-17821556.jpg')}
+        source={are[2]}
       ></ImageBackground>{' '}
-      <Text style={styles.back}> ♪ Back</Text>
+      <Pressable
+        onPress={() => {
+          router.push('/');
+        }}
+        style={styles.back}
+      >
+        ♪ Back
+      </Pressable>
       <ScrollView style={styles.topMargin}>{res}</ScrollView>
     </>
   );
@@ -110,8 +137,20 @@ export default function Modal() {
 
 const styles = StyleSheet.create({
   iconBlock: { flexDirection: 'row' },
-  icon: { width: 16, height: 16, margin: 10, backgroundColor: '#888' },
-  back: { paddingTop: 200, fontSize: 15, paddingLeft: '5%', color: '#FFF' },
+  text: { left: 10, top: -2 },
+  icon: {
+    width: 16,
+    height: 16,
+    backgroundColor: '#888',
+    borderRadius: 20,
+  },
+  icon2: {
+    width: 16,
+    height: 20,
+    backgroundColor: '#888',
+    borderRadius: 5,
+  },
+  back: { paddingTop: 170, fontSize: 15, paddingLeft: '5%', color: '#FFF' },
   topMargin: {
     alignSelf: 'center',
     width: '90%',
