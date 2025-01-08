@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, Image, Pressable } from 'react-native';
+import { View, Text, StyleSheet, Image, Pressable, Alert } from 'react-native';
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import ButtonWallet from '@/components/ButtonWallet';
 
@@ -16,11 +16,44 @@ const CardPaymentPage: React.FC = () => {
     router.push('/wallet/(payment)/FormAddNewCard' as any);
   };
 
+  const handlePayment = async () => {
+    if (!isChecked) {
+      Alert.alert('Terms and Conditions', 'You must accept the terms and conditions before continuing.');
+      return;
+    }
+
+    try {
+      const response = await fetch('bakend//////api/checkout/create-session', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ amount: price * 100 }), // Montant en centimes
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to create a payment session.');
+      }
+
+      const data = await response.json();
+      const paymentUrl = data.url;
+
+      if (paymentUrl) {
+        router.push(paymentUrl);
+      } else {
+        Alert.alert('Error', 'Failed to retrieve payment URL.');
+      }
+    } catch (error) {
+      console.error(error);
+      Alert.alert('Payment Error', 'An error occurred while processing your payment.');
+    }
+  };
+
   return (
     <View style={styles.container}>
       <View style={styles.content}>
         <Text style={styles.textBalance}>Balance due:</Text>
-        <Text style={styles.textPrice}> {price.toFixed(2)} €</Text>
+        <Text style={styles.textPrice}>{price.toFixed(2)} €</Text>
       </View>
 
       <View>
@@ -28,7 +61,7 @@ const CardPaymentPage: React.FC = () => {
           <Image
             source={require('../../../assets/images/cb.png')}
             style={styles.image}
-            resizeMode='cover'
+            resizeMode="cover"
           />
         </View>
       </View>
@@ -40,7 +73,7 @@ const CardPaymentPage: React.FC = () => {
             <Text style={styles.text}>**** **** **** 3456</Text>
           </View>
 
-          <Pressable onPress={() => handleAddNewCard()}>
+          <Pressable onPress={handleAddNewCard}>
             <Text style={styles.linkText}>ADD NEW CARD</Text>
           </Pressable>
         </View>
@@ -75,7 +108,7 @@ const CardPaymentPage: React.FC = () => {
         </Text>
       </View>
 
-      <ButtonWallet text='Continue' onPress={() => console.log('Purchased')} />
+      <ButtonWallet text="Continue" onPress={handlePayment} />
     </View>
   );
 };
