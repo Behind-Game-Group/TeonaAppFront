@@ -13,6 +13,7 @@ import {
   ScrollView,
   TouchableOpacity,
 } from 'react-native';
+import ContactUs from '@/components/ContactUs';
 import { Link, useRouter } from 'expo-router';
 import { IoAlert, IoStarSharp, IoWalk } from 'react-icons/io5';
 import { BsFillQuestionCircleFill } from 'react-icons/bs';
@@ -20,8 +21,10 @@ import { MdOutlinePayment } from 'react-icons/md';
 import { FaPhoneVolume } from 'react-icons/fa';
 import { IoIosSettings } from 'react-icons/io';
 import { Int32 } from 'react-native/Libraries/Types/CodegenTypes';
+import { on } from 'events';
 export default function Modal() {
   const router = useRouter();
+  const [visible, setVisible] = useState<boolean>(false);
   function force(params: React.JSX.Element | number) {
     if (typeof params != 'number') return params;
     else
@@ -59,7 +62,7 @@ export default function Modal() {
       icon: <BsFillQuestionCircleFill></BsFillQuestionCircleFill>,
       title: 'contact us',
       link: () => {
-        router.push('/settings/milesFouthen');
+        setVisible(true);
       },
     },
     {
@@ -80,7 +83,7 @@ export default function Modal() {
       icon: 1,
       title: 'travel compagnon',
       link: () => {
-        router.push('/settings/milesFouthen');
+        router.push('/settings/Travel');
       },
     },
     {
@@ -122,14 +125,38 @@ export default function Modal() {
         }}
         source={are[2]}
       ></ImageBackground>{' '}
-      <Pressable
-        onPress={() => {
-          router.push('/');
-        }}
-        style={styles.back}
-      >
-        ♪ Back
-      </Pressable>
+      <View style={[styles.modal, visible ? styles.on : styles.off]}>
+        <Text>You will leave the app and be directed to our website</Text>{' '}
+        <View style={styles.box}>
+          <Pressable
+            onPress={() => {
+              router.push('https://google.fr');
+            }}
+            style={styles.btn}
+          >
+            ok
+          </Pressable>
+          <Pressable
+            onPress={() => {
+              setVisible(false);
+            }}
+            style={styles.btn}
+          >
+            Cancel
+          </Pressable>
+        </View>
+      </View>
+      <Text>
+        {' '}
+        <Pressable
+          onPress={() => {
+            router.push('/');
+          }}
+          style={styles.back}
+        >
+          ♪ Back
+        </Pressable>
+      </Text>
       <ScrollView style={styles.topMargin}>{res}</ScrollView>
     </>
   );
@@ -169,5 +196,34 @@ const styles = StyleSheet.create({
     alignItems: 'baseline',
     width: '90%',
     borderBottomWidth: 2,
+  },
+  on: { display: 'flex' },
+  off: { display: 'none' },
+  box: {
+    flexDirection: 'row',
+  },
+  modal: {
+    zIndex: 2,
+    top: '50%',
+    backgroundColor: '#EEE',
+    borderColor: '#777777',
+    padding: 10,
+    borderRadius: 10,
+    textAlign: 'center',
+    alignItems: 'center',
+    alignSelf: 'center',
+    borderWidth: 3,
+    width: '90%',
+  },
+  btn: {
+    borderColor: '#777777',
+    top: 5,
+    fontSize: 20,
+    margin: 15,
+    right: '30%',
+    borderRadius: 10,
+    borderWidth: 2,
+    padding: 5,
+    width: '60%',
   },
 });
