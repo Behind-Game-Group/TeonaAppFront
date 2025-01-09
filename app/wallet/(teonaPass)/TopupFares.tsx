@@ -186,7 +186,7 @@ const TopupFares: React.FC<TopupFaresProps> = ({
 };
 
 const styles = StyleSheet.create({
-  faresContainer: { padding: 6 },
+  faresContainer: { padding: 6, backgroundColor: '#fff' },
   headerText: { fontSize: 24, fontWeight: 'bold', textAlign: 'center' },
   faresTotalCard: {
     flexDirection: 'row',

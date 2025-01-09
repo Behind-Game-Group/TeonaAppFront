@@ -1,9 +1,20 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, TouchableOpacity, StyleSheet, Image, Dimensions } from 'react-native';
+import {
+  View,
+  Text,
+  TouchableOpacity,
+  StyleSheet,
+  Image,
+  Dimensions,
+} from 'react-native';
 import { useRouter, usePathname } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
 
-type RoutePath = '/' | '/wallet/TopUp' | '/wallet/PaymentDisplay' | '/wallet/FormTeonaPass';
+type RoutePath =
+  | '/'
+  | '/wallet/TopUp'
+  | '/wallet/PaymentDisplay'
+  | '/wallet/FormTeonaPass';
 
 type PathOption = { path: string; title: string; back: RoutePath };
 
@@ -29,18 +40,29 @@ const MenuTop: React.FC = () => {
     { path: '/wallet/Fares', title: 'Our Cards', back: '/' },
     { path: '/wallet/TopUp', title: 'TopUp Fares', back: '/' },
     { path: '/wallet/FormTeonaPass', title: 'Our Cards', back: '/' },
-    { path: '/wallet/PaymentDisplayCard', title: 'Payment', back: '/wallet/TopUp' },
+    {
+      path: '/wallet/PaymentDisplayCard',
+      title: 'Payment',
+      back: '/wallet/TopUp',
+    },
   ];
 
   return (
     <>
-      <StatusBar style="light" backgroundColor="#599AD0" />
-      <View style={[styles.header, pathname.includes('successTransction') && styles.darkHeader]}>
+      <StatusBar style='light' backgroundColor='#599AD0' />
+      <View
+        style={[
+          styles.header,
+          pathname.includes('successTransction') && styles.darkHeader,
+        ]}
+      >
         {/* Bouton de retour */}
         <TouchableOpacity
           style={styles.backButton}
           onPress={() => {
-            const currentOption = pathOptions.find(option => option.path === pathname);
+            const currentOption = pathOptions.find(
+              (option) => option.path === pathname,
+            );
             if (currentOption?.back) {
               router.push(currentOption.back);
             } else {
@@ -57,7 +79,8 @@ const MenuTop: React.FC = () => {
         {/* Titre */}
         <View style={styles.titleContainer}>
           <Text style={styles.title}>
-            {pathOptions.find(option => option.path === pathname)?.title || 'Page Not Found'}
+            {pathOptions.find((option) => option.path === pathname)?.title ||
+              'Page Not Found'}
           </Text>
         </View>
 
