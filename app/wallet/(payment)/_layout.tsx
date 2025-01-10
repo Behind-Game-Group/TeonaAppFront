@@ -4,7 +4,6 @@ import { View, StyleSheet } from 'react-native';
 import Navbar from '@/components/NavbarWallet';
 import MenuTop from '@/components/MenuTop';
 
-
 export default function LoginLayout() {
   return (
     <View style={styles.container}>
