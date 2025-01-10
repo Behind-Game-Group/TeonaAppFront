@@ -247,16 +247,15 @@ const height = Dimensions.get('window').height;
 
 const styles = StyleSheet.create({
   safeArea: {
-    flex: 1,
+    flex:1,
   },
   travelSetContainer: {
-    flex: 1,
+flex:1,
+    backgroundColor:'#FFFFFF',
   },
   travelSetContainent: {
-    backgroundColor: '#FFFFFF',
-    width: width,
-    height: height,
-    borderRadius: 30,
+
+
     marginTop: 0,
     padding: 0,
     alignItems: 'center',
@@ -264,15 +263,17 @@ const styles = StyleSheet.create({
     flexDirection: 'column',
   },
   travelSetHeader: {
+    flex: 1,
+    width:width ,
     margin: 0,
     padding: 0,
-    backgroundColor: 'blue',
-    width: width,
+
+    borderRadius: 30,
   },
   travelImage: {
     width: width * 0.25,
     height: height * 0.25,
-    backgroundColor: 'red',
+
     justifyContent: 'center',
     resizeMode: 'contain',
     margin: 0,
