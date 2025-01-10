@@ -90,7 +90,7 @@ export default function Modal() {
       icon: <FaPhoneVolume></FaPhoneVolume>,
       title: 'Emergency contacts',
       link: () => {
-        router.push('/settings/milesFouthen');
+        router.push('/settings/EmergenciContact');
       },
     },
     {
