@@ -13,19 +13,16 @@ import {
   ScrollView,
   TouchableOpacity,
 } from 'react-native';
-import ContactUs from '@/components/ContactUs';
-import { Link, useRouter } from 'expo-router';
+import { Href, Link, useRouter } from 'expo-router';
 import { IoAlert, IoStarSharp, IoWalk } from 'react-icons/io5';
 import { BsFillQuestionCircleFill } from 'react-icons/bs';
 import { MdOutlinePayment } from 'react-icons/md';
 import { FaPhoneVolume } from 'react-icons/fa';
 import { IoIosSettings } from 'react-icons/io';
-import { Int32 } from 'react-native/Libraries/Types/CodegenTypes';
-import { on } from 'events';
 export default function Modal() {
   const router = useRouter();
   const [visible, setVisible] = useState<boolean>(false);
-  function force(params: React.JSX.Element | number) {
+  function isIcon(params: React.JSX.Element | number) {
     if (typeof params != 'number') return params;
     else
       return (
@@ -42,77 +39,54 @@ export default function Modal() {
     require('@/assets/images/user-logo.png'),
     require('@/assets/images/pexels-denner-trindade-1570398-17821556.jpg'),
   ];
+  interface data {
+    icon: React.JSX.Element | number;
+    title: string;
+    link: Href | number;
+  }
 
-  const tabLink = [
+  const tabLink: data[] = [
     {
       icon: 0,
       title: 'MyMiles Card',
-      link: () => {
-        router.push('/settings/milesFouthen');
-      },
+      link: '/settings/milesFouthen',
     },
     {
       icon: <MdOutlinePayment></MdOutlinePayment>,
       title: 'Payement methods',
-      link: () => {
-        router.push('/settings/milesFouthen');
-      },
+      link: '/settings/milesFouthen',
     },
     {
       icon: <BsFillQuestionCircleFill></BsFillQuestionCircleFill>,
       title: 'contact us',
-      link: () => {
-        setVisible(true);
-      },
+      link: 0,
     },
     {
       icon: <IoStarSharp></IoStarSharp>,
       title: 'Rate the app',
-      link: () => {
-        router.push('/settings/milesFouthen');
-      },
+      link: '/settings/Rate',
     },
     {
       icon: <IoAlert></IoAlert>,
       title: 'Legal info',
-      link: () => {
-        router.push('/settings/milesFouthen');
-      },
+      link: '/settings/milesFouthen',
     },
     {
       icon: 1,
       title: 'travel compagnon',
-      link: () => {
-        router.push('/settings/Travel');
-      },
+      link: '/settings/Travel',
     },
     {
       icon: <FaPhoneVolume></FaPhoneVolume>,
       title: 'Emergency contacts',
-      link: () => {
-        router.push('/settings/EmergenciContact');
-      },
+      link: '/settings/EmergenciContact',
     },
     {
       icon: <IoIosSettings></IoIosSettings>,
       title: 'settings ',
-      link: () => {
-        router.push('/settings/milesFouthen');
-      },
+      link: '/settings/milesFouthen',
     },
   ];
-  let res = [<></>];
-  tabLink.forEach((element) => {
-    //todo do a component
-    res.push(
-      <TouchableOpacity onPress={element.link} style={[styles.oni]}>
-        <View style={styles.iconBlock}>
-          {force(element.icon)}
-          <Text style={styles.text}>{element.title} </Text>
-        </View>
-      </TouchableOpacity>,
-    );
-  });
   return (
     <>
       {' '}
@@ -130,7 +104,7 @@ export default function Modal() {
         <View style={styles.box}>
           <Pressable
             onPress={() => {
-              router.push('https://google.fr');
+              router.push('/');
             }}
             style={styles.btn}
           >
@@ -157,7 +131,23 @@ export default function Modal() {
           ♪ Back
         </Pressable>
       </Text>
-      <ScrollView style={styles.topMargin}>{res}</ScrollView>
+      <ScrollView style={styles.topMargin}>
+        {tabLink.map((element) => (
+          <TouchableOpacity
+            onPress={() => {
+              typeof element.link == 'string'
+                ? router.push(element.link)
+                : setVisible(true);
+            }}
+            style={[styles.oni]}
+          >
+            <View style={styles.iconBlock}>
+              {isIcon(element.icon)}
+              <Text style={styles.text}>{element.title} </Text>
+            </View>
+          </TouchableOpacity>
+        ))}
+      </ScrollView>
     </>
   );
 }

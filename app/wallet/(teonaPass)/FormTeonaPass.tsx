@@ -129,7 +129,7 @@ function FormTeonaPass() {
         postCode,
         city,
         phoneNumber,
-        country,
+        countryCode: country,
         image,
         userId,
       };
