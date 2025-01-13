@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   View,
   Text,
@@ -7,11 +7,20 @@ import {
   TouchableOpacity,
 } from 'react-native';
 
+import axios from 'axios';
+import * as SecureStore from 'expo-secure-store';
+import { Platform } from 'react-native';
+
 const CardPaymentPage: React.FC = () => {
   const [name, setName] = useState<string>('');
   const [cardNumber, setCardNumber] = useState<string>('');
   const [dateExpiration, setDateExpiration] = useState<string>('');
   const [securityCode, setSecurityCode] = useState<string>('');
+  const [loading, setLoading] = useState<boolean>(false);
+  const [error, setError] = useState<string | null>(null);
+  const [userId, setUserId] = useState('');
+  const [walletId, setWalletId] = useState('');
+  const [token, setToken] = useState('');
 
   const handleCardNumberChange = (text: string) => {
     let formattedText = text.replace(/\D/g, '');
@@ -49,6 +58,87 @@ const CardPaymentPage: React.FC = () => {
     }
 
     setSecurityCode(formattedText);
+  };
+  console.log('App component mounted');
+  useEffect(() => {
+    console.log('useEffect triggered');
+    const fetchUserAndWallet = async () => {
+      try {
+        let userId = null;
+        let token = null;
+
+        if (Platform.OS === 'web') {
+          userId = localStorage.getItem('userId');
+          token = localStorage.getItem('authToken');
+        } else {
+          userId = await SecureStore.getItemAsync('userId');
+          token = await SecureStore.getItemAsync('authToken');
+        }
+
+        if (!userId || !token) {
+          alert('User ID or token not found.');
+          setLoading(false);
+          return;
+        }
+        setUserId(userId);
+        setToken(token);
+
+        const walletResponse = await axios.get(
+          `http://localhost:8082/api/has-wallet/${userId}`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          },
+        );
+
+        console.log('Wallet response:', walletResponse);
+        if (walletResponse.data && walletResponse.data.walletId) {
+          setWalletId(walletResponse.data.walletId);
+          console.log('Set wallet ID:', walletResponse.data.walletId);
+        } else {
+          alert('No wallet found for this user.');
+          setLoading(false);
+          return;
+        }
+      } catch (error) {
+        console.error('Error fetching wallet:', error);
+        alert('Failed to fetch wallet. Please try again.');
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchUserAndWallet();
+  }, []);
+
+  const handleSaveCard = async () => {
+    setLoading(true);
+    setError(null);
+
+    try {
+      const response = await axios.post(
+        'http://localhost:8082/api/visacard/add',
+        {
+          walletId: walletId,
+          cardOwner: name,
+          lastFourDigits: cardNumber.slice(-4),
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        },
+      );
+
+      console.log('Card saved successfully', response.data);
+      alert('Card saved successfully!');
+    } catch (error) {
+      console.error('Error saving card', error);
+      setError('Failed to save card. Please try again.');
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -114,7 +204,7 @@ const CardPaymentPage: React.FC = () => {
       </Text>
 
       <View style={styles.containerButton}>
-        <TouchableOpacity style={styles.button}>
+        <TouchableOpacity style={styles.button} onPress={handleSaveCard}>
           <Text style={styles.textButton}>Save Card</Text>
         </TouchableOpacity>
       </View>

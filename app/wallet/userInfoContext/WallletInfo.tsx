@@ -39,7 +39,7 @@ export const WalletProvider: React.FC<WalletProviderProps> = ({ children }) => {
   const [Wallet, setWallet] = useState<Wallet>({});
 
   const updateWallet = (newWalletData: Partial<Wallet>) => {
-    setWallet((prevWallet) => ({ ...prevWallet, ...newWalletData })); // Met à jour les données utilisateur
+    setWallet((prevWallet) => ({ ...prevWallet, ...newWalletData }));
   };
 
   return (
