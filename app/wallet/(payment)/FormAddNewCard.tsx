@@ -14,8 +14,10 @@ const CardPaymentPage: React.FC = () => {
   const [securityCode, setSecurityCode] = useState<string>('');
 
   const handleCardNumberChange = (text: string) => {
-    let formattedText = text.replace(/\D/g, '');
+    let formattedText = (text ?? '').replace(/\D/g, '');
+    console.log(formattedText)
 
+    
     if (formattedText.length > 16) {
       formattedText = formattedText.slice(0, 16);
     }
@@ -42,7 +44,7 @@ const CardPaymentPage: React.FC = () => {
   };
 
   const handleSecurityCodeChange = (text: string) => {
-    let formattedText = text.replace(/\D/g, '');
+    let formattedText = (text ?? '').replace(/\D/g, '');
 
     if (formattedText.length > 3) {
       formattedText = formattedText.slice(0, 3);

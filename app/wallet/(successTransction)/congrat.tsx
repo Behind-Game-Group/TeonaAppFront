@@ -1,4 +1,3 @@
-import CustomButton from '@/components/ButtonWallet';
 import OrangeButton from '@/components/TopUpButton';
 import React, { useState } from 'react';
 import { Text, Image, View, StyleSheet, ScrollView } from 'react-native';

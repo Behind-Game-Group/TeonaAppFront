@@ -1,5 +1,4 @@
 import { Image, StyleSheet } from 'react-native';
-
 import { HelloWave } from '@/components/HelloWave';
 import ParallaxScrollView from '@/components/ParallaxScrollView';
 import { ThemedText } from '@/components/ThemedText';
@@ -22,13 +21,20 @@ export default function HomeScreen() {
         <HelloWave />
       </ThemedView>
       <ThemedView style={styles.stepContainer}>
-        <Link href={'/hub/login'}>Login</Link>
-        <Link href={'/hub/register'}>Register</Link>
-        <Link href={'/wallet/(teonaPass)/PurchaseForm'}>Wallet</Link>
-        <Link href={'/wallet/TopUp'}>Topup</Link>
+        <Link href={'/hub/auth'}>Auth Screen</Link>
+        <Link href={'/hub/(login)/Login'}>Login</Link>
+        <Link href={'/hub/BeginInscription'}>Begin Inscription</Link>
+        <Link href={'/wallet/(fares)/Fares'}>Wallet UX</Link>
+        <Link href={'/wallet/FormTeonaPass'}>Wallet Form TeonaPass</Link>
+        <Link href={'/wallet/(teonaPass)/PurchaseForm'}>Wallet Form Card</Link>
+        <Link href={'/wallet/TopupFares'}>Topup</Link>
         <Link href={'/bus/bus'}>Bus</Link>
         <Link href={'/wallet/(teonaPass)/TopupFares'}>test</Link>
         <Link href={'/sky/sky'}>Sky</Link>
+        <Link href={'/hub/PasswordCreation'}>Password Creation</Link>
+        <Link href={'/hub/(login)/ResetPassword'}>Reset Password</Link>
+        <Link href={'/home'}> Home </Link>
+        <Link href={'/bus'}> Home for bus</Link>
       </ThemedView>
     </ParallaxScrollView>
   );
