@@ -24,7 +24,7 @@ function FormTeonaPass() {
   const [streetNameOptional, setStreetNameOptional] = useState<string>('');
   const [postCode, setPostCode] = useState('');
   const [city, setCity] = useState<string>('');
-  const [phoneNumber, setPhoneNumber] = useState('');
+  const [countryCode, setCountryCode] = useState('');
   const [country, setCountry] = useState<string>('');
   const [image, setImage] = useState<string | null>(null);
   const [modalVisible, setModalVisible] = useState(false);
@@ -108,6 +108,29 @@ function FormTeonaPass() {
           setUserId(userId);
 
           console.log('User ID found:', userId);
+          const response = await axios.get(
+            'http://localhost:8082/api/adress/getAdress',
+            {
+              headers: {
+                ...(token && { Authorization: `Bearer ${token}` }),
+              },
+            },
+          );
+
+          if (response.status === 200) {
+            const address = response.data;
+            console.log('address', response);
+            setFirstName(address.firstName || '');
+            setLastName(address.lastName || '');
+            setStreetName(address.streetName || '');
+            setStreetNameOptional(address.streetNameOptional || '');
+            setPostCode(address.postCode || '');
+            setCity(address.city || '');
+            setCountryCode(address.countryCode || '');
+            setCountry(address.country || '');
+          } else {
+            console.log('No address found for the user');
+          }
         } else {
           console.warn('User ID not found');
         }
@@ -128,14 +151,14 @@ function FormTeonaPass() {
         streetNameOptional,
         postCode,
         city,
-        phoneNumber,
+        countryCode,
         country,
         image,
         userId,
       };
 
       const response = await axios.post(
-        'http://localhost:8082/api/add/saveAddress',
+        'http://localhost:8082/api/adress/saveAddress',
         formData,
         {
           method: 'POST',
@@ -285,8 +308,8 @@ function FormTeonaPass() {
               style={styles.inputNumber}
               placeholder='+995'
               placeholderTextColor='#888'
-              value={phoneNumber}
-              onChangeText={setPhoneNumber}
+              value={countryCode}
+              onChangeText={setCountryCode}
             />
 
             <TextInput

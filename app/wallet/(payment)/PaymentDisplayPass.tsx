@@ -75,7 +75,10 @@ const CardPaymentPage: React.FC = () => {
           onPress={() =>
             router.push({
               pathname: '/wallet/(payment)/PaymentInformations',
-              params: { price: price.toString() },
+              params: {
+                price: price.toString(),
+                total: currentBalance.toFixed(2).toString(),
+              },
             })
           }
         >
