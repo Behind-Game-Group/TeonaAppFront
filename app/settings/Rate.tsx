@@ -1,4 +1,4 @@
-import { View, Text, StyleSheet, Pressable } from 'react-native';
+import { View, Text, StyleSheet, Pressable, TextInput } from 'react-native';
 import React, { useState } from 'react';
 import { IoStarSharp } from 'react-icons/io5';
 import { GoChevronDown } from 'react-icons/go';
@@ -40,7 +40,10 @@ export default function RateTheApp() {
   // setCountries(months);
   return (
     <View>
-      <Text style={{ margin: 5 }}> what do you think of this app?</Text>
+      <Text style={{ margin: 15, fontSize: 20 }}>
+        {' '}
+        what do you think of this app?
+      </Text>
       <Text style={{ textAlign: 'center' }}>
         {stars.map((elem: number) => (
           <Pressable
@@ -49,7 +52,8 @@ export default function RateTheApp() {
             }}
           >
             <IoStarSharp
-              style={selecrStars < elem ? styles.stars : styles.starsOn}
+              style={styles.stars}
+              color={selecrStars < elem ? '#606060' : '#EDEF72'}
             />
           </Pressable>
         ))}
@@ -63,7 +67,7 @@ export default function RateTheApp() {
         {' '}
         {option1.map((option, id) => (
           <Pressable
-            style={id == hover ? styles.test : { paddingLeft: 5 }}
+            style={id == hover ? styles.test : { padding: 5 }}
             onHoverIn={() => {
               setHover(id);
             }}
@@ -85,7 +89,7 @@ export default function RateTheApp() {
         {' '}
         {option2.map((option, id) => (
           <Pressable
-            style={id == hover2 ? styles.test : { paddingLeft: 5 }}
+            style={id == hover2 ? styles.test : { padding: 5 }}
             onHoverIn={() => {
               setHover2(id);
             }}
@@ -98,6 +102,12 @@ export default function RateTheApp() {
           </Pressable>
         ))}
       </View>
+      <Text style={{ paddingLeft: '3%', top: 30 }}>Give us more details:</Text>
+      <TextInput
+        style={[styles.picker, { padding: 5 }]} //margin padding
+        multiline={true}
+        numberOfLines={5}
+      ></TextInput>
     </View>
   );
 }
@@ -118,13 +128,15 @@ const styles = StyleSheet.create({
   test: {
     backgroundColor: '#AAA', //orange
     borderRadius: 5,
+
+    margin: 5, //lol5
     paddingLeft: 5,
   },
-  starsOn: { margin: 4, width: 45, height: 45, color: 'yellow' },
-  stars: { margin: 4, width: 45, height: 45 },
+  stars: { margin: 8, width: 60, height: 60 },
   picker: {
     backgroundColor: '#FFF',
     marginTop: 35,
+    minHeight: 25,
     paddingLeft: 10,
     width: '95%',
     alignSelf: 'center',
