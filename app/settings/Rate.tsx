@@ -1,4 +1,11 @@
-import { View, Text, StyleSheet, Pressable, TextInput } from 'react-native';
+import {
+  View,
+  Text,
+  StyleSheet,
+  Pressable,
+  TextInput,
+  ScrollView,
+} from 'react-native';
 import React, { useState } from 'react';
 import { IoStarSharp } from 'react-icons/io5';
 import { GoChevronDown } from 'react-icons/go';
@@ -39,7 +46,7 @@ export default function RateTheApp() {
   };
   // setCountries(months);
   return (
-    <View>
+    <ScrollView>
       <Text style={{ margin: 15, fontSize: 20 }}>
         {' '}
         what do you think of this app?
@@ -108,7 +115,7 @@ export default function RateTheApp() {
         multiline={true}
         numberOfLines={5}
       ></TextInput>
-    </View>
+    </ScrollView>
   );
 }
 const styles = StyleSheet.create({

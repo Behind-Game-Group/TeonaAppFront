@@ -84,7 +84,7 @@ export default function Modal() {
     {
       icon: <IoIosSettings></IoIosSettings>,
       title: 'settings ',
-      link: '/settings/milesFouthen',
+      link: '/settings/Navigate',
     },
   ];
   return (
