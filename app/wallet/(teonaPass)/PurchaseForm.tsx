@@ -9,6 +9,7 @@ import {
   TouchableOpacity,
   Image,
 } from 'react-native';
+import CheckboxAdress from '../../../components/CheckboxAdress'
 import axios from 'axios';
 import { useRouter } from 'expo-router';
 
@@ -85,7 +86,7 @@ const PurchaseForm: React.FC = () => {
       const response = axios.post('XXXXXXXXXXXXXXXXXXXXXXXX', {
         firstName,
         lastName,
-        address,
+        streetName,
         city,
         postalCode,
       });
@@ -111,6 +112,9 @@ const PurchaseForm: React.FC = () => {
       <Text style={[styles.subtitles, { color: '#df8D22', marginTop: 15 }]}>
         Fill this out and you will have it delivered to your door
       </Text>
+
+      <CheckboxAdress/>
+
       {/* L'utilisation de la balise <Image/> ce fait comme suit, en utilisant les attributs source et la méthode require pour renseigner le chemin du fichier d'image à afficher ; l'import ne fonctionnait pas pour toi car il te manque le fichier "declarations.d.ts" à la racine de ton projet "./TeonaAppFront/declarations.d.ts" qui permet de définir les différents types de fichier d'image que Typescript doit prendre en compte ; je te fournirais un exemple de ce fichier */}
       <Image
         source={require('../../../assets/images/OrderBlueCard.png')}
