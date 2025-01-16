@@ -35,6 +35,7 @@ export default function HomeScreen() {
         <Link href={'/hub/(login)/ResetPassword'}>Reset Password</Link>
         <Link href={'/home'}> Home </Link>
         <Link href={'/bus'}> Home for bus</Link>
+        <Link href={'/settings/modal'}> option</Link>
       </ThemedView>
     </ParallaxScrollView>
   );

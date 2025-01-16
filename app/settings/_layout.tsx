@@ -6,12 +6,11 @@ import MenuTop from '@/components/MenuTop';
 import { usePathname } from 'expo-router';
 export default function LoginLayout() {
   const pathname = usePathname();
-  const head =
-    pathname == '/settings/modal' || pathname == '/settings/Navigate' ? (
-      <></>
-    ) : (
-      <MenuTop />
-    );
+  const isHead =
+    pathname == '/settings/modal' ||
+    pathname == '/settings/Cookie' ||
+    pathname == '/settings/Navigate';
+  const head = isHead ? <></> : <MenuTop />;
   return (
     <View style={styles.container}>
       {/* Header  */}

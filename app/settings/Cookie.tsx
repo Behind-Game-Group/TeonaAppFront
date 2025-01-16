@@ -1,18 +1,12 @@
 import { useState } from 'react';
-import {
-  View,
-  StyleSheet,
-  Text,
-  Pressable,
-  ImageBackground,
-  TouchableOpacity,
-} from 'react-native';
+import { View, StyleSheet, Text, ImageBackground } from 'react-native';
 import Navigation from '../../components/SwitchView';
-import TopUpButton from '@/components/TopUpButton';
-import { Link, useRouter } from 'expo-router';
-const nav = () => {
+import { Link } from 'expo-router';
+
+const cookie = () => {
   const [promo, setPromo] = useState(true);
   const [update, setUpdate] = useState(true);
+  const [media, setMedia] = useState(true);
   return (
     <>
       <ImageBackground
@@ -25,43 +19,33 @@ const nav = () => {
       />
       <View style={styles.modal}>
         <View style={{ flexDirection: 'row' }}>
-          <Text style={styles.title}>Notifications</Text>
+          <Text style={styles.title}>Cookies</Text>
           <Link href={'/'} style={styles.exit}>
             X
           </Link>
         </View>
         <Navigation
           setStrate={setPromo}
-          title='Offers and promotions'
-          sub='Get notifier with our best offers and promotions'
+          title='Functionl and analytical cookies'
         />
         <Navigation
           setStrate={setUpdate}
-          title='Flight updates'
-          sub='You while auto'
+          title='Marketing cookies for performance'
         />
-        <Link
-          style={{
-            alignSelf: 'center',
-            alignContent: 'center',
-            left: '8%',
-            width: '60%',
-          }}
-          href={'/settings/Cookie'}
-        >
-          {' '}
-          <TopUpButton title='Next' onPress={() => {}}></TopUpButton>
-        </Link>
+        <Navigation
+          setStrate={setPromo}
+          title='Marketing cookies , advertisement and social media'
+        />
       </View>
     </>
   );
 }; //
-export default nav;
+export default cookie;
 const styles = StyleSheet.create({
   italique: { color: 'orange' },
   modal: {
-    bottom: '50%',
-    height: '50%',
+    bottom: '65%',
+    height: '65%',
     marginTop: 2,
     borderTopRightRadius: 15,
     borderTopLeftRadius: 15,
@@ -72,7 +56,7 @@ const styles = StyleSheet.create({
     fontSize: 18,
     width: '80%',
     marginLeft: '10%',
-    paddingTop: 8,
+    paddingTop: 10,
     paddingBottom: 8,
   },
   exit: {
