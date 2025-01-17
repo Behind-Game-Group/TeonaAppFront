@@ -8,7 +8,7 @@ export default function LoginLayout() {
   const pathname = usePathname();
   const isHead =
     pathname == '/settings/modal' ||
-    pathname == '/settings/Cookie' ||
+    pathname == '/settings/Cookies' ||
     pathname == '/settings/Navigate';
   const head = isHead ? <></> : <MenuTop />;
   return (
