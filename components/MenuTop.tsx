@@ -38,9 +38,10 @@ const MenuTop: React.FC = () => {
   // Options de navigation
   const pathOptions: PathOption[] = [
     { path: '/wallet/Fares', title: 'Our Cards', back: '/' },
-    { path: '/wallet/(topUpCard)/TopUp', title: 'TopUp Fares', back: '/' },
+    { path: '/wallet/TopUp', title: 'TopUp Fares', back: '/' },
     { path: '/wallet/FormTeonaPass', title: 'Our Cards', back: '/' },
     { path: '/settings/TravelSettings', title: 'Settings', back: '/'},
+    { path: '/wallet/PaymentInformations', title: 'Payment Informations', back: '/'},
     {
       path: '/wallet/PaymentDisplayCard',
       title: 'Payment',

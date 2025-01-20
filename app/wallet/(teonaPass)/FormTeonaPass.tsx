@@ -196,9 +196,6 @@ function FormTeonaPass() {
   return (
     <View style={styles.container}>
       <View style={styles.content}>
-        <View style={styles.header}>
-          <Text style={styles.title}>Purchase Teona Pass</Text>
-        </View>
 
         <Text style={styles.secondTitle}>
           Fill this out and you will have it {'\n'} delivered to your door.

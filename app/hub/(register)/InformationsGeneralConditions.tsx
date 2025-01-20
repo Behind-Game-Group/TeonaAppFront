@@ -54,12 +54,6 @@ export default function InformationsGeneralConditions() {
       if (response.data.status === 'success') {
         router.push('/hub/(register)/VerifyEmailInscription');
       }
-      // else {
-      //   Alert.alert(
-      //     "Account Creation Failed",
-      //     response.data.message || "Something went wrong"
-      //   );
-      // }
     } catch (error) {
       console.error('Error during account creation:', error);
       Alert.alert('Error', 'An error occurred while creating your account.');

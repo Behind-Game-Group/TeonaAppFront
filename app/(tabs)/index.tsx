@@ -21,6 +21,7 @@ export default function HomeScreen() {
         <HelloWave />
       </ThemedView>
       <ThemedView style={styles.stepContainer}>
+        <Link href={'/home'}> Home </Link>
         <Link href={'/hub/auth'}>Auth Screen</Link>
         <Link href={'/hub/(login)/Login'}>Login</Link>
         <Link href={'/hub/BeginInscription'}>Begin Inscription</Link>
@@ -33,7 +34,6 @@ export default function HomeScreen() {
         <Link href={'/sky/sky'}>Sky</Link>
         <Link href={'/hub/PasswordCreation'}>Password Creation</Link>
         <Link href={'/hub/(login)/ResetPassword'}>Reset Password</Link>
-        <Link href={'/home'}> Home </Link>
         <Link href={'/wallet/(successTransction)/Congrat'}> Tesst </Link>
         <Link href={'/settings/TravelConf'}> settings </Link>
         <Link href={'/settings/TravelSettings'}> form setting</Link>

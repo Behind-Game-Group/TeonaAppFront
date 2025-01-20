@@ -6,11 +6,20 @@ import {
   Text,
   TouchableOpacity,
   View,
+  Platform,
 } from 'react-native';
 import { router } from 'expo-router';
 
 const { width, height } = Dimensions.get('window');
+
 export default function allowTrackAct() {
+  // Fonction pour gérer la navigation conditionnelle
+  const handleNavigation = (route: string) => {
+    const isMobile = Platform.OS === 'ios' || Platform.OS === 'android';
+    const targetRoute = isMobile ? '/hub/(register)/AllowLocation' : route;
+    router.push(targetRoute as any);
+  };
+
   return (
     <SafeAreaProvider>
       <ImageBackground
@@ -28,12 +37,12 @@ export default function allowTrackAct() {
           </Text>
           <View style={styles.trackActiButton}>
             <TouchableOpacity
-              onPress={() => router.push('/hub/(register)/BeginInscription')}
+              onPress={() => handleNavigation('/home')}
             >
-              <Text> Don't Allow</Text>
+              <Text>Don't Allow</Text>
             </TouchableOpacity>
             <TouchableOpacity
-              onPress={() => router.push('/hub/(register)/BeginInscription')}
+              onPress={() => handleNavigation('/home')}
             >
               <Text>Allow</Text>
             </TouchableOpacity>

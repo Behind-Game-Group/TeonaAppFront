@@ -89,7 +89,7 @@ const LoginPage: React.FC = () => {
 
   const closeModalAndGoHome = () => {
     setModalVisible(false);
-    router.push('/');
+    router.push('/home');
   };
 
   return (
