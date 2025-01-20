@@ -28,7 +28,7 @@ const TeonaPassNav: React.FC<TeonaPassNavProps> = ({ title }) => {
       <Text style={styles.title}>{title}</Text>
       {isMobile ? (
         <TouchableOpacity onPress={toggleMenu} style={styles.burgerMenu}>
-          <Ionicons name="menu" size={24} color="black" />
+          <Ionicons name='menu' size={24} color='black' />
         </TouchableOpacity>
       ) : (
         <View style={styles.menu}>

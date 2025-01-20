@@ -1,11 +1,5 @@
 import React from 'react';
-import {
-  View,
-  Text,
-  Image,
-  StyleSheet,
-  useWindowDimensions,
-} from 'react-native';
+import { View, Text, Image, StyleSheet, Dimensions } from 'react-native';
 import TopUpButton from './TopUpButton';
 import { TeonaCardModel } from '@/components/TeonaCardModel';
 
@@ -13,7 +7,7 @@ interface TeonaCardProps {
   card: TeonaCardModel;
   onTopUp: (cardType: TeonaCardModel) => void;
 }
-const { width, height } = useWindowDimensions();
+
 const TeonaCard: React.FC<TeonaCardProps> = ({ card, onTopUp }) => {
   return (
     <View style={styles.card}>
@@ -29,7 +23,8 @@ const TeonaCard: React.FC<TeonaCardProps> = ({ card, onTopUp }) => {
     </View>
   );
 };
-
+const width = Dimensions.get('window').width;
+const height = Dimensions.get('window').height;
 const styles = StyleSheet.create({
   card: {
     flexDirection: 'row',

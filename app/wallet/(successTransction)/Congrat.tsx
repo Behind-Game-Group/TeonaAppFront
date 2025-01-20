@@ -2,7 +2,7 @@ import OrangeButton from '@/components/TopUpButton';
 import React, { useState } from 'react';
 import { Text, Image, View, StyleSheet, ScrollView } from 'react-native';
 import { useLocalSearchParams } from 'expo-router';
-export default function congrat() {
+export default function Congrat() {
   const para = useLocalSearchParams();
   const card = para?.isCard == 'TopUp';
   const [isCard] = useState(card);

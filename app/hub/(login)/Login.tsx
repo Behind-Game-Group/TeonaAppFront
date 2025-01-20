@@ -112,7 +112,9 @@ const LoginPage: React.FC = () => {
             autoCapitalize='none'
             autoCorrect={false}
           />
-          {emailError ? <Text style={styles.errorText}>{emailError}</Text> : null}
+          {emailError ? (
+            <Text style={styles.errorText}>{emailError}</Text>
+          ) : null}
 
           <TextInput
             style={styles.input}

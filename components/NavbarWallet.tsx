@@ -8,7 +8,8 @@ import {
 } from 'react-native';
 import { useRouter } from 'expo-router';
 
-const { width } = Dimensions.get('window');
+const width = Dimensions.get('window').width;
+const height = Dimensions.get('window').height;
 
 const NavbarWallet = () => {
   const router = useRouter();
@@ -47,8 +48,8 @@ const NavbarWallet = () => {
 
 const styles = StyleSheet.create({
   footer: {
-    height: '10%',
-    width: '100%',
+    height: height * 0.1,
+    width: width,
     backgroundColor: '#DF8D22',
     flexDirection: 'row',
     justifyContent: 'space-around',
@@ -56,8 +57,8 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
   },
   footerIcon: {
-    width: width * 0.1,
-    height: width * 0.1,
+    width: width * 0.09,
+    height: height * 0.101,
   },
 });
 

@@ -1,5 +1,13 @@
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, Image, TouchableOpacity, TextInput, Pressable } from 'react-native';
+import {
+  View,
+  Text,
+  StyleSheet,
+  Image,
+  TouchableOpacity,
+  TextInput,
+  Pressable,
+} from 'react-native';
 import { useRoute, RouteProp } from '@react-navigation/native';
 import ButtonWallet from '@/components/ButtonWallet';
 import { useRouter } from 'expo-router';
@@ -25,7 +33,7 @@ const CardPaymentPage: React.FC = () => {
 
   const goToPaymentCard = () => {
     router.push('/wallet/(payment)/PaymentInformations');
-  }
+  };
 
   return (
     <View style={styles.container}>
@@ -34,7 +42,11 @@ const CardPaymentPage: React.FC = () => {
       <View style={styles.row}>
         <View>
           <View style={styles.imageContainer}>
-            <Image source={require('../../../assets/images/TopUpCard.png')} style={styles.image} resizeMode="cover" />
+            <Image
+              source={require('../../../assets/images/TopUpCard.png')}
+              style={styles.image}
+              resizeMode='cover'
+            />
           </View>
         </View>
 
@@ -42,7 +54,9 @@ const CardPaymentPage: React.FC = () => {
           <Text style={styles.text}>Card Fee : 5.00 €</Text>
           <Text style={styles.text}>TopUp : {numericPrice.toFixed(2)}€</Text>
           <View style={styles.line}></View>
-          <Text style={styles.text}>Balance : {(numericPrice + 5.00).toFixed(2)}€</Text>
+          <Text style={styles.text}>
+            Balance : {(numericPrice + 5.0).toFixed(2)}€
+          </Text>
         </View>
       </View>
 
@@ -67,17 +81,22 @@ const CardPaymentPage: React.FC = () => {
         style={styles.input}
         value={email}
         onChangeText={(text) => setEmail(text)}
-        placeholder="Email address"
+        placeholder='Email address'
       />
 
       <View style={styles.containerCheckbox}>
-        <Pressable style={[styles.checkbox, isChecked && styles.checked]} onPress={toggleCheckbox}>
+        <Pressable
+          style={[styles.checkbox, isChecked && styles.checked]}
+          onPress={toggleCheckbox}
+        >
           {isChecked && <Text style={styles.checkmark}>✓</Text>}
         </Pressable>
-        <Text style={styles.textCheckbox}>I accept the terms of sale and the terms of use</Text>
+        <Text style={styles.textCheckbox}>
+          I accept the terms of sale and the terms of use
+        </Text>
       </View>
 
-      <ButtonWallet text="Continue" onPress={() => {}} />
+      <ButtonWallet text='Continue' onPress={() => {}} />
     </View>
   );
 };

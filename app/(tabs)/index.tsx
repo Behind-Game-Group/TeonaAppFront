@@ -34,6 +34,9 @@ export default function HomeScreen() {
         <Link href={'/hub/PasswordCreation'}>Password Creation</Link>
         <Link href={'/hub/(login)/ResetPassword'}>Reset Password</Link>
         <Link href={'/home'}> Home </Link>
+        <Link href={'/wallet/(successTransction)/Congrat'}> Tesst </Link>
+        <Link href={'/settings/TravelConf'}> settings </Link>
+        <Link href={'/settings/TravelSettings'}> form setting</Link>
         <Link href={'/bus'}> Home for bus</Link>
         <Link href={'/settings/modal'}> Option</Link>
       </ThemedView>
