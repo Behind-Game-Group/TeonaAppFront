@@ -255,7 +255,7 @@ const styles = StyleSheet.create({
     margin: 0,
   },
   faresTextMem: {
-    fontSize: 6,
+    fontSize: 12,
 
     textAlign: 'center',
     alignItems: 'center',
@@ -265,7 +265,7 @@ const styles = StyleSheet.create({
     marginTop: 0,
   },
   faresTextSub: {
-    fontSize: 5,
+    fontSize: 9,
     fontWeight: 'bold',
     textAlign: 'center',
     alignItems: 'center',
@@ -292,13 +292,12 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
   },
   faresCard: {
-    backgroundColor: '#FFFFFF',
     alignItems: 'center',
     justifyContent: 'center',
     padding: 0,
     margin: 0,
     flex: 1,
-    height: height * 0.455,
+    height: height,
   },
   faresContainerCardTop: {
     alignItems: 'center',
@@ -331,13 +330,12 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   faresCardContainer: {
-    backgroundColor: '#FFFFFF',
     alignItems: 'center',
     justifyContent: 'center',
     padding: 0,
     flexDirection: 'column',
     flex: 1,
-    height: height * 0.455,
+    height: height,
   },
 
   faresContainerCard: {
