@@ -33,7 +33,7 @@ const PurchaseForm: React.FC = () => {
   //!\   N'omet pas de typer tes constantes /!\
   const [firstName, setFirstName] = useState<string>('');
   const [lastName, setLastName] = useState<string>('');
-  const [address, setAddress] = useState<string>('');
+  // const [address, setAddress] = useState<string>('');
   const [streetName, setStreetName] = useState<string>('');
   const [Optional] = useState<string>('');
   const [countryCode, setCountryCode] = useState<string>('');
@@ -71,7 +71,7 @@ const PurchaseForm: React.FC = () => {
     return !Object.values(newErrors).some((error) => error !== '');
   };
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     if (!validateFields()) {
       Alert.alert(
         'Validation Error',
@@ -83,12 +83,15 @@ const PurchaseForm: React.FC = () => {
     setLoading(true);
 
     try {
-      const response = axios.post('XXXXXXXXXXXXXXXXXXXXXXXX', {
+      const response = await axios.post('http://localhost:8082/api/add/card', {
         firstName,
         lastName,
         streetName,
-        city,
         postalCode,
+        city,
+        countryCode,
+        country
+
       });
 
       // Cas succès
