@@ -9,7 +9,7 @@
     countryCode: string;
     country: string;
 
-    constructor(id: number, firstName: string, lastName: string, streetName: string, streetNameOptional: string | undefined,
+    constructor(id: number, firstName: string, lastName: string, streetName: string, streetNameOptional: string,
         postCode: string, city: string, countryCode: string, country: string) {
         this.id = id;
         this.firstName = firstName;
