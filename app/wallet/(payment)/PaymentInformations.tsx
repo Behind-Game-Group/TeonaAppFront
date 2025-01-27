@@ -21,10 +21,24 @@ const PaymentInformations: React.FC = () => {
     id: number;
     lastFourDigits: string;
   } | null>(null);
+  const [paymentIntentId, setPaymentIntentId] = useState('');
+  const cardTitle = params.cardTitle;
+  const cardPrice =
+    typeof params.cardPrice === 'string' ? parseFloat(params.cardPrice) : 0;
+  // const userId = params.userId;
+  const adressId = params.adressId;
+  const isActive = params.isActive;
+  const cardType = params.cardType;
+  console.log('Received Params to payment information:', {
+    cardTitle,
+    cardPrice,
+    isActive,
+    userId,
+    adressId,
+    cardType,
+  });
 
-  console.log('CardPaymentPage is rendering');
   useEffect(() => {
-    console.log('useEffect triggered');
     const fetchUser = async () => {
       try {
         let userId = null;
@@ -80,7 +94,6 @@ const PaymentInformations: React.FC = () => {
   const handleAddNewCard = () => {
     router.push('/wallet/(payment)/FormAddNewCard' as any);
   };
-
   const handlePayment = async () => {
     if (!isChecked) {
       Alert.alert(
@@ -90,26 +103,113 @@ const PaymentInformations: React.FC = () => {
       return;
     }
 
+    const totalAmount =
+      typeof params.total === 'string'
+        ? parseFloat(params.total)
+        : parseFloat(params.total[0] || '0');
+
+    if (isNaN(totalAmount)) {
+      Alert.alert('Invalid Amount', 'The amount provided is not valid.');
+      return;
+    }
+
+    const amountInCents = Math.round(totalAmount * 100);
+    const paymentMethodId = 'pm_card_visa';
     try {
-      const response = await fetch('bakend//////api/checkout/create-session', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
+      // Step 1: Create the PaymentIntent
+      const response = await fetch(
+        'http://localhost:8082/api/payment/create-payment-intent',
+        {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            amount: amountInCents,
+            currency: 'eur',
+          }),
         },
-        body: JSON.stringify({ amount: price * 100 }),
-      });
+      );
 
       if (!response.ok) {
         throw new Error('Failed to create a payment session.');
       }
 
       const data = await response.json();
-      const paymentUrl = data.url;
+      console.log('create-payment-intent response:', data);
+      const paymentIntentId = data.payment_intent_id;
+      setPaymentIntentId(paymentIntentId);
+      const clientSecret = data.client_secret;
 
-      if (paymentUrl) {
-        router.push(paymentUrl);
+      if (!clientSecret || !paymentIntentId) {
+        throw new Error('No client secret received.');
+      }
+
+      const confirmationResponse = await fetch(
+        'http://localhost:8082/api/payment/confirm-payment',
+        {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            clientSecret: clientSecret,
+            paymentIntentId: paymentIntentId,
+            PaymentMethodId: paymentMethodId,
+          }),
+        },
+      );
+
+      if (!confirmationResponse.ok) {
+        throw new Error('Error confirming payment.');
+      }
+
+      const confirmationData = await confirmationResponse.json();
+      console.log('confirmation status', confirmationData);
+
+      if (confirmationData.success === true) {
+        Alert.alert('Payment Successful', 'Your payment was successful!');
+        console.log('Saving pass to the database...');
+
+        const payload = {
+          cardTitle: cardTitle,
+          cardPrice: cardPrice,
+          isActive: isActive,
+          userId: userId,
+          adressId: adressId,
+          cardType: cardType,
+        };
+
+        const savePassResponse = await axios.post(
+          'http://localhost:8082/api/add/savePass',
+          payload,
+          {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              ...(token && { Authorization: `Bearer ${token}` }),
+            },
+            params: {
+              paymentIntentId: paymentIntentId,
+              paymentMethodId: paymentMethodId,
+            },
+          },
+        );
+
+        if (savePassResponse.status !== 200) {
+          throw new Error('Error saving pass.');
+        }
+
+        console.log('Pass saved successfully:', savePassResponse.data);
+        router.push({
+          pathname: '/wallet/(successTransction)/successTransction',
+          params: {
+            cardPrice: cardPrice,
+          },
+        });
+        // router.push('/wallet/(successTransction)/successTransction');
       } else {
-        Alert.alert('Error', 'Failed to retrieve payment URL.');
+        Alert.alert('Payment Failed', 'The payment confirmation failed.');
       }
     } catch (error) {
       console.error(error);
@@ -142,7 +242,7 @@ const PaymentInformations: React.FC = () => {
           <View>
             <Text style={styles.titleCard}>Credit card number</Text>
             <Text style={styles.text}>
-              **** **** **** {visacardDetails?.lastFourDigits || 'XXXX'}
+              4242 4242 4242 {visacardDetails?.lastFourDigits || 'XXXX'}
             </Text>
           </View>
 
@@ -156,12 +256,12 @@ const PaymentInformations: React.FC = () => {
 
         <View style={styles.row}>
           <View>
-            <Text style={styles.titleCard}>Issued on</Text>
-            <Text style={styles.text}>**/**</Text>
+            <Text style={styles.titleCard}>Expires</Text>
+            <Text style={styles.text}>12/34</Text>
           </View>
           <View>
-            <Text style={styles.titleCard}>Expires</Text>
-            <Text style={styles.text}>**/**</Text>
+            <Text style={styles.titleCard}>Code</Text>
+            <Text style={styles.text}>123</Text>
           </View>
         </View>
       </View>
