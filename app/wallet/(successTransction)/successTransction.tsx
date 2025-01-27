@@ -13,10 +13,11 @@ import CustomButton from '@/components/ButtonWallet';
 import { router, useLocalSearchParams } from 'expo-router';
 export default function SuccessTransction({ montant = '15' }) {
   const params = useLocalSearchParams();
-  const isCard = params?.cardType;
+  // const isCard = params?.cardType;
+  const cardPrice = params?.cardPrice || montant;
   const afficheMonant = () => {
-    if (params.currentBalance && typeof params.currentBalance === 'string') {
-      montant = params.currentBalance;
+    if (params.cardPrice && typeof params.cardPrice === 'string') {
+      montant = params.cardPrice;
     }
 
     return montant.replace('.', ',') === montant
@@ -28,8 +29,8 @@ export default function SuccessTransction({ montant = '15' }) {
 
   const onprogress = () => {
     router.push({
-      pathname: '/wallet/congrat',
-      params: { isCard },
+      pathname: '/wallet/Congrat',
+      params: { isCard: params?.cardType },
     });
   };
   return (
