@@ -21,6 +21,22 @@ const PaymentInformations: React.FC = () => {
     id: number;
     lastFourDigits: string;
   } | null>(null);
+  const [paymentIntentId, setPaymentIntentId] = useState('');
+  const cardTitle = params.cardTitle;
+  const cardPrice =
+    typeof params.cardPrice === 'string' ? parseFloat(params.cardPrice) : 0;
+  // const userId = params.userId;
+  const adressId = params.adressId;
+  const isActive = params.isActive;
+  const cardType = params.cardType;
+  console.log('Received Params to payment information:', {
+    cardTitle,
+    cardPrice,
+    isActive,
+    userId,
+    adressId,
+    cardType,
+  });
 
   useEffect(() => {
     const fetchUser = async () => {
@@ -78,7 +94,6 @@ const PaymentInformations: React.FC = () => {
   const handleAddNewCard = () => {
     router.push('/wallet/(payment)/FormAddNewCard' as any);
   };
-
   const handlePayment = async () => {
     if (!isChecked) {
       Alert.alert(
@@ -87,6 +102,7 @@ const PaymentInformations: React.FC = () => {
       );
       return;
     }
+
     const totalAmount =
       typeof params.total === 'string'
         ? parseFloat(params.total)
@@ -98,16 +114,9 @@ const PaymentInformations: React.FC = () => {
     }
 
     const amountInCents = Math.round(totalAmount * 100);
-
+    const paymentMethodId = 'pm_card_visa';
     try {
-      // const cardDetails = {
-      //   number: '4242424242424242',
-      //   exp_month: '12',
-      //   exp_year: '2025',
-      //   cvc: '123',
-      // };
-      //const paymentMethodId = await tokenizeCardDetails(cardDetails);
-
+      // Step 1: Create the PaymentIntent
       const response = await fetch(
         'http://localhost:8082/api/payment/create-payment-intent',
         {
@@ -118,7 +127,6 @@ const PaymentInformations: React.FC = () => {
           body: JSON.stringify({
             amount: amountInCents,
             currency: 'eur',
-            // cardDetails: cardDetails,
           }),
         },
       );
@@ -130,12 +138,8 @@ const PaymentInformations: React.FC = () => {
       const data = await response.json();
       console.log('create-payment-intent response:', data);
       const paymentIntentId = data.payment_intent_id;
+      setPaymentIntentId(paymentIntentId);
       const clientSecret = data.client_secret;
-      const paymentMethodId = data.payment_method_id;
-
-      console.log('PaymentIntent ID:', paymentIntentId);
-      console.log('Client Secret:', clientSecret);
-      console.log('paymentMethodId:', paymentMethodId);
 
       if (!clientSecret || !paymentIntentId) {
         throw new Error('No client secret received.');
@@ -151,19 +155,59 @@ const PaymentInformations: React.FC = () => {
           body: JSON.stringify({
             clientSecret: clientSecret,
             paymentIntentId: paymentIntentId,
-            PaymentMethodId: 'pm_card_visa',
+            PaymentMethodId: paymentMethodId,
           }),
         },
       );
+
       if (!confirmationResponse.ok) {
         throw new Error('Error confirming payment.');
       }
 
       const confirmationData = await confirmationResponse.json();
+      console.log('confirmation status', confirmationData);
 
-      if (confirmationData.success) {
+      if (confirmationData.success === true) {
         Alert.alert('Payment Successful', 'Your payment was successful!');
-        router.push('/wallet/(successTransction)/successTransction');
+        console.log('Saving pass to the database...');
+
+        const payload = {
+          cardTitle: cardTitle,
+          cardPrice: cardPrice,
+          isActive: isActive,
+          userId: userId,
+          adressId: adressId,
+          cardType: cardType,
+        };
+
+        const savePassResponse = await axios.post(
+          'http://localhost:8082/api/add/savePass',
+          payload,
+          {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              ...(token && { Authorization: `Bearer ${token}` }),
+            },
+            params: {
+              paymentIntentId: paymentIntentId,
+              paymentMethodId: paymentMethodId,
+            },
+          },
+        );
+
+        if (savePassResponse.status !== 200) {
+          throw new Error('Error saving pass.');
+        }
+
+        console.log('Pass saved successfully:', savePassResponse.data);
+        router.push({
+          pathname: '/wallet/(successTransction)/successTransction',
+          params: {
+            cardPrice: cardPrice,
+          },
+        });
+        // router.push('/wallet/(successTransction)/successTransction');
       } else {
         Alert.alert('Payment Failed', 'The payment confirmation failed.');
       }
