@@ -9,6 +9,8 @@ import {
   TouchableOpacity,
   Image,
 } from 'react-native';
+import CheckboxAdress from '../../../components/CheckboxAdress'
+import Adress from '../../model/adress'; 
 import axios from 'axios';
 import { useRouter } from 'expo-router';
 
@@ -21,7 +23,7 @@ interface Errors {
   lastName: string;
   streetName: string;
   Optional: string;
-  postalCode: string;
+  postCode: string;
   city: string;
   countryCode: string;
   country: string;
@@ -32,13 +34,13 @@ const PurchaseForm: React.FC = () => {
   //!\   N'omet pas de typer tes constantes /!\
   const [firstName, setFirstName] = useState<string>('');
   const [lastName, setLastName] = useState<string>('');
-  const [address, setAddress] = useState<string>('');
+  // const [address, setAddress] = useState<string>('');
   const [streetName, setStreetName] = useState<string>('');
   const [Optional] = useState<string>('');
   const [countryCode, setCountryCode] = useState<string>('');
   const [country, setCountry] = useState<string>('');
   const [city, setCity] = useState<string>('');
-  const [postalCode, setPostalCode] = useState<string>('');
+  const [postCode, setPostCode] = useState<string>('');
   const [loading, setLoading] = useState<boolean>(false);
 
   //!\ Utiliser l'interface Errors de la ligne ≃ 27 pour typer les valeurs des champs de cette constante /!\
@@ -47,7 +49,7 @@ const PurchaseForm: React.FC = () => {
     lastName: '',
     streetName: '',
     Optional: '',
-    postalCode: '',
+    postCode: '',
     city: '',
     countryCode: '',
     country: '',
@@ -60,7 +62,7 @@ const PurchaseForm: React.FC = () => {
       //address: address ? '' : 'Address is required.',
       streetName: streetName ? '' : '',
       Optional: Optional ? '' : ' ',
-      postalCode: postalCode ? '' : '',
+      postCode: postCode ? '' : '',
 
       city: city ? '' : '',
       countryCode: countryCode ? '' : '',
@@ -70,7 +72,28 @@ const PurchaseForm: React.FC = () => {
     return !Object.values(newErrors).some((error) => error !== '');
   };
 
-  const handleSubmit = () => {
+  const handleAddressSelect = (address: Adress | null) => {
+    if (address) {
+      setFirstName(address.firstName);
+      setLastName(address.lastName);
+      setStreetName(address.streetName);
+      setPostCode(address.postCode);
+      setCity(address.city);
+      setCountryCode(address.countryCode);
+      setCountry(address.country);
+    }
+    else {
+      setFirstName('');
+      setLastName('');
+      setStreetName('');
+      setPostCode('');
+      setCity('');
+      setCountryCode('');
+      setCountry('');
+    }
+  };
+
+  const handleSubmit = async () => {
     if (!validateFields()) {
       Alert.alert(
         'Validation Error',
@@ -82,12 +105,15 @@ const PurchaseForm: React.FC = () => {
     setLoading(true);
 
     try {
-      const response = axios.post('XXXXXXXXXXXXXXXXXXXXXXXX', {
+      const response = await axios.post('http://localhost:8082/api/add/card', {
         firstName,
         lastName,
-        address,
+        streetName,
+        postCode,
         city,
-        postalCode,
+        countryCode,
+        country
+
       });
 
       // Cas succès
@@ -111,6 +137,9 @@ const PurchaseForm: React.FC = () => {
       <Text style={[styles.subtitles, { color: '#df8D22', marginTop: 15 }]}>
         Fill this out and you will have it delivered to your door
       </Text>
+
+      <CheckboxAdress onSelectAddress={handleAddressSelect}/>
+
       {/* L'utilisation de la balise <Image/> ce fait comme suit, en utilisant les attributs source et la méthode require pour renseigner le chemin du fichier d'image à afficher ; l'import ne fonctionnait pas pour toi car il te manque le fichier "declarations.d.ts" à la racine de ton projet "./TeonaAppFront/declarations.d.ts" qui permet de définir les différents types de fichier d'image que Typescript doit prendre en compte ; je te fournirais un exemple de ce fichier */}
       <Image
         source={require('../../../assets/images/OrderBlueCard.png')}
@@ -190,15 +219,15 @@ const PurchaseForm: React.FC = () => {
           <TextInput
             style={[
               styles.input,
-              errors.postalCode && styles.errorInput,
+              errors.postCode && styles.errorInput,
               {
                 flex: 1,
                 width: 97,
               },
             ]}
             keyboardType='numeric'
-            value={postalCode}
-            onChangeText={setPostalCode}
+            value={postCode}
+            onChangeText={setPostCode}
           />
         </View>
 
@@ -227,8 +256,8 @@ const PurchaseForm: React.FC = () => {
         </View>
       </View>
 
-      {errors.postalCode ? (
-        <Text style={styles.errorText}>{errors.postalCode}</Text>
+      {errors.postCode ? (
+        <Text style={styles.errorText}>{errors.postCode}</Text>
       ) : null}
 
       {errors.city ? <Text style={styles.errorText}>{errors.city}</Text> : null}
