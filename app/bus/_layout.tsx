@@ -6,9 +6,11 @@ import Header from '@/components/HeaderBus';
 import { usePathname } from 'expo-router';
 export default function LoginLayout() {
   const pathname = usePathname();
+  const noHead = pathname == 'LoadingPage';
   return (
     <View style={styles.container}>
-      {/* Header  */} <Header /> {/* Contenu principal */}{' '}
+      {/* Header  */}
+      {noHead && <Header />} {/* Contenu principal */}
       <View style={styles.content}>
         <Stack screenOptions={{ headerShown: false }} />
       </View>
@@ -23,13 +25,7 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   none: { display: 'none' },
-  pepole: {
-    width: 280,
-    height: 200,
-    top: -135,
-    display: 'flex',
-    alignSelf: 'center',
-  },
+
   content: {
     flex: 1,
   },

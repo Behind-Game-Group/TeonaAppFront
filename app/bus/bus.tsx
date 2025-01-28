@@ -4,6 +4,7 @@ import { Picker } from '@react-native-picker/picker';
 import { useState } from 'react';
 import CustomBusButton from '@/components/bus_components/Bus_btn';
 import Bus_FromTo from '@/components/bus_components/Bus_fromTo';
+
 export default function Bus() {
   const [select, setSelect] = useState<number>(0);
   const [selectOption] = useState<string[]>([
