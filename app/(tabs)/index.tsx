@@ -29,7 +29,7 @@ export default function HomeScreen() {
         <Link href={'/wallet/(teonaPass)/PurchaseForm'}>Wallet Form Card</Link>
         <Link href={'/wallet/TopupFares'}>Topup</Link>
         <Link href={'/bus/bus'}>Bus</Link>
-        <Link href={'/wallet/(teonaPass)/TopupFares'}>test</Link>
+        <Link href={'/wallet/(fares)/Fares'}>test</Link>
         <Link href={'/sky/sky'}>Sky</Link>
         <Link href={'/hub/PasswordCreation'}>Password Creation</Link>
         <Link href={'/hub/(login)/ResetPassword'}>Reset Password</Link>
@@ -38,6 +38,7 @@ export default function HomeScreen() {
         <Link href={'/settings/TravelConf'}> settings </Link>
         <Link href={'/settings/TravelSettings'}> form setting</Link>
         <Link href={'/bus'}> Home for bus</Link>
+        <Link href={'/settings/modal'}> Option</Link>
       </ThemedView>
     </ParallaxScrollView>
   );

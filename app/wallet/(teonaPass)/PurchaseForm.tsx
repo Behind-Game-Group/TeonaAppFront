@@ -9,10 +9,13 @@ import {
   Alert,
   StyleSheet,
 } from 'react-native';
+import CheckboxAdress from '../../../components/CheckboxAdress'
+import Adress from '../../model/adress'; 
 import axios from 'axios';
 import * as SecureStore from 'expo-secure-store';
 import { useRouter } from 'expo-router';
 import { Platform } from 'react-native';
+
 
 const PurchaseForm = () => {
   const [firstName, setFirstName] = useState('');
@@ -93,6 +96,7 @@ const PurchaseForm = () => {
       } catch (error) {
         console.error('Error fetching user data:', error);
       }
+
     };
 
     fetchUserData();
@@ -133,12 +137,15 @@ const PurchaseForm = () => {
     return Object.keys(newErrors).length === 0;
   };
 
+
+
   const handleSubmit = async () => {
     if (!validateFields()) {
       return;
     }
 
     try {
+
       const formData = {
         firstName,
         lastName,
@@ -178,6 +185,7 @@ const PurchaseForm = () => {
         router.push('/wallet/(topUpCard)/TopUp');
       } else {
         Alert.alert('Error', 'Failed to submit the form.');
+
       }
     } catch (error) {
       console.error('Error submitting form:', error);
@@ -192,6 +200,9 @@ const PurchaseForm = () => {
       <Text style={[styles.subtitles, { color: '#df8D22', marginTop: 15 }]}>
         Fill this out and you will have it delivered to your door
       </Text>
+
+      <CheckboxAdress onSelectAddress={handleAddressSelect}/>
+
       {/* L'utilisation de la balise <Image/> ce fait comme suit, en utilisant les attributs source et la méthode require pour renseigner le chemin du fichier d'image à afficher ; l'import ne fonctionnait pas pour toi car il te manque le fichier "declarations.d.ts" à la racine de ton projet "./TeonaAppFront/declarations.d.ts" qui permet de définir les différents types de fichier d'image que Typescript doit prendre en compte ; je te fournirais un exemple de ce fichier */}
       <Image
         source={require('../../../assets/images/OrderBlueCard.png')}
@@ -274,15 +285,15 @@ const PurchaseForm = () => {
           <TextInput
             style={[
               styles.input,
-              errors.postalCode && styles.errorInput,
+              errors.postCode && styles.errorInput,
               {
                 flex: 1,
                 width: 97,
               },
             ]}
             keyboardType='numeric'
-            value={postalCode}
-            onChangeText={setPostalCode}
+            value={postCode}
+            onChangeText={setPostCode}
           />
         </View>
 
@@ -311,8 +322,8 @@ const PurchaseForm = () => {
         </View>
       </View>
 
-      {errors.postalCode ? (
-        <Text style={styles.errorText}>{errors.postalCode}</Text>
+      {errors.postCode ? (
+        <Text style={styles.errorText}>{errors.postCode}</Text>
       ) : null}
 
       {errors.city ? <Text style={styles.errorText}>{errors.city}</Text> : null}
