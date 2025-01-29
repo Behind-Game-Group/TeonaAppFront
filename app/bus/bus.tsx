@@ -1,18 +1,25 @@
 import React from 'react';
-import { Text, View, StyleSheet, ScrollView } from 'react-native';
-import { Picker } from '@react-native-picker/picker';
+import {
+  Text,
+  View,
+  StyleSheet,
+  TouchableOpacity,
+  ScrollView,
+} from 'react-native';
+
 import { useState } from 'react';
+import PassagerBike from '@/components/bus_components/PassagerBike';
 import CustomBusButton from '@/components/bus_components/Bus_btn';
 import Bus_FromTo from '@/components/bus_components/Bus_fromTo';
 
 export default function Bus() {
-  const [select, setSelect] = useState<number>(0);
-  const [selectOption] = useState<string[]>([
-    'Please choose an option',
-    'Passager',
-    'Bike',
-    'Bike / Passager',
-  ]);
+  const [isShow, setIsShow] = useState<boolean>(false);
+  const showOn = () => {
+    setIsShow(true);
+  };
+  const showOff = () => {
+    setIsShow(false);
+  };
   const SubmitHanddle = () => {
     console.log('clicked');
   };
@@ -33,16 +40,10 @@ export default function Bus() {
         />
       </View>
 
-      <Picker
-        selectedValue={select}
-        onValueChange={(itemValue) => setSelect(itemValue)}
-        style={styles.picker}
-      >
-        {selectOption.map((option) => (
-          <Picker.Item key={option} label={option} value={option} />
-        ))}
-      </Picker>
-
+      <TouchableOpacity onPress={showOn} style={styles.picker}>
+        Passenger/bike
+      </TouchableOpacity>
+      {isShow && <PassagerBike onPress={showOff} />}
       <CustomBusButton onPress={SubmitHanddle} text='Search' />
     </ScrollView>
   );
@@ -53,6 +54,9 @@ const styles = StyleSheet.create({
     minWidth: '90%',
     marginTop: 15,
     margin: 5,
+    paddingTop: 9,
+    paddingLeft: 25,
+    fontSize: 25,
     borderColor: '#679C70',
     backgroundColor: '#eee',
     borderWidth: 1,
