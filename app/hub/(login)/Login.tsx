@@ -58,6 +58,7 @@ const LoginPage: React.FC = () => {
     setLoading(true);
 
     try {
+      console.log("connexion")
       const response = await axios.post(
         'http://localhost:8082/api/user/login',
         {

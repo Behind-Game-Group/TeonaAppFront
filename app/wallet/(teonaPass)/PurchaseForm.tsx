@@ -22,7 +22,7 @@ const PurchaseForm = () => {
   const [lastName, setLastName] = useState('');
   const [streetName, setStreetName] = useState('');
   const [Optional, setOptional] = useState('');
-  const [postalCode, setPostalCode] = useState('');
+  const [postCode, setPostCode] = useState('');
   const [city, setCity] = useState('');
   const [countryCode, setCountryCode] = useState('');
   const [country, setCountry] = useState('');
@@ -37,7 +37,7 @@ const PurchaseForm = () => {
     firstName?: string;
     lastName?: string;
     streetName?: string;
-    postalCode?: string;
+    postCode?: string;
     city?: string;
     countryCode?: string;
     country?: string;
@@ -83,7 +83,7 @@ const PurchaseForm = () => {
             setLastName(address.lastName || '');
             setStreetName(address.streetName || '');
             setOptional(address.streetNameOptional || '');
-            setPostalCode(address.postCode || '');
+            setPostCode(address.postCode || '');
             setCity(address.city || '');
             setCountryCode(address.countryCode || '');
             setCountry(address.country || '');
@@ -117,8 +117,8 @@ const PurchaseForm = () => {
       newErrors.streetName = 'Street name is required.';
     }
 
-    if (!postalCode.trim()) {
-      newErrors.postalCode = 'Postal code is required.';
+    if (!postCode.trim()) {
+      newErrors.postCode = 'Postal code is required.';
     }
 
     if (!city.trim()) {
@@ -137,7 +137,26 @@ const PurchaseForm = () => {
     return Object.keys(newErrors).length === 0;
   };
 
-
+  const handleAddressSelect = (address: Adress | null) => {
+    if (address) {
+      setFirstName(address.firstName);
+      setLastName(address.lastName);
+      setStreetName(address.streetName);
+      setPostCode(address.postCode);
+      setCity(address.city);
+      setCountryCode(address.countryCode);
+      setCountry(address.country);
+    }
+    else {
+      setFirstName('');
+      setLastName('');
+      setStreetName('');
+      setPostCode('');
+      setCity('');
+      setCountryCode('');
+      setCountry('');
+    }
+  };
 
   const handleSubmit = async () => {
     if (!validateFields()) {
@@ -151,7 +170,7 @@ const PurchaseForm = () => {
         lastName,
         streetName,
         streetNameOptional: Optional,
-        postCode: postalCode,
+        postCode: postCode,
         city,
         countryCode,
         country,

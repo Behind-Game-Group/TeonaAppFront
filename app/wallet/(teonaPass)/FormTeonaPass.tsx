@@ -12,8 +12,9 @@ import {
 import * as ImagePicker from 'expo-image-picker';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import ButtonTeonaPass from '@/components/ButtonTeonaPass';
-import CheckboxAdress from '../../../components/CheckboxAdress'
 import * as SecureStore from 'expo-secure-store';
+import CheckboxAdress from '../../../components/CheckboxAdress'
+import Adress from '../../model/adress'; 
 import { Platform } from 'react-native';
 import { useRouter } from 'expo-router';
 import axios from 'axios';
@@ -143,6 +144,27 @@ function FormTeonaPass() {
     fetchUserData();
   }, []);
 
+  const handleAddressSelect = (address: Adress | null) => {
+    if (address) {
+      setFirstName(address.firstName);
+      setLastName(address.lastName);
+      setStreetName(address.streetName);
+      setPostCode(address.postCode);
+      setCity(address.city);
+      setCountryCode(address.countryCode);
+      setCountry(address.country);
+    }
+    else {
+      setFirstName('');
+      setLastName('');
+      setStreetName('');
+      setPostCode('');
+      setCity('');
+      setCountryCode('');
+      setCountry('');
+    }
+  };
+
   const handleSubmit = async () => {
     try {
       const formData = {
@@ -205,7 +227,7 @@ function FormTeonaPass() {
           Fill this out and you will have it {'\n'} delivered to your door.
         </Text>
 
-        <CheckboxAdress/>
+        <CheckboxAdress onSelectAddress={handleAddressSelect}/>
 
 
         <View style={styles.cardImageContainer}>
