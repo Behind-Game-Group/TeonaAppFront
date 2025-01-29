@@ -1,137 +1,200 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
+  ScrollView,
   View,
   Text,
   TextInput,
+  Image,
+  TouchableOpacity,
   Alert,
   StyleSheet,
-  ScrollView,
-  TouchableOpacity,
-  Image,
 } from 'react-native';
 import CheckboxAdress from '../../../components/CheckboxAdress'
 import Adress from '../../model/adress'; 
 import axios from 'axios';
+import * as SecureStore from 'expo-secure-store';
 import { useRouter } from 'expo-router';
+import { Platform } from 'react-native';
 
-// import Subtitles from 'react-native-subtitles';
-// import { OrderBlueCard } from '/assets/images/OrderBlueCard.png';
 
-// Tu peux créer une interface ici pour typer ta constante d'erreur voir le mettre dans un fichier à part dans un dossier "types" ou "interfaces" à la racine de ton projet avec un export default et pouvoir l'importer ici
-interface Errors {
-  firstName: string;
-  lastName: string;
-  streetName: string;
-  Optional: string;
-  postCode: string;
-  city: string;
-  countryCode: string;
-  country: string;
-}
-
-const PurchaseForm: React.FC = () => {
+const PurchaseForm = () => {
+  const [firstName, setFirstName] = useState('');
+  const [lastName, setLastName] = useState('');
+  const [streetName, setStreetName] = useState('');
+  const [Optional, setOptional] = useState('');
+  const [postalCode, setPostalCode] = useState('');
+  const [city, setCity] = useState('');
+  const [countryCode, setCountryCode] = useState('');
+  const [country, setCountry] = useState('');
+  const [userId, setUserId] = useState('');
+  const [token, setToken] = useState('');
+  const [adressId, setAdressId] = useState('');
+  const [loading, setLoading] = useState(false);
+  const [errors, setErrors] = useState<ErrorsType>({});
   const router = useRouter();
-  //!\   N'omet pas de typer tes constantes /!\
-  const [firstName, setFirstName] = useState<string>('');
-  const [lastName, setLastName] = useState<string>('');
-  // const [address, setAddress] = useState<string>('');
-  const [streetName, setStreetName] = useState<string>('');
-  const [Optional] = useState<string>('');
-  const [countryCode, setCountryCode] = useState<string>('');
-  const [country, setCountry] = useState<string>('');
-  const [city, setCity] = useState<string>('');
-  const [postCode, setPostCode] = useState<string>('');
-  const [loading, setLoading] = useState<boolean>(false);
 
-  //!\ Utiliser l'interface Errors de la ligne ≃ 27 pour typer les valeurs des champs de cette constante /!\
-  const [errors, setErrors] = useState<Errors>({
-    firstName: '',
-    lastName: '',
-    streetName: '',
-    Optional: '',
-    postCode: '',
-    city: '',
-    countryCode: '',
-    country: '',
-  });
+  interface ErrorsType {
+    firstName?: string;
+    lastName?: string;
+    streetName?: string;
+    postalCode?: string;
+    city?: string;
+    countryCode?: string;
+    country?: string;
+  }
+
+  useEffect(() => {
+    const fetchUserData = async () => {
+      try {
+        let userId = null;
+        let token = null;
+
+        if (Platform.OS === 'web') {
+          userId = localStorage.getItem('userId');
+          token = localStorage.getItem('authToken');
+        } else {
+          userId = await SecureStore.getItemAsync('userId');
+          token = await SecureStore.getItemAsync('authToken');
+        }
+
+        if (token) {
+          setToken(token);
+          console.log('Token found:', token);
+        } else {
+          console.warn('Token not found');
+        }
+
+        if (userId) {
+          setUserId(userId);
+          console.log('User ID found:', userId);
+          const response = await axios.get(
+            'http://localhost:8082/api/adress/getAdress',
+            {
+              headers: {
+                ...(token && { Authorization: `Bearer ${token}` }),
+              },
+            },
+          );
+
+          if (response.status === 200) {
+            const address = response.data;
+            console.log('address', response);
+            setFirstName(address.firstName || '');
+            setLastName(address.lastName || '');
+            setStreetName(address.streetName || '');
+            setOptional(address.streetNameOptional || '');
+            setPostalCode(address.postCode || '');
+            setCity(address.city || '');
+            setCountryCode(address.countryCode || '');
+            setCountry(address.country || '');
+          } else {
+            console.log('No address found for the user');
+          }
+        } else {
+          console.warn('User ID not found');
+        }
+      } catch (error) {
+        console.error('Error fetching user data:', error);
+      }
+
+    };
+
+    fetchUserData();
+  }, []);
 
   const validateFields = () => {
-    const newErrors: typeof errors = {
-      firstName: firstName ? '' : '',
-      lastName: lastName ? '' : '',
-      //address: address ? '' : 'Address is required.',
-      streetName: streetName ? '' : '',
-      Optional: Optional ? '' : ' ',
-      postCode: postCode ? '' : '',
+    const newErrors: ErrorsType = {};
 
-      city: city ? '' : '',
-      countryCode: countryCode ? '' : '',
-      country: country ? '' : '',
-    };
+    if (!firstName.trim()) {
+      newErrors.firstName = 'First name is required.';
+    }
+
+    if (!lastName.trim()) {
+      newErrors.lastName = 'Last name is required.';
+    }
+
+    if (!streetName.trim()) {
+      newErrors.streetName = 'Street name is required.';
+    }
+
+    if (!postalCode.trim()) {
+      newErrors.postalCode = 'Postal code is required.';
+    }
+
+    if (!city.trim()) {
+      newErrors.city = 'City is required.';
+    }
+
+    if (!countryCode.trim()) {
+      newErrors.countryCode = 'Country code is required.';
+    }
+
+    if (!country.trim()) {
+      newErrors.country = 'Country is required.';
+    }
+
     setErrors(newErrors);
-    return !Object.values(newErrors).some((error) => error !== '');
+    return Object.keys(newErrors).length === 0;
   };
 
-  const handleAddressSelect = (address: Adress | null) => {
-    if (address) {
-      setFirstName(address.firstName);
-      setLastName(address.lastName);
-      setStreetName(address.streetName);
-      setPostCode(address.postCode);
-      setCity(address.city);
-      setCountryCode(address.countryCode);
-      setCountry(address.country);
-    }
-    else {
-      setFirstName('');
-      setLastName('');
-      setStreetName('');
-      setPostCode('');
-      setCity('');
-      setCountryCode('');
-      setCountry('');
-    }
-  };
+
 
   const handleSubmit = async () => {
     if (!validateFields()) {
-      Alert.alert(
-        'Validation Error',
-        'Please fill in all the required fields.',
-      );
       return;
     }
 
-    setLoading(true);
-
     try {
-      const response = await axios.post('http://localhost:8082/api/add/card', {
+
+      const formData = {
         firstName,
         lastName,
         streetName,
-        postCode,
+        streetNameOptional: Optional,
+        postCode: postalCode,
         city,
         countryCode,
-        country
+        country,
+        userId,
+      };
 
-      });
+      setLoading(true);
+      const response = await axios.post(
+        'http://localhost:8082/api/adress/saveAddress',
+        formData,
+        {
+          headers: {
+            'Content-Type': 'application/json',
+            ...(token && { Authorization: `Bearer ${token}` }),
+          },
+        },
+      );
 
-      // Cas succès
-      Alert.alert('Success', 'Address submitted successfully!');
-      router.push('/');
-    } catch (error: unknown) {
-      console.error(error);
+      if (response.status === 200 || (response.data && response.data.id)) {
+        const { id } = response.data;
+        console.log('the id of the adress:', response.data.id);
+        setAdressId(id);
 
-      let errorMessage = 'An error occurred. Please try again.';
-      if (axios.isAxiosError(error) && error.response) {
-        errorMessage = error.response.data?.message || errorMessage;
+        if (Platform.OS === 'web') {
+          localStorage.setItem('addressId', id);
+        } else {
+          await SecureStore.setItemAsync('addressId', id);
+        }
+
+        Alert.alert('Success', 'Form submitted successfully.');
+        router.push('/wallet/(topUpCard)/TopUp');
+      } else {
+        Alert.alert('Error', 'Failed to submit the form.');
+
       }
-      Alert.alert('Error', errorMessage);
+    } catch (error) {
+      console.error('Error submitting form:', error);
+      Alert.alert('Error', 'An unexpected error occurred.');
     } finally {
       setLoading(false);
     }
   };
-
+  console.log('address id is :', adressId);
   return (
     <ScrollView contentContainerStyle={styles.container}>
       <Text style={[styles.subtitles, { color: '#df8D22', marginTop: 15 }]}>
@@ -167,6 +230,9 @@ const PurchaseForm: React.FC = () => {
             value={firstName}
             onChangeText={setFirstName}
           />
+          {errors.firstName && (
+            <Text style={styles.errorText}>{errors.firstName}</Text>
+          )}
         </View>
         <View style={{ width: '49%', flexDirection: 'column', gap: 2 }}>
           <Text style={{ marginLeft: 10 }}>Last name*</Text>
