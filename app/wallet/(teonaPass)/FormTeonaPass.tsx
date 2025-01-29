@@ -12,6 +12,7 @@ import {
 import * as ImagePicker from 'expo-image-picker';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import ButtonTeonaPass from '@/components/ButtonTeonaPass';
+import CheckboxAdress from '../../../components/CheckboxAdress'
 import * as SecureStore from 'expo-secure-store';
 import { Platform } from 'react-native';
 import { useRouter } from 'expo-router';
@@ -196,10 +197,16 @@ function FormTeonaPass() {
   return (
     <View style={styles.container}>
       <View style={styles.content}>
+        <View style={styles.header}>
+          <Text style={styles.title}>Purchase Teona Pass</Text>
+        </View>
 
         <Text style={styles.secondTitle}>
           Fill this out and you will have it {'\n'} delivered to your door.
         </Text>
+
+        <CheckboxAdress/>
+
 
         <View style={styles.cardImageContainer}>
           {/* Affiche l'image choisie ou un logo par défaut */}

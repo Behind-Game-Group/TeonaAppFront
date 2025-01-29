@@ -51,7 +51,7 @@ const Home: React.FC = () => {
         <View style={styles.contentContainer}>
           <TouchableOpacity
             style={[styles.imageWrapper, styles.whiteBackground]}
-            onPress={() => router.push('/wallet/Fares')}
+            onPress={() => router.push('/wallet/wallet')}
           >
             <Image
               source={require('@/assets/images/TeonaWalletIcon.png')}

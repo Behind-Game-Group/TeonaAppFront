@@ -29,11 +29,11 @@ const CardPaymentPage: React.FC = () => {
   // const userId = params.userId;
   const adressId = params.adressId;
   const isActive = params.isActive;
+
   console.log('Received Params to display pass:', {
     cardTitle,
     cardPrice,
     isActive,
-
     adressId,
     cardType,
     price,

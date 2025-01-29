@@ -2,13 +2,13 @@ import { Stack } from 'expo-router';
 import React from 'react';
 import { View, StyleSheet } from 'react-native';
 import Navbar from '@/components/NavbarWallet';
-import MenuTop from '@/components/MenuTop';
+import Header from '@/components/HeaderWallet';
 
 export default function LoginLayout() {
   return (
     <View style={styles.container}>
       {/* Header  */}
-      <MenuTop />
+      <Header />
       {/* Contenu principal */}
       <View style={styles.content}>
         <Stack screenOptions={{ headerShown: false }} />
