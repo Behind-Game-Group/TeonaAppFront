@@ -5,8 +5,9 @@ import {
   StyleSheet,
   TouchableOpacity,
   ScrollView,
+  Platform,
 } from 'react-native';
-
+import * as Calendar from 'expo-calendar';
 import { useState } from 'react';
 import PassagerBike from '@/components/bus_components/PassagerBike';
 import CustomBusButton from '@/components/bus_components/Bus_btn';
@@ -23,6 +24,14 @@ export default function Bus() {
   const SubmitHanddle = () => {
     console.log('clicked');
   };
+
+  async function createCalendar() {
+    const newCalendarID = await Calendar.createCalendarAsync({
+      title: 'Expo Calendar',
+      color: 'blue',
+    });
+    console.log(`Your new calendar ID is: ${newCalendarID}`);
+  }
   return (
     <ScrollView>
       <Text style={styles.title}>Search</Text>
@@ -45,6 +54,7 @@ export default function Bus() {
       </TouchableOpacity>
       {isShow && <PassagerBike onPress={showOff} />}
       <CustomBusButton onPress={SubmitHanddle} text='Search' />
+      <TouchableOpacity onPress={createCalendar}>oki</TouchableOpacity>
     </ScrollView>
   );
 }

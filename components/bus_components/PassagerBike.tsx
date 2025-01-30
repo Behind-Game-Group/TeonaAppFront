@@ -62,6 +62,8 @@ const PassagerBike: React.FC<CustomProps> = ({ data, onPress }) => {
                   flexDirection: 'row',
                 }}
               >
+                <Text style={{ fontSize: 20 }}>{'<'}</Text>
+                <Text style={{ fontSize: 20, color: 'orange' }}>{'<'}</Text>
                 <TouchableOpacity
                   style={styles.btn}
                   onPress={() => {
