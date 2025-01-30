@@ -10,29 +10,44 @@ import {
 } from 'react-native';
 import { useRoute, RouteProp } from '@react-navigation/native';
 import ButtonWallet from '@/components/ButtonWallet';
-import { useRouter } from 'expo-router';
+import { useRouter, useLocalSearchParams } from 'expo-router';
 
-// Type pour les paramètres de la route
 type RootStackParamList = {
   Wallet: { price: number };
 };
 
 const CardPaymentPage: React.FC = () => {
   const router = useRouter();
+  const params = useLocalSearchParams();
   const [email, setEmail] = useState('');
   const [isChecked, setIsChecked] = useState(false);
-
-  // Récupération des paramètres via useRoute
   const route = useRoute<RouteProp<RootStackParamList, 'Wallet'>>();
-  const { price = 0 } = route.params || {};
-
-  // Conversion de price en number (en cas de type string ou autre)
+  const { price } = route.params;
   const numericPrice = Number(price);
-
+  const total = (numericPrice + 5.0).toFixed(2);
   const toggleCheckbox = () => setIsChecked(!isChecked);
+  const adressId = params.adressId;
+  const isActive = params.isActive;
+  const cardTitle = params.cardTitle;
 
+  console.log('Received Params to display CARD:', {
+    isActive,
+    adressId,
+    cardTitle,
+    price,
+    total,
+  });
   const goToPaymentCard = () => {
-    router.push('/wallet/(payment)/PaymentInformations');
+    router.push({
+      pathname: '/wallet/(payment)/PaymentInformationsCard',
+      params: {
+        price: price.toString(),
+        isActive,
+        adressId,
+        total,
+        cardTitle,
+      },
+    });
   };
 
   return (
