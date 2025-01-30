@@ -43,17 +43,18 @@ const PassagerBike: React.FC<CustomProps> = ({ data, onPress }) => {
         <Text style={styles.title}>
           PASSANGER/BIKES
           <TouchableOpacity onPress={onPress} style={styles.back}>
-            X
-          </TouchableOpacity>
+            <Text>X</Text>
+          </TouchableOpacity>{' '}
+          <Text style={{ fontSize: 20 }}>{'<'}</Text>
         </Text>
 
         {/* <Text style={styles.gilet}>{'<  >'}</Text> */}
         {elements.map((elem, index) => {
           return (
             <View key={index} style={styles.container}>
-              <View>
+              <TouchableOpacity>
                 <Text style={styles.var}>{elem.title}</Text>
-              </View>
+              </TouchableOpacity>
 
               <View
                 style={{
@@ -62,8 +63,6 @@ const PassagerBike: React.FC<CustomProps> = ({ data, onPress }) => {
                   flexDirection: 'row',
                 }}
               >
-                <Text style={{ fontSize: 20 }}>{'<'}</Text>
-                <Text style={{ fontSize: 20, color: 'orange' }}>{'<'}</Text>
                 <TouchableOpacity
                   style={styles.btn}
                   onPress={() => {
@@ -85,7 +84,6 @@ const PassagerBike: React.FC<CustomProps> = ({ data, onPress }) => {
             </View>
           );
         })}
-        <Text> </Text>
       </SafeAreaView>
     </>
   );
@@ -132,7 +130,13 @@ const styles = StyleSheet.create({
     backgroundColor: '#aaa',
   },
   var: { fontSize: 24, marginBottom: 7 },
-  title: { color: '#F88F04', width: '100%', marginLeft: 15, fontSize: 30 },
+  title: {
+    color: '#F88F04',
+    width: '100%',
+    marginLeft: 15,
+    fontSize: 20,
+    marginTop: 15,
+  },
   modal: {
     borderWidth: 1,
     borderRadius: 10,
