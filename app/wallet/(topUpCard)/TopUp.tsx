@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   View,
   Text,
@@ -9,22 +9,61 @@ import {
 } from 'react-native';
 import { useRouter } from 'expo-router';
 import { useWallet } from '../userInfoContext/WallletInfo';
+import { Platform } from 'react-native';
+import * as SecureStore from 'expo-secure-store';
 
 function TopUp() {
   const router = useRouter();
   const wallet = useWallet();
+  const [token, setToken] = useState('');
+  const [userId, setUserId] = useState('');
+  const [adressId, setAdressId] = useState('');
 
   const [selectedPrice, setSelectedPrice] = useState('');
   console.log(wallet.Wallet.firstName);
 
+  useEffect(() => {
+    const fetchUserData = async () => {
+      try {
+        let userId = null;
+        let token = null;
+        let adressId = null;
+
+        if (Platform.OS === 'web') {
+          userId = localStorage.getItem('userId');
+          adressId = localStorage.getItem('addressId');
+          token = localStorage.getItem('authToken');
+        } else {
+          userId = await SecureStore.getItemAsync('userId');
+          adressId = await SecureStore.getItemAsync('addressId');
+          token = await SecureStore.getItemAsync('authToken');
+        }
+
+        if (token) setToken(token);
+        if (userId) setUserId(userId);
+        if (adressId) setAdressId(adressId);
+      } catch (error) {
+        console.error('Error fetching user data:', error);
+      }
+    };
+
+    fetchUserData();
+  }, []);
+
   const handleTopUp = (price: string) => {
-    // Ajout automatique de deux zéros si le prix est un entier
     if (!price.includes('.')) {
       price = `${price}.00`;
     }
+
     router.push({
-      pathname: '/wallet/PaymentDisplayCard',
-      params: { price },
+      pathname: '/wallet/(payment)/PaymentDisplayCard',
+      params: {
+        price: parseFloat(price),
+        isActive: 1,
+        userId,
+        adressId,
+        cardTitle: 'TopUp',
+      },
     });
   };
 

@@ -38,6 +38,7 @@ export default function HomeScreen() {
         <Link href={'/settings/TravelConf'}> settings </Link>
         <Link href={'/settings/TravelSettings'}> form setting</Link>
         <Link href={'/bus'}> Home for bus</Link>
+        <Link href={'/settings/modal'}> Option</Link>
       </ThemedView>
     </ParallaxScrollView>
   );

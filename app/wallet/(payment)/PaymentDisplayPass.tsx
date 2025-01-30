@@ -23,7 +23,21 @@ const CardPaymentPage: React.FC = () => {
 
   const cardType = typeof params.cardType === 'string' ? params.cardType : '';
   const price = !isNaN(Number(params.price)) ? Number(params.price) : 0;
+  const cardTitle = params.cardTitle;
+  const cardPrice =
+    typeof params.cardPrice === 'string' ? parseFloat(params.cardPrice) : 0;
+  // const userId = params.userId;
+  const adressId = params.adressId;
+  const isActive = params.isActive;
 
+  console.log('Received Params to display pass:', {
+    cardTitle,
+    cardPrice,
+    isActive,
+    adressId,
+    cardType,
+    price,
+  });
   const [isFirstCard, setIsFirstCard] = useState<boolean>(true);
   const router = useRouter();
 
@@ -78,6 +92,11 @@ const CardPaymentPage: React.FC = () => {
               params: {
                 price: price.toString(),
                 total: currentBalance.toFixed(2).toString(),
+                cardTitle,
+                cardPrice,
+                isActive,
+                adressId,
+                cardType,
               },
             })
           }

@@ -6,7 +6,7 @@ import * as SecureStore from 'expo-secure-store';
 import { Platform } from 'react-native';
 import axios from 'axios';
 
-const PaymentInformations: React.FC = () => {
+const PaymentInformationsCard: React.FC = () => {
   const [isChecked, setIsChecked] = useState(false);
   const router = useRouter();
 
@@ -22,20 +22,22 @@ const PaymentInformations: React.FC = () => {
     lastFourDigits: string;
   } | null>(null);
   const [paymentIntentId, setPaymentIntentId] = useState('');
-  const cardTitle = params.cardTitle;
+
   const cardPrice =
-    typeof params.cardPrice === 'string' ? parseFloat(params.cardPrice) : 0;
+    typeof params.price === 'string' ? parseFloat(params.price) : 0;
   // const userId = params.userId;
   const adressId = params.adressId;
   const isActive = params.isActive;
-  const cardType = params.cardType;
+  const cardTitle = params.cardTitle;
+  const total = params.total;
+
   console.log('Received Params to payment information:', {
-    cardTitle,
     cardPrice,
     isActive,
     userId,
     adressId,
-    cardType,
+    cardTitle,
+    total,
   });
 
   useEffect(() => {
@@ -172,16 +174,15 @@ const PaymentInformations: React.FC = () => {
         console.log('Saving pass to the database...');
 
         const payload = {
-          cardTitle: cardTitle,
           cardPrice: cardPrice,
           isActive: isActive,
           userId: userId,
           adressId: adressId,
-          cardType: cardType,
+          cardTitle: cardTitle,
         };
 
         const savePassResponse = await axios.post(
-          'http://localhost:8082/api/add/savePass',
+          'http://localhost:8082/api/add/saveCard',
           payload,
           {
             method: 'POST',
@@ -207,7 +208,6 @@ const PaymentInformations: React.FC = () => {
             cardPrice: cardPrice,
           },
         });
-        // router.push('/wallet/(successTransction)/successTransction');
       } else {
         Alert.alert('Payment Failed', 'The payment confirmation failed.');
       }
@@ -375,4 +375,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default PaymentInformations;
+export default PaymentInformationsCard;
