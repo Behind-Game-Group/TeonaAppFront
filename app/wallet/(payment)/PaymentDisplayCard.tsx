@@ -20,7 +20,10 @@ const CardPaymentPage: React.FC = () => {
   const router = useRouter();
   const params = useLocalSearchParams();
   const [email, setEmail] = useState('');
+  const [emailError, setEmailError] = useState('');
+  const [formError, setFormError] = useState('');
   const [isChecked, setIsChecked] = useState(false);
+  const [selectedPayment, setSelectedPayment] = useState<string | null>(null);
   const route = useRoute<RouteProp<RootStackParamList, 'Wallet'>>();
   const { price } = route.params;
   const numericPrice = Number(price);
@@ -37,7 +40,28 @@ const CardPaymentPage: React.FC = () => {
     price,
     total,
   });
+
+  const validateEmail = (email: string) => {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailRegex.test(email);
+  };
+
+  const handleEmailChange = (text: string) => {
+    setEmail(text);
+    if (!validateEmail(text)) {
+      setEmailError('Veuillez entrer une adresse email valide');
+    } else {
+      setEmailError('');
+    }
+  };
+
   const goToPaymentCard = () => {
+    if (!selectedPayment || !validateEmail(email)) {
+      setFormError('Vous devez valider un choix de paiement et entrer une adresse email valide.');
+      return;
+    }
+    setFormError('');
+
     router.push({
       pathname: '/wallet/(payment)/PaymentInformationsCard',
       params: {
@@ -69,24 +93,40 @@ const CardPaymentPage: React.FC = () => {
           <Text style={styles.text}>Card Fee : 5.00 €</Text>
           <Text style={styles.text}>TopUp : {numericPrice.toFixed(2)}€</Text>
           <View style={styles.line}></View>
-          <Text style={styles.text}>
-            Balance : {(numericPrice + 5.0).toFixed(2)}€
-          </Text>
+          <Text style={styles.text}>Balance : {total}€</Text>
         </View>
       </View>
 
       <Text style={styles.textType}>Choose payment type</Text>
 
-      <TouchableOpacity style={styles.button}>
+      <TouchableOpacity
+        style={[
+          styles.button,
+          selectedPayment === 'Apple Pay' && styles.selectedButton,
+        ]}
+        onPress={() => setSelectedPayment('Apple Pay')}
+      >
         <Text style={styles.buttonText}>Pay with Apple Pay</Text>
       </TouchableOpacity>
 
-      <TouchableOpacity style={styles.button} onPress={goToPaymentCard}>
+      <TouchableOpacity
+        style={[
+          styles.button,
+          selectedPayment === 'Card' && styles.selectedButton,
+        ]}
+        onPress={() => setSelectedPayment('Card')}
+      >
         <Text style={styles.buttonText}>Debit/credit card</Text>
       </TouchableOpacity>
 
-      <TouchableOpacity style={styles.button}>
-        <Text style={styles.buttonText}>PayPal </Text>
+      <TouchableOpacity
+        style={[
+          styles.button,
+          selectedPayment === 'PayPal' && styles.selectedButton,
+        ]}
+        onPress={() => setSelectedPayment('PayPal')}
+      >
+        <Text style={styles.buttonText}>PayPal</Text>
       </TouchableOpacity>
 
       <Text style={styles.textEmail}>
@@ -95,9 +135,11 @@ const CardPaymentPage: React.FC = () => {
       <TextInput
         style={styles.input}
         value={email}
-        onChangeText={(text) => setEmail(text)}
+        onChangeText={handleEmailChange}
         placeholder='Email address'
+        keyboardType='email-address'
       />
+      {emailError ? <Text style={styles.errorText}>{emailError}</Text> : null}
 
       <View style={styles.containerCheckbox}>
         <Pressable
@@ -111,7 +153,8 @@ const CardPaymentPage: React.FC = () => {
         </Text>
       </View>
 
-      <ButtonWallet text='Continue' onPress={() => {}} />
+      <ButtonWallet text='Continue' onPress={goToPaymentCard} />
+      {formError ? <Text style={styles.errorText}>{formError}</Text> : null}
     </View>
   );
 };
@@ -151,12 +194,6 @@ const styles = StyleSheet.create({
     color: '#606060',
     marginTop: 2,
   },
-  errorText: {
-    fontSize: 18,
-    color: 'red',
-    textAlign: 'center',
-    marginTop: 50,
-  },
   line: {
     height: 1,
     backgroundColor: '#606060',
@@ -178,6 +215,9 @@ const styles = StyleSheet.create({
     marginTop: 6,
     justifyContent: 'center',
   },
+  selectedButton: {
+    backgroundColor: '#DF8D23',
+  },
   buttonText: {
     fontSize: 18,
     marginLeft: 30,
@@ -197,6 +237,11 @@ const styles = StyleSheet.create({
     marginTop: 5,
     paddingLeft: 27,
     color: '#606060',
+  },
+  errorText: {
+    color: 'red',
+    fontSize: 14,
+    marginTop: 5,
   },
   containerCheckbox: {
     flexDirection: 'row',
