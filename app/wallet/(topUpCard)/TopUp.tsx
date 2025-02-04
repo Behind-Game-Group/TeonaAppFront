@@ -59,7 +59,6 @@ function TopUp() {
       pathname: '/wallet/(payment)/PaymentDisplayCard',
       params: {
         price: parseFloat(price),
-        isActive: 1,
         userId,
         adressId,
         cardTitle: 'TopUp',

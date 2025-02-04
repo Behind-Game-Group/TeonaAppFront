@@ -120,7 +120,7 @@ function FormTeonaPass() {
 
           if (response.status === 200) {
             const address = response.data;
-            console.log('address', response);
+            console.log('address is', response);
             setFirstName(address.firstName || '');
             setLastName(address.lastName || '');
             setStreetName(address.streetName || '');
@@ -176,7 +176,6 @@ function FormTeonaPass() {
         setAdressId(id);
         if (Platform.OS === 'web') {
           localStorage.setItem('addressId', id);
-          // console.log("Address ID saved to localStorage:", id);
         } else {
           await SecureStore.setItemAsync('addressId', id);
           console.log('Address ID saved to SecureStore:', id);
@@ -184,7 +183,13 @@ function FormTeonaPass() {
 
         Alert.alert('Success', 'Form submitted successfully.');
 
-        router.push('/wallet/TopupFares');
+        router.push({
+          pathname: '/wallet/TopupFares',
+          params: {
+            firstName: firstName,
+            lastName: lastName,
+          },
+        });
       } else {
         Alert.alert('Error', 'Failed to submit the form.');
       }

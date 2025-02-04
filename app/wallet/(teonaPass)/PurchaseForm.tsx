@@ -79,14 +79,14 @@ const PurchaseForm = () => {
           if (response.status === 200) {
             const address = response.data;
             console.log('address', response);
-            setFirstName(address.firstName || '');
-            setLastName(address.lastName || '');
-            setStreetName(address.streetName || '');
-            setOptional(address.streetNameOptional || '');
-            setPostalCode(address.postCode || '');
-            setCity(address.city || '');
-            setCountryCode(address.countryCode || '');
-            setCountry(address.country || '');
+            setFirstName(address?.firstName || '');
+            setLastName(address?.lastName || '');
+            setStreetName(address?.streetName || '');
+            setOptional(address?.streetNameOptional || '');
+            setPostalCode(address?.postCode || '');
+            setCity(address?.city || '');
+            setCountryCode(address?.countryCode || '');
+            setCountry(address?.country || '');
           } else {
             console.log('No address found for the user');
           }
