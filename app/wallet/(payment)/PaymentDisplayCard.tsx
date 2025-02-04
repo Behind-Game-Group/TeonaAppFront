@@ -31,7 +31,6 @@ const CardPaymentPage: React.FC = () => {
   const cardTitle = params.cardTitle;
 
   console.log('Received Params to display CARD:', {
-    isActive,
     adressId,
     cardTitle,
     price,
@@ -42,10 +41,10 @@ const CardPaymentPage: React.FC = () => {
       pathname: '/wallet/(payment)/PaymentInformationsCard',
       params: {
         price: price.toString(),
-        isActive,
         adressId,
         total,
         cardTitle,
+        email,
       },
     });
   };

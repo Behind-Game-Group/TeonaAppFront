@@ -99,7 +99,6 @@ const TopupFares: React.FC<TopupFaresProps> = ({
       params: {
         cardTitle: selectedCard.title,
         cardPrice: parseFloat(selectedCard.price),
-        isActive: 1,
         userId,
         adressId,
         cardType: 'TopUp',

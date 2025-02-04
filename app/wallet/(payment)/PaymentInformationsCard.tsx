@@ -25,15 +25,13 @@ const PaymentInformationsCard: React.FC = () => {
 
   const cardPrice =
     typeof params.price === 'string' ? parseFloat(params.price) : 0;
-  // const userId = params.userId;
+
   const adressId = params.adressId;
-  const isActive = params.isActive;
   const cardTitle = params.cardTitle;
   const total = params.total;
 
   console.log('Received Params to payment information:', {
     cardPrice,
-    isActive,
     userId,
     adressId,
     cardTitle,
@@ -175,7 +173,6 @@ const PaymentInformationsCard: React.FC = () => {
 
         const payload = {
           cardPrice: cardPrice,
-          isActive: isActive,
           userId: userId,
           adressId: adressId,
           cardTitle: cardTitle,
@@ -200,8 +197,13 @@ const PaymentInformationsCard: React.FC = () => {
         if (savePassResponse.status !== 200) {
           throw new Error('Error saving pass.');
         }
-
         console.log('Pass saved successfully:', savePassResponse.data);
+        if (savePassResponse.data.emailSent) {
+          console.log('Invoice email sent successfully.');
+        } else {
+          console.warn('Invoice email failed to send.');
+        }
+
         router.push({
           pathname: '/wallet/(successTransction)/successTransction',
           params: {

@@ -28,12 +28,10 @@ const CardPaymentPage: React.FC = () => {
     typeof params.cardPrice === 'string' ? parseFloat(params.cardPrice) : 0;
   // const userId = params.userId;
   const adressId = params.adressId;
-  const isActive = params.isActive;
 
   console.log('Received Params to display pass:', {
     cardTitle,
     cardPrice,
-    isActive,
     adressId,
     cardType,
     price,
@@ -94,9 +92,9 @@ const CardPaymentPage: React.FC = () => {
                 total: currentBalance.toFixed(2).toString(),
                 cardTitle,
                 cardPrice,
-                isActive,
                 adressId,
                 cardType,
+                email,
               },
             })
           }
@@ -136,8 +134,16 @@ const CardPaymentPage: React.FC = () => {
         text='Continue'
         onPress={() => {
           router.push({
-            pathname: '/wallet/(successTransction)/successTransction',
-            params: { cardType, currentBalance },
+            pathname: '/wallet/(payment)/PaymentInformations',
+            params: {
+              price: price.toString(),
+              total: currentBalance.toFixed(2).toString(),
+              cardTitle,
+              cardPrice,
+              adressId,
+              cardType,
+              email,
+            },
           });
         }}
       />
