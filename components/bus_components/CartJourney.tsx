@@ -46,9 +46,8 @@ const CartJourney: React.FC<res> = ({ data }) => {
             height: 30,
             width: 170,
             top: 20,
-            color: '#555',
             flexDirection: 'row',
-            backgroundColor: 'green',
+            backgroundColor: '#444',
           }}
         >
           <Image
@@ -56,7 +55,9 @@ const CartJourney: React.FC<res> = ({ data }) => {
             resizeMode='contain'
             source={require('@/assets/images/bus-logo.png')}
           />
-          <Text style={{ bottom: 26, left: 3 }}>Journey details {'>'}</Text>
+          <Text style={{ bottom: 26, left: 3, color: '#' }}>
+            Journey details {'>'}
+          </Text>
         </button>
         <TouchableOpacity
           style={[
