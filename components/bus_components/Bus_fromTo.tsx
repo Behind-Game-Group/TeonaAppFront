@@ -4,17 +4,34 @@ import {
   Text,
   TextInput,
   StyleSheet,
-  GestureResponderEvent,
   View,
 } from 'react-native';
+import useBus from '../../app/bus/BusInfoContext/BusInfo';
 
 const Bus_FromTo = () => {
+  const uBus = useBus();
+  const updateF = (e: string) => {
+    //console.log(e);
+    const busf = uBus.Bus;
+    busf.from = e;
+    busf.to = e;
+    uBus.updateBus(busf);
+  };
+
   return (
     <View style={styles.view}>
       <Text style={styles.txt}>From</Text>
-      <TextInput style={styles.input} placeholder='Paris' />
+      <TextInput
+        onChangeText={updateF}
+        style={styles.input}
+        placeholder='Paris'
+      />
       <Text style={[styles.to, styles.txt]}>To</Text>
-      <TextInput style={styles.input} placeholder='Géorgie' />
+      <TextInput
+        onChangeText={updateF}
+        style={styles.input}
+        placeholder='Géorgie'
+      />
     </View>
   );
 };

@@ -13,8 +13,9 @@ import {
   CustomBusButton,
   Bus_FromTo,
 } from '@/components/bus_components';
-
-export default function Bus() {
+import useBus from './BusInfoContext/BusInfo';
+import { router } from 'expo-router';
+export default function TeonaBus() {
   const [isShowBike, setIsShowBike] = useState<boolean>(false);
   const showOffBike = () => {
     setIsShowBike(false);
@@ -33,7 +34,12 @@ export default function Bus() {
         <Text style={styles.passBike}> Passenger/bike</Text>
       </TouchableOpacity>
       {isShowBike && <PassagerBike onPress={showOffBike} />}
-      <CustomBusButton onPress={() => {}} text='Search' />
+      <CustomBusButton
+        onPress={() => {
+          router.push('/bus/SelectJourney');
+        }}
+        text='Search'
+      />
     </ScrollView>
   );
 }
@@ -42,7 +48,6 @@ const styles = StyleSheet.create({
   passBike: {
     height: 50,
     minWidth: '90%',
-
     margin: 5,
     paddingTop: 11,
     paddingLeft: 25,
