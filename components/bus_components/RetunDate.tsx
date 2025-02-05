@@ -8,10 +8,10 @@ import {
   Platform,
 } from 'react-native';
 
-import { Calendar } from 'react-native-calendars';
+//import { Calendar } from 'react-native-calendars';
 import { useState } from 'react';
 import CustomBusButton from './Bus_btn';
-import { Theme } from 'react-native-calendars/src/types';
+//import { Theme } from 'react-native-calendars/src/types';
 
 export default function ReturnDate() {
   const [showFrom, setShowFrom] = useState<boolean>(false);
@@ -52,7 +52,7 @@ export default function ReturnDate() {
           text={selectedTo ? asString(selectedTo) : 'returning'}
         />
       </View>
-      {showFrom && ( //#F58D05
+      {/* {showFrom && ( //#F58D05
         <Calendar
           markedDates={{
             [selectedFrom]: {
@@ -76,18 +76,18 @@ export default function ReturnDate() {
           style={styles.calendar}
           onDayPress={hundleCalendarTo}
         ></Calendar>
-      )}
+      )} */}
     </>
   );
 }
-const theme: Theme = {
-  arrowColor: '#F58D05',
-  monthTextColor: '#F58D05',
-  selectedDayBackgroundColor: '#F58D05',
-  selectedDayTextColor: '#ffffff',
-  todayTextColor: '#F58D05',
-  textDisabledColor: '#eee',
-};
+// const theme = {
+//   arrowColor: '#F58D05',
+//   monthTextColor: '#F58D05',
+//   selectedDayBackgroundColor: '#F58D05',
+//   selectedDayTextColor: '#ffffff',
+//   todayTextColor: '#F58D05',
+//   textDisabledColor: '#eee',
+// };
 const styles = StyleSheet.create({
   calendar: { margin: 10, borderRadius: 5 },
 });

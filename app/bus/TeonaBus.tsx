@@ -13,7 +13,7 @@ import {
   CustomBusButton,
   Bus_FromTo,
 } from '@/components/bus_components';
-import useBus from './BusInfoContext/BusInfo';
+
 import { router } from 'expo-router';
 export default function TeonaBus() {
   const [isShowBike, setIsShowBike] = useState<boolean>(false);
