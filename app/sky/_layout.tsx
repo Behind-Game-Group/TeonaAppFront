@@ -2,6 +2,7 @@ import React from 'react';
 import { View, StyleSheet, Image, useWindowDimensions } from 'react-native';
 import { Stack, usePathname } from 'expo-router';
 import { UserProvider } from '@/app/hub/(register)/userInfoContext/UserInfo';
+import NavbarPlane from '@/components/NavbarPlane';
 
 export default function SkyLayout() {
   const pathname = usePathname(); // Obtenez le chemin actuel
@@ -23,13 +24,7 @@ export default function SkyLayout() {
 
         {/* Footer avec le logo Teona */}
         {!hideFooter && ( // Condition pour afficher le footer uniquement si ce n'est pas une page exclut
-          <View style={styles.footer}>
-            <Image
-              source={require('@/assets/images/teonaLogo.png')}
-              style={[styles.logo, { width: width * 0.4 }]} // Appliquer la largeur dynamique
-              resizeMode='contain'
-            />
-          </View>
+          <NavbarPlane />
         )}
       </View>
     </UserProvider>

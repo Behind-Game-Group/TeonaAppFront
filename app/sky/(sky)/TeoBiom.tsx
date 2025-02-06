@@ -1,13 +1,4 @@
-import {
-  View,
-  StyleSheet,
-  Dimensions,
-  Pressable,
-  Text,
-  Image,
-  SafeAreaView,
-  ImageBackground,
-} from 'react-native';
+import { View, StyleSheet, Dimensions, Text, Image } from 'react-native';
 import { router } from 'expo-router';
 import React from 'react';
 import OrangeButton from '@/components/TopUpButton';
@@ -17,16 +8,16 @@ export default function TeoBiom() {
     <View style={styles.container}>
       <View style={styles.content}>
         <View style={styles.imageContainer}>
-        <View style={styles.imageContent}>
-          <Image
-            source={require('@/assets/images/TeoBio.png')}
-            style={styles.BioImage}
-          />
-          <View style={styles.topLeftCorner} />
-          <View style={styles.topRightCorner} />
-          <View style={styles.bottomLeftCorner} />
-          <View style={styles.bottomRightCorner} />
-        </View>
+          <View style={styles.imageContent}>
+            <Image
+              source={require('@/assets/images/TeoBio.png')}
+              style={styles.BioImage}
+            />
+            <View style={styles.topLeftCorner} />
+            <View style={styles.topRightCorner} />
+            <View style={styles.bottomLeftCorner} />
+            <View style={styles.bottomRightCorner} />
+          </View>
         </View>
         <Text style={styles.text}>
           {' '}
@@ -41,7 +32,10 @@ export default function TeoBiom() {
           color={'#FFA500'}
           backgroundColor={'#FFFFFF'}
         />
-        <Text style={styles.subText}> Learn more about Georgina Sky Biometrics (GBH)</Text>
+        <Text style={styles.subText}>
+          {' '}
+          Learn more about Georgina Sky Biometrics (GBH)
+        </Text>
       </View>
     </View>
   );
@@ -127,7 +121,7 @@ const styles = StyleSheet.create({
     fontSize: 20,
     textAlign: 'center',
     color: '#FFFFFF',
-    maxWidth: width * 0.2,
+    maxWidth: width * 0.25,
     margin: 0,
     padding: 0,
   },
