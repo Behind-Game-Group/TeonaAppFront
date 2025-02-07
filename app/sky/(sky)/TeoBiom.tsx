@@ -27,7 +27,7 @@ export default function TeoBiom() {
         <OrangeButton
           title={'Create GBH profile'}
           onPress={() => {
-            router.push('/sky/sky');
+            router.push('/sky/(sky)/AddBiom');
           }}
           color={'#FFA500'}
           backgroundColor={'#FFFFFF'}
