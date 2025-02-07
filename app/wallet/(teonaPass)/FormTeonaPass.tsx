@@ -16,6 +16,7 @@ import * as SecureStore from 'expo-secure-store';
 import { Platform } from 'react-native';
 import { useRouter } from 'expo-router';
 import axios from 'axios';
+import * as FileSystem from 'expo-file-system';
 
 function FormTeonaPass() {
   const [firstName, setFirstName] = useState<string>('');
@@ -27,9 +28,10 @@ function FormTeonaPass() {
   const [countryCode, setCountryCode] = useState('');
   const [country, setCountry] = useState<string>('');
   const [image, setImage] = useState<string | null>(null);
+  const [imageFile, setImageFile] = useState<string | null>(null);
   const [modalVisible, setModalVisible] = useState(false);
   const [email, setEmail] = useState<string | null>(null);
-
+  const [imageName, setImageName] = useState<string | null>(null);
   const [userId, setUserId] = useState('');
   const [token, setToken] = useState('');
   const [adressId, setAdressId] = useState('');
@@ -65,8 +67,12 @@ function FormTeonaPass() {
     });
 
     if (!result.canceled) {
+      console.log('Captured Image:', result.assets[0].uri);
+
       setImage(result.assets[0].uri);
-      setModalVisible(false);
+      await uploadImage(result.assets[0].uri);
+      // setImage(result.assets[0].uri);
+      // setModalVisible(false);
     }
   };
 
@@ -79,8 +85,24 @@ function FormTeonaPass() {
     });
 
     if (!result.canceled) {
-      setImage(result.assets[0].uri);
+      uploadImage(result.assets[0].uri);
     }
+  };
+
+  const uploadImage = async (uri) => {
+    setImage(uri);
+
+    const filename = uri.split('/').pop();
+    const match = /\.(\w+)$/.exec(filename);
+    const type = match ? `image/${match[1]}` : 'image/jpeg';
+
+    setImageFile({
+      uri,
+      name: filename,
+      type,
+    });
+
+    console.log('Selected Image:', filename, type);
   };
 
   useEffect(() => {
@@ -119,7 +141,8 @@ function FormTeonaPass() {
 
           if (response.status === 200) {
             const address = response.data;
-            console.log('address is', response);
+            console.log('Full response from backend:', response.data);
+            console.log('Image from backend:', address.image);
             setFirstName(address.firstName || '');
             setLastName(address.lastName || '');
             setStreetName(address.streetName || '');
@@ -128,6 +151,24 @@ function FormTeonaPass() {
             setCity(address.city || '');
             setCountryCode(address.countryCode || '');
             setCountry(address.country || '');
+            if (address.image) {
+              const newImageUrl = `http://localhost:8082/api/adress/uploads/${address.image}`;
+              console.log('Checking Image URL:', newImageUrl);
+
+              try {
+                const imageCheck = await fetch(newImageUrl);
+                if (imageCheck.ok) {
+                  setImage(newImageUrl);
+                  console.log('Image URL set:', newImageUrl);
+                } else {
+                  console.warn('Image not found at:', newImageUrl);
+                }
+              } catch (fetchError) {
+                console.error('Error checking image URL:', fetchError);
+              }
+            } else {
+              console.warn('No image found in backend response');
+            }
           } else {
             console.log('No address found for the user');
           }
@@ -142,9 +183,12 @@ function FormTeonaPass() {
     fetchUserData();
   }, []);
 
+  console.log('image name:', image);
+
   const handleSubmit = async () => {
     try {
-      const formData = {
+      const formData = new FormData();
+      const formRequestData = {
         firstName,
         lastName,
         streetName,
@@ -153,9 +197,37 @@ function FormTeonaPass() {
         city,
         countryCode,
         country,
-        image,
         userId,
       };
+      formData.append(
+        'formRequest',
+        new Blob([JSON.stringify(formRequestData)], {
+          type: 'application/json',
+        }),
+      );
+
+      if (imageFile) {
+        const imageUri = imageFile.uri;
+        const fileName = imageFile.fileName || `image_${Date.now()}.jpg`;
+        const mimeType = imageFile.type || 'image/jpeg';
+
+        if (Platform.OS === 'web') {
+          const response = await fetch(imageUri);
+          const blob = await response.blob();
+          formData.append(
+            'image',
+            new File([blob], fileName, { type: mimeType }),
+          );
+        } else {
+          formData.append('image', {
+            uri: imageUri,
+            name: fileName,
+            type: mimeType,
+          });
+        }
+      }
+
+      console.log('Final FormData:', formData);
 
       const response = await axios.post(
         'http://localhost:8082/api/adress/saveAddress',
@@ -163,7 +235,7 @@ function FormTeonaPass() {
         {
           method: 'POST',
           headers: {
-            'Content-Type': 'application/json',
+            'Content-Type': 'multipart/form-data',
             ...(token && { Authorization: `Bearer ${token}` }),
           },
         },
@@ -212,7 +284,11 @@ function FormTeonaPass() {
         <View style={styles.cardImageContainer}>
           {/* Affiche l'image choisie ou un logo par défaut */}
           {image ? (
-            <Image source={{ uri: image }} style={styles.profilePic} />
+            <Image
+              source={{ uri: image }}
+              alt='Uploaded'
+              style={styles.profilePic}
+            />
           ) : (
             <Image
               source={require('../../../assets/images/user-logo.png')}
